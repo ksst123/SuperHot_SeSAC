@@ -4,17 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "WeaponBase.h"
-#include "Guns.generated.h"
+#include "Pistol.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class SUPERHOT_SESAC_API AGuns : public AWeaponBase
+class SUPERHOT_SESAC_API APistol : public AWeaponBase
 {
 	GENERATED_BODY()
-	
-public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	class UStaticMesh* bulletMesh;
+
+	void Fire();
 };

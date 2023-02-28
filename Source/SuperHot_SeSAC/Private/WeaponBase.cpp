@@ -2,6 +2,7 @@
 
 
 #include "WeaponBase.h"
+#include "Components/StaticMeshComponent.h"
 
 // Sets default values
 AWeaponBase::AWeaponBase()
