@@ -23,8 +23,6 @@ AEnemyBase::AEnemyBase()
 	
 	MoveComponent = CreateDefaultSubobject<UEnemyMoveComponent>(TEXT("Move Component"));
 	HandFightComponent = CreateDefaultSubobject<UEnemyHandFightComponent>(TEXT("Hand Fight Component"));
-
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	GetMesh()->SetCollisionProfileName(FName("Ragdoll"));

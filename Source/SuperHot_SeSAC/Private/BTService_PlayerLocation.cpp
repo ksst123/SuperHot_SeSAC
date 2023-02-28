@@ -2,6 +2,9 @@
 
 
 #include "BTService_PlayerLocation.h"
+#include "HotPlayer.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 UBTService_PlayerLocation::UBTService_PlayerLocation()
 {
@@ -12,9 +15,9 @@ void UBTService_PlayerLocation::TickNode(UBehaviorTreeComponent& OwnerComp, uint
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
-	// player = Cast<>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-	// if(enemy)
-	// {
-	// 	OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), player->GetActorLocation());
-	// }
+	AHotPlayer* player = Cast<AHotPlayer>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+	if(player)
+	{
+		OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), player->GetActorLocation());
+	}
 }
