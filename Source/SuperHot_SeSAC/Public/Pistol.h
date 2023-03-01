@@ -15,4 +15,6 @@ class SUPERHOT_SESAC_API APistol : public AWeaponBase
 	GENERATED_BODY()
 
 	void Fire();
+
+	virtual void BeginPlay() override;
 };

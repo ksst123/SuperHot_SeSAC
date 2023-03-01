@@ -27,5 +27,5 @@ public:
 	class UStaticMeshComponent* bulletMeshComp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	float bulletSpeed = 200;
+	float bulletSpeed = 500;
 };

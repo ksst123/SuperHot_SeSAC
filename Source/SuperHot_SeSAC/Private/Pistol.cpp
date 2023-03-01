@@ -5,7 +5,14 @@
 #include "Bullet.h"
 #include "Components/SceneComponent.h"
 
+void APistol::BeginPlay()
+{
+	Super::BeginPlay();
+	Fire();
+}
+
 void APistol::Fire()
 {
-	GetWorld()->SpawnActor<ABullet>(bulletFactory, )
+	GetWorld()->SpawnActor<ABullet>(bulletFactory, weaponMesh->GetSocketTransform(TEXT("Front")));
 }
+
