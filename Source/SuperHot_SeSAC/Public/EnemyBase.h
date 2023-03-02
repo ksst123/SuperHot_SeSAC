@@ -30,4 +30,11 @@ public:
 	class UEnemyMoveComponent* MoveComponent;
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class UEnemyHandFightComponent* HandFightComponent;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	class UStaticMeshComponent* DestructibleMesh;
+
+	class UStaticMesh* TempMesh;
+
+	UPROPERTY()
+	class UBaseEnemyAnimInstance* BaseEnemyAnim;
 };

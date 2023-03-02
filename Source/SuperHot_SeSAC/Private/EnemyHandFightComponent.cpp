@@ -2,6 +2,9 @@
 
 
 #include "EnemyHandFightComponent.h"
+#include "Animation/AnimMontage.h"
+#include "BaseEnemyAnimInstance.h"
+#include "EnemyBase.h"
 
 // Sets default values for this component's properties
 UEnemyHandFightComponent::UEnemyHandFightComponent()
@@ -19,7 +22,7 @@ void UEnemyHandFightComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
+	
 	
 }
 
@@ -30,5 +33,28 @@ void UEnemyHandFightComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+}
+
+void UEnemyHandFightComponent::OnPunch()
+{
+	if(!bPunching)
+	{
+		return;
+	}
+	bPunching = false;
+	
+	int32 PunchDir = FMath::RandRange(1, 100);
+	if(PunchDir > 50)
+	{
+		ownerEnemy->PlayAnimMontage(ownerEnemy->BaseEnemyAnim->PunchLeft, 2.f, TEXT("Default"));
+		ownerEnemy->BaseEnemyAnim->AnimNotify_PunchLeft();
+		UE_LOG(LogTemp, Warning, TEXT("Punch Left"));
+	}
+	else
+	{
+		ownerEnemy->PlayAnimMontage(ownerEnemy->BaseEnemyAnim->PunchRight, 2.f, TEXT("Default"));
+		ownerEnemy->BaseEnemyAnim->AnimNotify_PunchRight();
+		UE_LOG(LogTemp, Warning, TEXT("Punch Right"));
+	}
 }
 

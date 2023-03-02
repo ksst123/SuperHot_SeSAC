@@ -22,4 +22,14 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	float Speed;
+
+	UPROPERTY(EditAnywhere, Category = "Montages")
+	class UAnimMontage* PunchLeft;
+	UPROPERTY(EditAnywhere, Category = "Montages")
+	class UAnimMontage* PunchRight;
+
+	UFUNCTION()
+	void AnimNotify_PunchLeft();
+	UFUNCTION()
+	void AnimNotify_PunchRight();
 };

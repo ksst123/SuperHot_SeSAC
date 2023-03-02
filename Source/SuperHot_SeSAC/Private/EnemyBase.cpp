@@ -3,6 +3,7 @@
 
 #include "EnemyBase.h"
 
+#include "BaseEnemyAnimInstance.h"
 #include "EnemyHandFightComponent.h"
 #include "EnemyMoveComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -28,13 +29,42 @@ AEnemyBase::AEnemyBase()
 	GetMesh()->SetCollisionProfileName(FName("Ragdoll"));
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
+
+	DestructibleMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Destructible Mesh"));
+	DestructibleMesh->SetupAttachment(RootComponent);
+	DestructibleMesh->SetVisibility(false);
+	DestructibleMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	
+	TempMesh = LoadObject<UStaticMesh>(nullptr, TEXT("/Script/Engine.StaticMesh'/Game/AI/SM_Enemy.SM_Enemy'"));
+	DestructibleMesh->SetStaticMesh(TempMesh);
+
+	// GetMesh()->SetSimulatePhysics(true);
+	// DestructibleMesh->SetWorldTransform(GetMesh()->GetComponentTransform());
+	// DestructibleMesh->DestroyComponent();
+	
+
+	
 }
 
 // Called when the game starts or when spawned
 void AEnemyBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	BaseEnemyAnim = Cast<UBaseEnemyAnimInstance>(GetMesh()->GetAnimInstance());
+
+	FTimerHandle TimerHandle;
+	float DelaySeconds = 1.0f;
 	
+	GetMesh()->SetSimulatePhysics(true);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, [this]
+	{
+		DestructibleMesh->SetWorldTransform(GetMesh()->GetComponentTransform());
+		DestructibleMesh->SetVisibility(true);
+		DestructibleMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		GetMesh()->DestroyComponent();
+	}
+		, DelaySeconds, false);
 }
 
 // Called every frame

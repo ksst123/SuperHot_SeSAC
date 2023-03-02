@@ -2,8 +2,8 @@
 
 
 #include "BaseEnemyAnimInstance.h"
-
 #include "EnemyBase.h"
+#include "EnemyHandFightComponent.h"
 
 void UBaseEnemyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
@@ -15,4 +15,14 @@ void UBaseEnemyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		FVector Velocity = ownerEnemy->GetVelocity();
 		Speed = FVector::DotProduct(ownerEnemy->GetActorForwardVector(), Velocity);
 	}
+}
+
+void UBaseEnemyAnimInstance::AnimNotify_PunchLeft()
+{
+	ownerEnemy->HandFightComponent->bPunching = true;
+}
+
+void UBaseEnemyAnimInstance::AnimNotify_PunchRight()
+{
+	ownerEnemy->HandFightComponent->bPunching = true;
 }
