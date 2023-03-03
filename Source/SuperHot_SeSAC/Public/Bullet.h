@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "NiagaraSystem.h"
 #include "Bullet.generated.h"
 
 UCLASS()
@@ -23,6 +24,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+	class USceneComponent* rootComp;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	class UStaticMeshComponent* bulletMeshComp;
 
@@ -40,4 +44,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	class AWeaponBase* weapon;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapong")
+	class UNiagaraComponent* trailVFX;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	class UNiagaraSystem* bulletVFX;
 };
