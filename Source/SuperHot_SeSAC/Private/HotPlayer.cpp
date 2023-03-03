@@ -8,6 +8,7 @@
 #include "EnhancedInputComponent.h"
 #include "MotionControllerComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values
@@ -52,6 +53,7 @@ AHotPlayer::AHotPlayer()
 void AHotPlayer::BeginPlay()
 {
 	Super::BeginPlay();
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.001);
 
 	// Enhanced Input 사용처리
 	auto PC = Cast<APlayerController>(GetWorld()->GetFirstPlayerController());
@@ -73,7 +75,6 @@ void AHotPlayer::BeginPlay()
 void AHotPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
@@ -86,12 +87,14 @@ void AHotPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	{
 		// Binding for moving
 		InputSystem->BindAction(IA_HotMove, ETriggerEvent::Triggered, this, &AHotPlayer::Move);
+		InputSystem->BindAction(IA_HotMove, ETriggerEvent::Completed, this, &AHotPlayer::Stop);
 		InputSystem->BindAction(IA_HotMouse, ETriggerEvent::Triggered, this, &AHotPlayer::Turn);
 	}
 }
 
 void AHotPlayer::Move(const FInputActionValue& Values)
 {
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1);
 	// 사용자의 입력에 따라 앞뒤좌우 이동
 	FVector2D Axis = Values.Get<FVector2D>();
 	AddMovementInput(GetActorForwardVector(), Axis.X);
@@ -103,4 +106,11 @@ void AHotPlayer::Turn(const FInputActionValue& Values)
 	FVector2d Axis = Values.Get<FVector2d>();
 	AddControllerYawInput(Axis.X);
 	AddControllerPitchInput(Axis.Y);
+	
 }
+
+void AHotPlayer::Stop()
+{
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.001);
+}
+

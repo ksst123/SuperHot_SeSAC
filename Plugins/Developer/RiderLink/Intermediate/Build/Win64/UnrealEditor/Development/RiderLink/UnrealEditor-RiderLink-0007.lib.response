@@ -6,6 +6,6 @@
 /NAME:"UnrealEditor-RiderLink-0007.dll"
 /IGNORE:4221
 /NODEFAULTLIB
-"C:\UnrealProjects\SuperHot_SeSAC\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RiderLink\Module.RiderLink.cpp.obj"
-"C:\UnrealProjects\SuperHot_SeSAC\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RiderLink\Default.rc2.res"
-/OUT:"C:\UnrealProjects\SuperHot_SeSAC\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RiderLink\UnrealEditor-RiderLink-0007.lib"
+"C:\Users\SBAuser\Documents\Unreal Projects\SuperHot_SeSAC\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RiderLink\Module.RiderLink.cpp.obj"
+"C:\Users\SBAuser\Documents\Unreal Projects\SuperHot_SeSAC\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RiderLink\Default.rc2.res"
+/OUT:"C:\Users\SBAuser\Documents\Unreal Projects\SuperHot_SeSAC\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RiderLink\UnrealEditor-RiderLink-0007.lib"
