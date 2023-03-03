@@ -40,4 +40,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	class AWeaponBase* weapon;
+
+
+	
+	void EnemyHitCheck();
 };

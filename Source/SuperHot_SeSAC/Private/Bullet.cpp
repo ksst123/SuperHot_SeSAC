@@ -3,6 +3,7 @@
 
 #include "Bullet.h"
 
+#include "EnemyBase.h"
 #include "WeaponBase.h"
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/RotatingMovementComponent.h"
@@ -43,6 +44,7 @@ void ABullet::Tick(float DeltaTime)
 
 	SetActorLocation(GetActorLocation() + GetActorForwardVector() * bulletSpeed * DeltaTime);
 
+	EnemyHitCheck();
 }
 
 void ABullet::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
@@ -63,5 +65,23 @@ void ABullet::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 		Destroy();
 	}
 	
+}
+
+void ABullet::EnemyHitCheck()
+{
+	FHitResult HitResult;
+	FCollisionQueryParams Params;
+
+	bool bHit = GetWorld()->SweepSingleByChannel(HitResult, GetActorLocation(), GetActorLocation() + GetActorForwardVector() * 100.f, FQuat::Identity, ECollisionChannel::ECC_Pawn, FCollisionShape::MakeSphere(100.f), Params);
+	if(bHit)
+	{
+		AEnemyBase* enemy = Cast<AEnemyBase>(HitResult.GetActor());
+		if(enemy)
+		{
+			enemy->GetMesh()->HideBoneByName(HitResult.BoneName, EPhysBodyOp::PBO_Term);
+			enemy->GetMesh()->GetPhysicsAsset();
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *(HitResult.BoneName.ToString()));
+		}
+	}
 }
 

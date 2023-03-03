@@ -33,8 +33,23 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class UStaticMeshComponent* DestructibleMesh;
 
+	UPROPERTY(VisibleAnywhere, Category = "Destructible Components")
+	class UGeometryCollectionComponent* DestructibleLeftArm;
+	UPROPERTY(VisibleAnywhere, Category = "Destructible Components")
+	class UGeometryCollectionComponent* DestructibleRightArm;
+	UPROPERTY(VisibleAnywhere, Category = "Destructible Components")
+	class UGeometryCollectionComponent* DestructibleLeftLeg;
+	UPROPERTY(VisibleAnywhere, Category = "Destructible Components")
+	class UGeometryCollectionComponent* DestructibleRightLeg;
+	UPROPERTY(VisibleAnywhere, Category = "Destructible Components")
+	class UGeometryCollectionComponent* DestructibleBody;
+	UPROPERTY(VisibleAnywhere, Category = "Destructible Components")
+	class UGeometryCollectionComponent* DestructibleHead;
+
 	class UStaticMesh* TempMesh;
 
 	UPROPERTY()
 	class UBaseEnemyAnimInstance* BaseEnemyAnim;
+	
+
 };
