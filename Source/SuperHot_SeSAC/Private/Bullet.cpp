@@ -10,6 +10,8 @@
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Components/SceneComponent.h"
+#include "GeometryCollection/GeometryCollectionComponent.h"
+#include "PhysicalMaterials/PhysicalMaterial.h"
 
 // Sets default values
 ABullet::ABullet()
@@ -90,16 +92,22 @@ void ABullet::EnemyHitCheck()
 {
 	FHitResult HitResult;
 	FCollisionQueryParams Params;
+	Params.bReturnPhysicalMaterial = true;
 
-	bool bHit = GetWorld()->SweepSingleByChannel(HitResult, GetActorLocation(), GetActorLocation() + GetActorForwardVector() * 100.f, FQuat::Identity, ECollisionChannel::ECC_Pawn, FCollisionShape::MakeSphere(100.f), Params);
+	bool bHit = GetWorld()->SweepSingleByChannel(HitResult, GetActorLocation(), GetActorLocation() + GetActorForwardVector() * 5.f, FQuat::Identity, ECollisionChannel::ECC_Pawn, FCollisionShape::MakeSphere(5.f), Params);
 	if(bHit)
 	{
 		AEnemyBase* enemy = Cast<AEnemyBase>(HitResult.GetActor());
 		if(enemy)
 		{
-			enemy->GetMesh()->HideBoneByName(HitResult.BoneName, EPhysBodyOp::PBO_Term);
-			enemy->GetMesh()->GetPhysicsAsset();
-			UE_LOG(LogTemp, Warning, TEXT("%s"), *(HitResult.BoneName.ToString()));
+			enemy->Die();
+			enemy->GetMesh()->SetVisibility(false);
+			enemy->GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			for(int i = 0; i < enemy->DestructibleMeshes.Num(); i++)
+			{
+				enemy->DestructibleMeshes[i]->SetVisibility(true);
+				enemy->DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+			}
 		}
 	}
 }

@@ -9,6 +9,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GeometryCollection/GeometryCollectionComponent.h"
+#include "ProceduralMeshComponent.h"
 
 // Sets default values
 AEnemyBase::AEnemyBase()
@@ -46,6 +47,7 @@ AEnemyBase::AEnemyBase()
 		DestructibleBody->SetRestCollection(TempBody.Object);
 		DestructibleBody->SetRelativeLocationAndRotation(FVector(0.230130, -1.931436, 27.215537), FRotator(0,-70, 10));
 	}
+	DestructibleMeshes.Add(DestructibleBody);
 	
 	DestructibleHead = CreateDefaultSubobject<UGeometryCollectionComponent>(TEXT("Destructible Head"));
 	DestructibleHead->SetupAttachment(RootComponent);
@@ -57,6 +59,7 @@ AEnemyBase::AEnemyBase()
 		DestructibleHead->SetRestCollection(TempHead.Object);
 		DestructibleHead->SetRelativeLocationAndRotation(FVector(9.342020,2,76.939693), FRotator(0,-90,20));
 	}
+	DestructibleMeshes.Add(DestructibleHead);
 	
 	DestructibleRightArm = CreateDefaultSubobject<UGeometryCollectionComponent>(TEXT("Destructible Right Arm"));
 	DestructibleRightArm->SetupAttachment(RootComponent);
@@ -68,6 +71,7 @@ AEnemyBase::AEnemyBase()
 		DestructibleRightArm->SetRestCollection(TempRightArm.Object);
 		DestructibleRightArm->SetRelativeLocationAndRotation(FVector(-2.702382, 17.551138, 46.930447), FRotator(25.658906, -73.897886, 23.690067));
 	}
+	DestructibleMeshes.Add(DestructibleRightArm);
 	
 	DestructibleLeftArm = CreateDefaultSubobject<UGeometryCollectionComponent>(TEXT("Destructible Left Arm"));
 	DestructibleLeftArm->SetupAttachment(RootComponent);
@@ -76,9 +80,10 @@ AEnemyBase::AEnemyBase()
 	ConstructorHelpers::FObjectFinder<UGeometryCollection> TempLeftArm(TEXT("/Script/GeometryCollectionEngine.GeometryCollection'/Game/AI/Meshes/SM_Enemy_LeftArm_GeometryCollection.SM_Enemy_LeftArm_GeometryCollection'"));
 	if(TempLeftArm.Succeeded())
 	{
-		DestructibleRightArm->SetRestCollection(TempLeftArm.Object);
-		DestructibleRightArm->SetRelativeLocationAndRotation(FVector(13.930650, -18.041913, 46.311575), FRotator(-25, -89.999999, 15));
+		DestructibleLeftArm->SetRestCollection(TempLeftArm.Object);
+		DestructibleLeftArm->SetRelativeLocationAndRotation(FVector(13.930650, -18.041913, 46.311575), FRotator(-25, -89.999999, 15));
 	}
+	DestructibleMeshes.Add(DestructibleLeftArm);
 	
 	DestructibleRightLeg = CreateDefaultSubobject<UGeometryCollectionComponent>(TEXT("Destructible Right Leg"));
 	DestructibleRightLeg->SetupAttachment(RootComponent);
@@ -90,6 +95,7 @@ AEnemyBase::AEnemyBase()
 		DestructibleRightLeg->SetRestCollection(TempRightLeg.Object);
 		DestructibleRightLeg->SetRelativeLocationAndRotation(FVector(-4.867088, 7.559282, -9.864259), FRotator(-2.497619, -40.094498, 4.332874));
 	}
+	DestructibleMeshes.Add(DestructibleRightLeg);
 	
 	DestructibleLeftLeg = CreateDefaultSubobject<UGeometryCollectionComponent>(TEXT("Destructible Left Leg"));
 	DestructibleLeftLeg->SetupAttachment(RootComponent);
@@ -101,6 +107,9 @@ AEnemyBase::AEnemyBase()
 		DestructibleLeftLeg->SetRestCollection(TempLeftLeg.Object);
 		DestructibleLeftLeg->SetRelativeLocationAndRotation(FVector(2.317956, -11, -8.431865), FRotator(0, -90, -5));
 	}
+	DestructibleMeshes.Add(DestructibleLeftLeg);
+
+	TestMeshComp = CreateDefaultSubobject<UProceduralMeshComponent>(TEXT("Test Mesh Comp"));
 }
 
 // Called when the game starts or when spawned
@@ -130,5 +139,10 @@ void AEnemyBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void AEnemyBase::Die()
+{
+	GetMesh()->SetSimulatePhysics(true);
 }
 
