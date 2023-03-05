@@ -14,9 +14,18 @@ class SUPERHOT_SESAC_API APistol : public AWeaponBase
 {
 	GENERATED_BODY()
 
+	UFUNCTION(BlueprintCallable)
 	void Fire();
-	
+
+	UFUNCTION(BlueprintCallable)
 	void EnemyFire();
 
 	virtual void BeginPlay() override;
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	class AHotPlayer* player;
+
+	UPROPERTY()
+	FTimerHandle resetTimer;
 };
