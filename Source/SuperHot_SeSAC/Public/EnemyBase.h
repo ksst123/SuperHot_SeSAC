@@ -46,18 +46,10 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Destructible Components")
 	class UGeometryCollectionComponent* DestructibleHead;
 
-	UPROPERTY()
-	bool bIsDead = false;
-
-	TArray<class UGeometryCollectionComponent*> DestructibleMeshes;
-
-	UPROPERTY(VisibleAnywhere, Category = "Destructible Components")
-	class UProceduralMeshComponent* TestMeshComp;
-	
 	class UStaticMesh* TempMesh;
 
 	UPROPERTY()
 	class UBaseEnemyAnimInstance* BaseEnemyAnim;
 	
-	void Die();
+
 };

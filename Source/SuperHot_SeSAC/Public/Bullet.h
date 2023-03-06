@@ -45,6 +45,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	class AWeaponBase* weapon;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	class AEnemyBase* enemy;
+
 	void EnemyHitCheck();
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapong")
@@ -52,4 +55,7 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	class UNiagaraSystem* bulletVFX;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	class UNiagaraSystem* bulletVFX2;
 };

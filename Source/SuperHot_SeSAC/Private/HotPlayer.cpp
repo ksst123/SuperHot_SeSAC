@@ -6,7 +6,9 @@
 #include "SuperHotGameModeBase.h"
 #include "Engine/LocalPlayer.h"
 #include "EnhancedInputComponent.h"
+#include "HeadMountedDisplayFunctionLibrary.h"
 #include "MotionControllerComponent.h"
+#include "Pistol.h"
 #include "Camera/CameraComponent.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -47,6 +49,9 @@ AHotPlayer::AHotPlayer()
 		RightHandMesh->SetRelativeLocation(FVector(-2.9f,3.5f,4.5f));
 		RightHandMesh->SetRelativeRotation(FRotator(25,0,90));
 	}
+
+	pistol = CreateDefaultSubobject<UChildActorComponent>(TEXT("Pistol"));
+	pistol->SetupAttachment(RightHand);
 }
 
 // Called when the game starts or when spawned
@@ -75,6 +80,13 @@ void AHotPlayer::BeginPlay()
 void AHotPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	//HMD가 연결되어 있지 않다면
+	if(UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayConnected() == false)
+	{
+		//손이 카메라 방향과 일치하도록 하자
+		RightHand->SetRelativeRotation(HotCamera->GetRelativeRotation());
+	}
 }
 
 // Called to bind functionality to input
@@ -87,14 +99,20 @@ void AHotPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	{
 		// Binding for moving
 		InputSystem->BindAction(IA_HotMove, ETriggerEvent::Triggered, this, &AHotPlayer::Move);
-		InputSystem->BindAction(IA_HotMove, ETriggerEvent::Completed, this, &AHotPlayer::Stop);
+		InputSystem->BindAction(IA_HotMove, ETriggerEvent::Completed, this, &AHotPlayer::MoveStop);
 		InputSystem->BindAction(IA_HotMouse, ETriggerEvent::Triggered, this, &AHotPlayer::Turn);
+		InputSystem->BindAction(IA_HotMouse, ETriggerEvent::Completed, this, &AHotPlayer::Stop);
 	}
 }
 
 void AHotPlayer::Move(const FInputActionValue& Values)
 {
-	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1);
+	bIsMoving = true;
+	//발사 후 1초 이내에는 시간 조작 X
+	//if(!bIsFiring)
+	//{
+		UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1);
+	//}
 	// 사용자의 입력에 따라 앞뒤좌우 이동
 	FVector2D Axis = Values.Get<FVector2D>();
 	AddMovementInput(GetActorForwardVector(), Axis.X);
@@ -103,6 +121,12 @@ void AHotPlayer::Move(const FInputActionValue& Values)
 
 void AHotPlayer::Turn(const FInputActionValue& Values)
 {
+	//발사 후 1초 이내에는 시간 조작 X
+	//이동 중일때는 시간 조작 1로
+	//if(!bIsFiring && !bIsMoving)
+	//{
+	//	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.1);
+	//}
 	FVector2d Axis = Values.Get<FVector2d>();
 	AddControllerYawInput(Axis.X);
 	AddControllerPitchInput(Axis.Y);
@@ -111,6 +135,18 @@ void AHotPlayer::Turn(const FInputActionValue& Values)
 
 void AHotPlayer::Stop()
 {
+	if(!bIsMoving && !bIsFiring)
+	{
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.001);
+	}
+}
+
+void AHotPlayer::MoveStop()
+{
+	bIsMoving = false;
+	if(!bIsFiring)
+	{
+		UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.001);	
+	}
 }
 

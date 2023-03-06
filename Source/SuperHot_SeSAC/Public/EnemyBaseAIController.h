@@ -17,13 +17,11 @@ class SUPERHOT_SESAC_API AEnemyBaseAIController : public AAIController
 public:
 	AEnemyBaseAIController();
 
-protected:
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaSeconds) override;
 
-public:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	class UBehaviorTree* BT_EnemyBase;
 
 	UPROPERTY()

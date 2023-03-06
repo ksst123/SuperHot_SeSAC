@@ -27,13 +27,9 @@ public:
 	class UAnimMontage* PunchLeft;
 	UPROPERTY(EditAnywhere, Category = "Montages")
 	class UAnimMontage* PunchRight;
-	UPROPERTY(EditAnywhere, Category = "Montages")
-	class UAnimMontage* Die;
 
 	UFUNCTION()
 	void AnimNotify_PunchLeft();
 	UFUNCTION()
 	void AnimNotify_PunchRight();
-	UFUNCTION()
-	void AnimNotify_Die();
 };

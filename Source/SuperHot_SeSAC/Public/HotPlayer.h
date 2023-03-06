@@ -61,23 +61,26 @@ public:
 	class UInputAction* IA_HotMouse;
 	void Turn(const FInputActionValue& Values);
 
+	// 발사 처리 함수
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	class UInputAction* IA_Fire;
+
 	//시간 조작 변수
 	UPROPERTY(EditAnywhere, Category = "Input")
-	float moveDilationX;
-
-	UPROPERTY(EditAnywhere, Category = "Input")
-	float moveDilationY;
-
-
-	UPROPERTY(EditAnywhere, Category = "Input")
-	float turnDilation;
-
-	UPROPERTY(EditAnywhere, Category = "Input")
-	float timeDilation;
-
-	UPROPERTY(EditAnywhere, Category = "Input")
 	bool bIsTimeStopped = true;
-
+	
 	UFUNCTION()
 	void Stop();
+
+	UFUNCTION()
+	void MoveStop();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	bool bIsFiring = false;
+
+	UPROPERTY(EditAnywhere, Category = "Input")
+	bool bIsMoving = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UChildActorComponent* pistol;
 };

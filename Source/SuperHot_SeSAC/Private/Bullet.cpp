@@ -10,8 +10,6 @@
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Components/SceneComponent.h"
-#include "GeometryCollection/GeometryCollectionComponent.h"
-#include "PhysicalMaterials/PhysicalMaterial.h"
 
 // Sets default values
 ABullet::ABullet()
@@ -63,6 +61,7 @@ void ABullet::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 {
 	bullet= Cast<ABullet>(OtherActor);
 	weapon = Cast<AWeaponBase>(OtherActor);
+	enemy = Cast<AEnemyBase>(OtherActor);
 
 	//부딪힌 대상이 총알이면 서로 파괴
 	if(bullet)
@@ -85,6 +84,15 @@ void ABullet::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 		//총알 메쉬 제거
 		bulletMeshComp->DestroyComponent();
 	}
+	else if(enemy)
+	{
+		//나이아가라 스폰
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), bulletVFX2, GetActorLocation(), GetActorRotation());
+		//궤적 VFX 불렛에서 분리
+		trailVFX->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+		//총알 메쉬 제거
+		bulletMeshComp->DestroyComponent();
+	}
 	
 }
 
@@ -92,22 +100,16 @@ void ABullet::EnemyHitCheck()
 {
 	FHitResult HitResult;
 	FCollisionQueryParams Params;
-	Params.bReturnPhysicalMaterial = true;
 
-	bool bHit = GetWorld()->SweepSingleByChannel(HitResult, GetActorLocation(), GetActorLocation() + GetActorForwardVector() * 5.f, FQuat::Identity, ECollisionChannel::ECC_Pawn, FCollisionShape::MakeSphere(5.f), Params);
+	bool bHit = GetWorld()->SweepSingleByChannel(HitResult, GetActorLocation(), GetActorLocation() + GetActorForwardVector() * 100.f, FQuat::Identity, ECollisionChannel::ECC_Pawn, FCollisionShape::MakeSphere(100.f), Params);
 	if(bHit)
 	{
-		AEnemyBase* enemy = Cast<AEnemyBase>(HitResult.GetActor());
+		 enemy = Cast<AEnemyBase>(HitResult.GetActor());
 		if(enemy)
 		{
-			enemy->Die();
-			enemy->GetMesh()->SetVisibility(false);
-			enemy->GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-			for(int i = 0; i < enemy->DestructibleMeshes.Num(); i++)
-			{
-				enemy->DestructibleMeshes[i]->SetVisibility(true);
-				enemy->DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-			}
+			enemy->GetMesh()->HideBoneByName(HitResult.BoneName, EPhysBodyOp::PBO_Term);
+			enemy->GetMesh()->GetPhysicsAsset();
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *(HitResult.BoneName.ToString()));
 		}
 	}
 }

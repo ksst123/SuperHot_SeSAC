@@ -3,20 +3,25 @@
 
 #include "Pistol.h"
 #include "Bullet.h"
+#include "HotPlayer.h"
 #include "Components/SceneComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 void APistol::BeginPlay()
 {
 	Super::BeginPlay();
-	EnemyFire();
+	player = Cast<AHotPlayer>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	
+	Fire();
 }
 
 void APistol::Fire()
 {
+	if(player)
+	{
+		player->bIsFiring = true;	
+	}
 	// 1초동안 시간 정상적으로 흐르도록
-<<<<<<< HEAD
-
-=======
 	GetWorldTimerManager().ClearTimer(resetTimer);
 	GetWorldTimerManager().SetTimer(resetTimer, FTimerDelegate::CreateLambda([&]()
 	{
@@ -26,13 +31,12 @@ void APistol::Fire()
 			player->bIsFiring = false;	
 		}
 		UE_LOG(LogTemp, Warning, TEXT("timerDOne"));
-	}), 1, false);
+	}), 0.5, false);
 	
-	UGameplayStatics::SetGlobalTimeDilation(GetWorld(),1);
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(),1.5);
 	
->>>>>>> parent of 795060b (230306 오른손 시점에 고정)
 	// 총알 액터 스폰
-	GetWorld()->SpawnActor<ABullet>(bulletFactory, weaponMesh->GetSocketTransform(TEXT("Front")));
+	GetWorld()->SpawnActor<ABullet>(bulletFactory2, weaponMesh->GetSocketTransform(TEXT("Front")));
 }
 
 void APistol::EnemyFire()
