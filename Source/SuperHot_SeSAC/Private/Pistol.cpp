@@ -31,12 +31,12 @@ void APistol::Fire()
 			player->bIsFiring = false;	
 		}
 		UE_LOG(LogTemp, Warning, TEXT("timerDOne"));
-	}), 1, false);
+	}), 0.5, false);
 	
-	UGameplayStatics::SetGlobalTimeDilation(GetWorld(),1);
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(),1.5);
 	
 	// 총알 액터 스폰
-	GetWorld()->SpawnActor<ABullet>(bulletFactory, weaponMesh->GetSocketTransform(TEXT("Front")));
+	GetWorld()->SpawnActor<ABullet>(bulletFactory2, weaponMesh->GetSocketTransform(TEXT("Front")));
 }
 
 void APistol::EnemyFire()

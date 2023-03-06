@@ -61,6 +61,7 @@ void ABullet::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 {
 	bullet= Cast<ABullet>(OtherActor);
 	weapon = Cast<AWeaponBase>(OtherActor);
+	enemy = Cast<AEnemyBase>(OtherActor);
 
 	//부딪힌 대상이 총알이면 서로 파괴
 	if(bullet)
@@ -83,6 +84,15 @@ void ABullet::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 		//총알 메쉬 제거
 		bulletMeshComp->DestroyComponent();
 	}
+	else if(enemy)
+	{
+		//나이아가라 스폰
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), bulletVFX2, GetActorLocation(), GetActorRotation());
+		//궤적 VFX 불렛에서 분리
+		trailVFX->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+		//총알 메쉬 제거
+		bulletMeshComp->DestroyComponent();
+	}
 	
 }
 
@@ -94,7 +104,7 @@ void ABullet::EnemyHitCheck()
 	bool bHit = GetWorld()->SweepSingleByChannel(HitResult, GetActorLocation(), GetActorLocation() + GetActorForwardVector() * 100.f, FQuat::Identity, ECollisionChannel::ECC_Pawn, FCollisionShape::MakeSphere(100.f), Params);
 	if(bHit)
 	{
-		AEnemyBase* enemy = Cast<AEnemyBase>(HitResult.GetActor());
+		 enemy = Cast<AEnemyBase>(HitResult.GetActor());
 		if(enemy)
 		{
 			enemy->GetMesh()->HideBoneByName(HitResult.BoneName, EPhysBodyOp::PBO_Term);

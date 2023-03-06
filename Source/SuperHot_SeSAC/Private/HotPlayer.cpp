@@ -6,6 +6,7 @@
 #include "SuperHotGameModeBase.h"
 #include "Engine/LocalPlayer.h"
 #include "EnhancedInputComponent.h"
+#include "HeadMountedDisplayFunctionLibrary.h"
 #include "MotionControllerComponent.h"
 #include "Pistol.h"
 #include "Camera/CameraComponent.h"
@@ -79,6 +80,13 @@ void AHotPlayer::BeginPlay()
 void AHotPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	//HMD가 연결되어 있지 않다면
+	if(UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayConnected() == false)
+	{
+		//손이 카메라 방향과 일치하도록 하자
+		RightHand->SetRelativeRotation(HotCamera->GetRelativeRotation());
+	}
 }
 
 // Called to bind functionality to input
