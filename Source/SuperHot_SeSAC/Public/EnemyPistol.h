@@ -25,4 +25,15 @@ public:
 	class APistol* Pistol;
 	UPROPERTY(EditAnywhere, Category = "Pistol")
 	TSubclassOf<APistol> PistolFactory;
+
+	UPROPERTY()
+	class UPistolEnemyAnimInstance* PistolEnemyAnim;
+
+	UPROPERTY()
+	bool bIsAiming = false;
+
+	UFUNCTION()
+	void AimOn();
+	UFUNCTION()
+	void AimOff();
 };

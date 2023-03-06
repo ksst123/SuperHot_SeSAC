@@ -20,6 +20,7 @@ void AEnemyBaseAIController::BeginPlay()
 		if(BT_EnemyBase)
 		{
 			RunBehaviorTree(BT_EnemyBase);
+			UE_LOG(LogTemp, Warning, TEXT("Run BT Base"));
 		}
 	}
 }

@@ -125,6 +125,20 @@ void AEnemyBase::BeginPlay()
 	DestructibleLeftArm->SetVisibility(false);
 	DestructibleRightLeg->SetVisibility(false);
 	DestructibleLeftLeg->SetVisibility(false);
+
+	// DestructibleBody->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	// DestructibleBody->SetVisibility(true);
+	// GetMesh()->SetSimulatePhysics(true);
+	// // GetMesh()->HideBoneByName(TEXT("pelvis"), EPhysBodyOp::PBO_None);
+	// // GetMesh()->HideBoneByName(TEXT("spine_01"), EPhysBodyOp::PBO_None);
+	// // GetMesh()->HideBoneByName(TEXT("spine_02"), EPhysBodyOp::PBO_None);
+	// GetMesh()->HideBoneByName(TEXT("spine_03"), EPhysBodyOp::PBO_None);
+	// // GetMesh()->HideBoneByName(TEXT("spine_04"), EPhysBodyOp::PBO_None);
+	// // GetMesh()->HideBoneByName(TEXT("spine_05"), EPhysBodyOp::PBO_None);
+	// // GetMesh()->HideBoneByName(TEXT("clavicle_l"), EPhysBodyOp::PBO_None);
+	// // GetMesh()->HideBoneByName(TEXT("clavicle_r"), EPhysBodyOp::PBO_None);
+	// DestructibleBody->AddImpulse(FVector(0,0,100));
+	
 }
 
 // Called every frame
@@ -143,6 +157,9 @@ void AEnemyBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 void AEnemyBase::Die()
 {
-	GetMesh()->SetSimulatePhysics(true);
+	// GetMesh()->SetSimulatePhysics(true);
+	PlayAnimMontage(BaseEnemyAnim->Die, 5.f, TEXT("Default"));
+	BaseEnemyAnim->AnimNotify_Die();
+	UnPossessed();
 }
 

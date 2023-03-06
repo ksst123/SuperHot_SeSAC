@@ -26,3 +26,8 @@ void UBaseEnemyAnimInstance::AnimNotify_PunchRight()
 {
 	ownerEnemy->HandFightComponent->bPunching = true;
 }
+
+void UBaseEnemyAnimInstance::AnimNotify_Die()
+{
+	ownerEnemy->bIsDead = true;
+}
