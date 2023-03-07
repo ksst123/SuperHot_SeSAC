@@ -28,4 +28,7 @@ public:
 
 	UPROPERTY()
 	FTimerHandle resetTimer;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+	class UNiagaraSystem* muzzleFlashVFX;
 };
