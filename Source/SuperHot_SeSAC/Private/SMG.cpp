@@ -32,7 +32,7 @@ void ASMG::Fire()
 			player->bIsFiring = false;	
 		}
 		UE_LOG(LogTemp, Warning, TEXT("timerDone"));
-	}), 0.3, false);
+	}), 0.6, false);
 	
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(),2.0);
 	
