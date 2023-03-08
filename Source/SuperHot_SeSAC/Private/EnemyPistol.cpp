@@ -2,8 +2,14 @@
 
 
 #include "EnemyPistol.h"
+
+#include "BrainComponent.h"
+#include "HotPlayer.h"
 #include "Pistol.h"
 #include "PistolEnemyAnimInstance.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "EnemyPistolAIController.h"
 
 AEnemyPistol::AEnemyPistol()
 {
@@ -19,7 +25,6 @@ void AEnemyPistol::BeginPlay()
 	if(Pistol)
 	{
 		Pistol->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("hand_rSocketPistol"));
-		Pistol->SetOwner(this);
 	}
 
 	PistolEnemyAnim = Cast<UPistolEnemyAnimInstance>(GetMesh()->GetAnimInstance());
@@ -47,4 +52,20 @@ void AEnemyPistol::Die()
 	BaseEnemyAnim->AnimNotify_Die();
 	Pistol->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 	UnPossessed();
+
+	
+	AEnemyPistolAIController* ControllerAI = Cast<AEnemyPistolAIController>(GetController());
+	if(ControllerAI)
+	{
+		ControllerAI->BrainComponent->StopLogic(TEXT("Die"));
+	}
+	
+	
+	AHotPlayer* player = Cast<AHotPlayer>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+	if(player)
+	{
+		Pistol->weaponMesh->SetSimulatePhysics(true);
+		Pistol->weaponMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		Pistol->weaponMesh->AddForce((player->GetActorLocation() - Pistol->GetActorLocation() + FVector(0.f, 0.f, 200.f))  * 200.f);
+	}
 }
