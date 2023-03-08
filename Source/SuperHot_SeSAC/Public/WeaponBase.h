@@ -32,5 +32,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	TSubclassOf<class ABullet> bulletFactory2;
+
+	
 };
  

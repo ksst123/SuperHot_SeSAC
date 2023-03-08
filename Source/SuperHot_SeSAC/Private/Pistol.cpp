@@ -4,6 +4,7 @@
 #include "Pistol.h"
 #include "Bullet.h"
 #include "HotPlayer.h"
+#include "NiagaraFunctionLibrary.h"
 #include "Components/SceneComponent.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -31,9 +32,11 @@ void APistol::Fire()
 			player->bIsFiring = false;	
 		}
 		UE_LOG(LogTemp, Warning, TEXT("timerDOne"));
-	}), 0.5, false);
+	}), 0.6, false);
 	
-	UGameplayStatics::SetGlobalTimeDilation(GetWorld(),1.5);
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(),2);
+
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), muzzleFlashVFX, weaponMesh->GetSocketLocation(TEXT("Front")), GetActorRotation());
 	
 	// 총알 액터 스폰
 	GetWorld()->SpawnActor<ABullet>(bulletFactory2, weaponMesh->GetSocketTransform(TEXT("Front")));
@@ -41,6 +44,8 @@ void APistol::Fire()
 
 void APistol::EnemyFire()
 {
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), muzzleFlashVFX, weaponMesh->GetSocketLocation(TEXT("Front")), weaponMesh->GetSocketRotation(TEXT("Front")));
+	
 	// 총알 액터 스폰
 	GetWorld()->SpawnActor<ABullet>(bulletFactory, weaponMesh->GetSocketTransform(TEXT("Front")));
 }

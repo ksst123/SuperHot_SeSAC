@@ -13,13 +13,13 @@ UCLASS()
 class SUPERHOT_SESAC_API APistol : public AWeaponBase
 {
 	GENERATED_BODY()
-
+public:
+	
 	UFUNCTION(BlueprintCallable)
 	void Fire();
 
 	virtual void BeginPlay() override;
-
-public:
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	class AHotPlayer* player;
 
@@ -28,4 +28,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void EnemyFire();
+
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+	class UNiagaraSystem* muzzleFlashVFX;
 };
