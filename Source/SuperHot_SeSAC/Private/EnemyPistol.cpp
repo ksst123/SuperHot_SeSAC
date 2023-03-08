@@ -36,3 +36,15 @@ void AEnemyPistol::AimOff()
 	PlayAnimMontage(PistolEnemyAnim->PistolAimOff, 1.f, TEXT("Default"));
 	PistolEnemyAnim->AnimNotify_AimOff();
 }
+
+void AEnemyPistol::Die()
+{
+	Super::Die();
+
+	bIsNotShooting = true;
+	bIsAiming = false;
+	PlayAnimMontage(BaseEnemyAnim->Die, 5.f, TEXT("Default"));
+	BaseEnemyAnim->AnimNotify_Die();
+	Pistol->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	UnPossessed();
+}

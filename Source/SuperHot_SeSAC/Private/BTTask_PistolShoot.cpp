@@ -5,6 +5,7 @@
 #include "AIController.h"
 #include "EnemyPistol.h"
 #include "Pistol.h"
+#include "PistolEnemyAnimInstance.h"
 
 UBTTask_PistolShoot::UBTTask_PistolShoot()
 {
@@ -15,11 +16,22 @@ EBTNodeResult::Type UBTTask_PistolShoot::ExecuteTask(UBehaviorTreeComponent& Own
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
 
-	AEnemyPistol* enemy = Cast<AEnemyPistol>(OwnerComp.GetAIOwner()->GetPawn());
+	enemy = Cast<AEnemyPistol>(OwnerComp.GetAIOwner()->GetPawn());
 	if(enemy)
 	{
-		// enemy->Pistol->EnemyFire();
+		if(enemy->bIsNotShooting)
+		{
+			enemy->bIsNotShooting = false;
+			UE_LOG(LogTemp, Warning, TEXT("%s"), (enemy->bIsNotShooting) ? TEXT("True") : TEXT("False"));
+			enemy->Pistol->EnemyFire();
+		}
 	}
 
+	FTimerHandle ShootDelay;
+	GetWorld()->GetTimerManager().SetTimer(ShootDelay, FTimerDelegate::CreateLambda([this]()->void
+	{
+		enemy->bIsNotShooting = true;
+	}), 2.f, false);
+	
 	return EBTNodeResult::Succeeded;
 }

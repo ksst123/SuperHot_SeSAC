@@ -21,26 +21,29 @@ void AEnemyPistolAIController::BeginPlay()
 		if(BT_EnemyPistol)
 		{
 			RunBehaviorTree(BT_EnemyPistol);
-			UE_LOG(LogTemp, Warning, TEXT("Run BT"));
 		}
 	}
 }
 
 void AEnemyPistolAIController::Tick(float DeltaSeconds)
 {
-	// Super::Tick(DeltaSeconds);
+	Super::Tick(DeltaSeconds);
 	
-	// if(Player)
-	// {
-	// 	SetFocus(Player);
-	// 	MoveToActor(Player, 150.f);
-	// }
-	// if(Player)
-	// {
-	// 	AEnemyPistol* owner = Cast<AEnemyPistol>(GetOwner());
-	// 	if(owner)
-	// 	{
-	// 		owner->bIsAiming = true;
-	// 	}
-	// }
+	if(Player)
+	{
+		SetFocus(Player);
+		MoveToActor(Player, 150.f);
+	}
+	
+	if(Player)
+	{
+		AEnemyPistol* owner = Cast<AEnemyPistol>(GetPawn());
+		if(owner)
+		{
+			if(owner->bIsAiming == false)
+			{
+				owner->bIsAiming = true;
+			}
+		}
+	}
 }

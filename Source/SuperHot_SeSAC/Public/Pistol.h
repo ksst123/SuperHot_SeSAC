@@ -17,9 +17,6 @@ class SUPERHOT_SESAC_API APistol : public AWeaponBase
 	UFUNCTION(BlueprintCallable)
 	void Fire();
 
-	UFUNCTION(BlueprintCallable)
-	void EnemyFire();
-
 	virtual void BeginPlay() override;
 
 public:
@@ -28,4 +25,7 @@ public:
 
 	UPROPERTY()
 	FTimerHandle resetTimer;
+
+	UFUNCTION(BlueprintCallable)
+	void EnemyFire();
 };

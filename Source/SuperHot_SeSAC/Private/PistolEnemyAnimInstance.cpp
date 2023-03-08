@@ -14,6 +14,9 @@ void UPistolEnemyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		FVector Velocity = ownerEnemyPistol->GetVelocity();
 		Speed = FVector::DotProduct(ownerEnemyPistol->GetActorForwardVector(), Velocity);
 		bIsAiming = ownerEnemyPistol->bIsAiming;
+
+		HorizontalAngle = ownerEnemyPistol->GetBaseAimRotation().Pitch - 360;
+		VerticalAngle = ownerEnemyPistol->GetBaseAimRotation().Yaw - 360;
 	}
 }
 
@@ -26,3 +29,8 @@ void UPistolEnemyAnimInstance::AnimNotify_AimOff()
 {
 	ownerEnemyPistol->bIsAiming = false;
 }
+
+// void UPistolEnemyAnimInstance::AnimNotify_ShootEnd()
+// {
+// 	ownerEnemyPistol->bIsNotShooting = true;
+// }

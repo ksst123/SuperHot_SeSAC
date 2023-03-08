@@ -28,9 +28,9 @@ void AEnemyBaseAIController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	// if(Player)
-	// {
-	// 	SetFocus(Player);
-	// 	MoveToActor(Player, 150.f);
-	// }
+	if(Player)
+	{
+		SetFocus(Player);
+		MoveToActor(Player, 150.f);
+	}
 }

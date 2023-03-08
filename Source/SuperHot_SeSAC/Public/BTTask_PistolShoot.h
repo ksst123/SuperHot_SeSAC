@@ -17,6 +17,9 @@ class SUPERHOT_SESAC_API UBTTask_PistolShoot : public UBTTask_BlackboardBase
 public:
 	UBTTask_PistolShoot();
 
+	UPROPERTY()
+	class AEnemyPistol* enemy;
+	
 protected:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 };

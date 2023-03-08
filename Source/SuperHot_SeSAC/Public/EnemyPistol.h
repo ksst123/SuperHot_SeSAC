@@ -32,8 +32,13 @@ public:
 	UPROPERTY()
 	bool bIsAiming = false;
 
+	UPROPERTY()
+	bool bIsNotShooting = true;
+
 	UFUNCTION()
 	void AimOn();
 	UFUNCTION()
 	void AimOff();
+
+	void Die() override;
 };

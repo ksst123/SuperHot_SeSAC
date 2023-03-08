@@ -16,6 +16,11 @@ class SUPERHOT_SESAC_API UPistolEnemyAnimInstance : public UBaseEnemyAnimInstanc
 
 public:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	float HorizontalAngle;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	float VerticalAngle;
 	
 	UPROPERTY()
 	class AEnemyPistol* ownerEnemyPistol;
@@ -24,6 +29,8 @@ public:
 	class UAnimMontage* PistolAimOn;
 	UPROPERTY(EditAnywhere, Category = "Montages")
 	class UAnimMontage* PistolAimOff;
+	UPROPERTY(EditAnywhere, Category = "Montages")
+	class UAnimMontage* PistolIdle;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	bool bIsAiming = false;
@@ -32,4 +39,6 @@ public:
 	void AnimNotify_AimOn();
 	UFUNCTION()
 	void AnimNotify_AimOff();
+	// UFUNCTION()
+	// void AnimNotify_ShootEnd();
 };

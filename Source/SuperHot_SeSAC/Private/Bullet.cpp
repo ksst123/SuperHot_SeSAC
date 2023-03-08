@@ -10,6 +10,7 @@
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Components/SceneComponent.h"
+#include "GeometryCollection/GeometryCollectionComponent.h"
 
 // Sets default values
 ABullet::ABullet()
@@ -92,6 +93,15 @@ void ABullet::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 		trailVFX->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
 		//총알 메쉬 제거
 		bulletMeshComp->DestroyComponent();
+
+		enemy->Die();
+		enemy->GetMesh()->SetVisibility(false);
+		enemy->GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		for(int i = 0; i < enemy->DestructibleMeshes.Num(); i++)
+		{
+			enemy->DestructibleMeshes[i]->SetVisibility(true);
+			enemy->DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		}
 	}
 	
 }
@@ -101,15 +111,20 @@ void ABullet::EnemyHitCheck()
 	FHitResult HitResult;
 	FCollisionQueryParams Params;
 
-	bool bHit = GetWorld()->SweepSingleByChannel(HitResult, GetActorLocation(), GetActorLocation() + GetActorForwardVector() * 100.f, FQuat::Identity, ECollisionChannel::ECC_Pawn, FCollisionShape::MakeSphere(100.f), Params);
+	bool bHit = GetWorld()->SweepSingleByChannel(HitResult, GetActorLocation(), GetActorLocation() + GetActorForwardVector() * 10.f, FQuat::Identity, ECollisionChannel::ECC_Pawn, FCollisionShape::MakeSphere(10.f), Params);
 	if(bHit)
 	{
 		 enemy = Cast<AEnemyBase>(HitResult.GetActor());
 		if(enemy)
 		{
-			enemy->GetMesh()->HideBoneByName(HitResult.BoneName, EPhysBodyOp::PBO_Term);
-			enemy->GetMesh()->GetPhysicsAsset();
-			UE_LOG(LogTemp, Warning, TEXT("%s"), *(HitResult.BoneName.ToString()));
+			// enemy->Die();
+			// enemy->GetMesh()->SetVisibility(false);
+			// enemy->GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			// for(int i = 0; i < enemy->DestructibleMeshes.Num(); i++)
+			// {
+			// 	enemy->DestructibleMeshes[i]->SetVisibility(true);
+			// 	enemy->DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+			// }
 		}
 	}
 }
