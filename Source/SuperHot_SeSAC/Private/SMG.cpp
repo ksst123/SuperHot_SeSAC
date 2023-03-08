@@ -32,17 +32,28 @@ void ASMG::Fire()
 			player->bIsFiring = false;	
 		}
 		UE_LOG(LogTemp, Warning, TEXT("timerDone"));
-	}), 0.5, false);
+	}), 0.3, false);
 	
-	UGameplayStatics::SetGlobalTimeDilation(GetWorld(),1.5);
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(),2.0);
 	
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), muzzleFlashVFX, weaponMesh->GetSocketLocation(TEXT("Front")), GetActorRotation());
 	
 	// 총알 액터 스폰
-	float randPitch = FMath::RandRange(-3,3);
-	float randYaw = FMath::RandRange(-3, 3);
-	GetWorld()->SpawnActor<ABullet>(bulletFactory2, weaponMesh->GetSocketLocation(TEXT("Front")),weaponMesh->GetSocketRotation(TEXT("Front")) + FRotator(randPitch, randYaw, 0));
+	//첫 발 발사
+	GetWorld()->SpawnActor<ABullet>(bulletFactory2, weaponMesh->GetSocketLocation(TEXT("Front")),weaponMesh->GetSocketRotation(TEXT("Front")) + FRotator(FMath::RandRange(-2,2), FMath::RandRange(-2,2), 0));
+	// 두 번째 발 발사
+	GetWorldTimerManager().SetTimer(burstTimer1, FTimerDelegate::CreateLambda([&]()
+		{
+		GetWorld()->SpawnActor<ABullet>(bulletFactory2, weaponMesh->GetSocketLocation(TEXT("Front")),weaponMesh->GetSocketRotation(TEXT("Front")) + FRotator(FMath::RandRange(-2,2), FMath::RandRange(-2,2), 0));
+		}), 0.3f, false);
+	//세 번째 발 발사
+	GetWorldTimerManager().SetTimer(burstTimer2, FTimerDelegate::CreateLambda([&]()
+{
+		GetWorld()->SpawnActor<ABullet>(bulletFactory2, weaponMesh->GetSocketLocation(TEXT("Front")),weaponMesh->GetSocketRotation(TEXT("Front")) + FRotator(FMath::RandRange(-2,2), FMath::RandRange(-2,2), 0));
+	}), 0.6f, false);
 }
+
+
 
 void ASMG::EnemyFire()
 {

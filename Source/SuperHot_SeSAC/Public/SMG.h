@@ -30,7 +30,10 @@ public:
 	FTimerHandle resetTimer;
 
 	UPROPERTY()
-	FTimerHandle burstTimer;
+	FTimerHandle burstTimer1;
+
+	UPROPERTY()
+	FTimerHandle burstTimer2;
 
 	UPROPERTY(EditAnywhere, Category = "Weapon")
 	class UNiagaraSystem* muzzleFlashVFX;

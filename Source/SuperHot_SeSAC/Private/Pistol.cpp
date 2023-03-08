@@ -32,9 +32,9 @@ void APistol::Fire()
 			player->bIsFiring = false;	
 		}
 		UE_LOG(LogTemp, Warning, TEXT("timerDOne"));
-	}), 0.5, false);
+	}), 0.6, false);
 	
-	UGameplayStatics::SetGlobalTimeDilation(GetWorld(),1.5);
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(),2);
 
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), muzzleFlashVFX, weaponMesh->GetSocketLocation(TEXT("Front")), GetActorRotation());
 	
