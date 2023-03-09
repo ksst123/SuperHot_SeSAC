@@ -44,7 +44,6 @@ void ABullet::BeginPlay()
 
 	bulletMeshComp->OnComponentBeginOverlap.AddDynamic(this, &ABullet::OnOverlapBegin);
 	
-	
 }
 
 // Called every frame
