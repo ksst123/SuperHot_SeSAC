@@ -4,6 +4,7 @@
 #include "EnemyPistol.h"
 
 #include "BrainComponent.h"
+#include "BTTask_PistolShoot.h"
 #include "HotPlayer.h"
 #include "Pistol.h"
 #include "PistolEnemyAnimInstance.h"
@@ -51,9 +52,7 @@ void AEnemyPistol::Die()
 	PlayAnimMontage(BaseEnemyAnim->Die, 5.f, TEXT("Default"));
 	BaseEnemyAnim->AnimNotify_Die();
 	Pistol->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-	UnPossessed();
-
-	
+	Pistol->weaponMesh->SetSimulatePhysics(true);
 	AEnemyPistolAIController* ControllerAI = Cast<AEnemyPistolAIController>(GetController());
 	if(ControllerAI)
 	{
@@ -66,6 +65,6 @@ void AEnemyPistol::Die()
 	{
 		Pistol->weaponMesh->SetSimulatePhysics(true);
 		Pistol->weaponMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-		Pistol->weaponMesh->AddForce((player->GetActorLocation() - Pistol->GetActorLocation() + FVector(0.f, 0.f, 200.f))  * 200.f);
+		Pistol->weaponMesh->AddForce((player->GetActorLocation() - Pistol->GetActorLocation() + FVector(0.f, 0.f, 150.f))  * 100.f);
 	}
 }

@@ -95,13 +95,13 @@ void ABullet::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 		bulletMeshComp->DestroyComponent();
 
 		enemy->Die();
-		enemy->GetMesh()->SetVisibility(false);
-		enemy->GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		for(int i = 0; i < enemy->DestructibleMeshes.Num(); i++)
-		{
-			enemy->DestructibleMeshes[i]->SetVisibility(true);
-			enemy->DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-		}
+		// enemy->GetMesh()->SetVisibility(false);
+		// enemy->GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		// for(int i = 0; i < enemy->DestructibleMeshes.Num(); i++)
+		// {
+		// 	enemy->DestructibleMeshes[i]->SetVisibility(true);
+		// 	enemy->DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		// }
 	}
 	
 }
@@ -110,11 +110,12 @@ void ABullet::EnemyHitCheck()
 {
 	FHitResult HitResult;
 	FCollisionQueryParams Params;
-
+	Params.AddIgnoredActor(this);
+	
 	bool bHit = GetWorld()->SweepSingleByChannel(HitResult, GetActorLocation(), GetActorLocation() + GetActorForwardVector() * 10.f, FQuat::Identity, ECollisionChannel::ECC_Pawn, FCollisionShape::MakeSphere(10.f), Params);
 	if(bHit)
 	{
-		 enemy = Cast<AEnemyBase>(HitResult.GetActor());
+		enemy = Cast<AEnemyBase>(HitResult.GetActor());
 		if(enemy)
 		{
 			// enemy->Die();
@@ -125,6 +126,8 @@ void ABullet::EnemyHitCheck()
 			// 	enemy->DestructibleMeshes[i]->SetVisibility(true);
 			// 	enemy->DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 			// }
+			enemy->GetMesh()->BreakConstraint(FVector(100.f, 100.f, 100.f), HitResult.Location, HitResult.BoneName);
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *(HitResult.BoneName.ToString()));
 		}
 	}
 }

@@ -32,6 +32,7 @@ EBTNodeResult::Type UBTTask_PistolShoot::ExecuteTask(UBehaviorTreeComponent& Own
 	{
 		enemy->bIsNotShooting = true;
 	}), 2.f, false);
+	GetWorld()->GetTimerManager().ClearTimer(ShootDelay);
 	
 	return EBTNodeResult::Succeeded;
 }
