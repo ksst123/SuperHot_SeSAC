@@ -12,8 +12,6 @@ void AShotgun::BeginPlay()
 {
 	Super::BeginPlay();
 	player = Cast<AHotPlayer>(GetWorld()->GetFirstPlayerController()->GetPawn());
-	
-	Fire();
 }
 
 void AShotgun::Fire()

@@ -80,10 +80,7 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Input")
 	bool bIsMoving = false;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UChildActorComponent* pistol;
-
+	
 
 	// 총알 발사 관련
 	UFUNCTION()
@@ -110,6 +107,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	TSubclassOf<class ABullet> bulletFactory2;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	TSubclassOf<class ABullet> bulletFactory3;
+
 	//  잡기용 손 스피어 생성
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class USphereComponent* handSphereR;
@@ -128,15 +128,47 @@ public:
 
 	void DetachGrabR();
 	void DetachGrabL();
+	
+	UPROPERTY()
+	class AWeaponBase* weapon;
+
+	UPROPERTY(EditAnywhere, Category = "Grab")
+	bool bIsGrabbableR = false;
+
+	UPROPERTY(EditAnywhere, Category = "Grab")
+	bool bIsGrabbableL = false;
 
 	// 잡기 범위
 	UPROPERTY(EditDefaultsOnly, Category = "Grab")
-	float GrabRange = 100;
+	float GrabRange = 20;
 
-	// 오른손 잡은 물체 기억
+	// 잡고 있는지 여부
+	bool bIsGrabbedR = false;
+
+	UPROPERTY()
+	class APistol* pistol;
+
+	UPROPERTY()
+	class ASMG* smg;
+
+	FTimerHandle burstTimer1;
+	FTimerHandle burstTimer2;
+
+	UPROPERTY()
+	class AShotgun* shotgun;
+
+	UPROPERTY(EditAnywhere, Category = "Grab")
+	class UMaterial* grabbedMaterial;
+
+	UPROPERTY(EditAnywhere, Category = "Grab")
+	class UMaterial* basicMaterial;
+
+	// 오른손 닿은 물체 기억
+	UPROPERTY()
+	class AActor* GrabbedActorR;
 	UPROPERTY()
 	class UPrimitiveComponent* GrabbedObjectR;
-	// 왼손 잡은 물체 기억
+	// 왼손 닿은 물체 기억
 	UPROPERTY()
 	class UPrimitiveComponent* GrabbedObjectL;
 };

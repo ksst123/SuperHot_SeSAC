@@ -12,8 +12,6 @@ void ASMG::BeginPlay()
 {
 	Super::BeginPlay();
 	player = Cast<AHotPlayer>(GetWorld()->GetFirstPlayerController()->GetPawn());
-	
-	Fire();
 }
 
 void ASMG::Fire()
