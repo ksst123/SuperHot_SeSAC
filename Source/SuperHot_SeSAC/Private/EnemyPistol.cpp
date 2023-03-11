@@ -4,7 +4,6 @@
 #include "EnemyPistol.h"
 
 #include "BrainComponent.h"
-#include "BTTask_PistolShoot.h"
 #include "HotPlayer.h"
 #include "Pistol.h"
 #include "PistolEnemyAnimInstance.h"

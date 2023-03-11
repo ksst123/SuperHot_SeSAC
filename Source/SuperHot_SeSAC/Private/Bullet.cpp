@@ -102,7 +102,6 @@ void ABullet::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 		// 	enemy->DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		// }
 	}
-	
 }
 
 void ABullet::EnemyHitCheck()
