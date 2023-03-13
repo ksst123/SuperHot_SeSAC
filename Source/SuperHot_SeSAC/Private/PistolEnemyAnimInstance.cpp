@@ -3,20 +3,24 @@
 
 #include "PistolEnemyAnimInstance.h"
 #include "EnemyPistol.h"
+#include "HotPlayer.h"
+#include "Kismet/GameplayStatics.h"
 
 void UPistolEnemyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
 
+	// auto player = Cast<AHotPlayer>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	
 	ownerEnemyPistol = Cast<AEnemyPistol>(TryGetPawnOwner());
 	if(ownerEnemyPistol)
 	{
 		FVector Velocity = ownerEnemyPistol->GetVelocity();
 		Speed = FVector::DotProduct(ownerEnemyPistol->GetActorForwardVector(), Velocity);
 		bIsAiming = ownerEnemyPistol->bIsAiming;
-
+		
 		HorizontalAngle = ownerEnemyPistol->GetBaseAimRotation().Pitch - 180;
-		VerticalAngle = ownerEnemyPistol->GetBaseAimRotation().Yaw - 180;
+		VerticalAngle = ownerEnemyPistol->GetBaseAimRotation().Yaw - 130;
 	}
 }
 

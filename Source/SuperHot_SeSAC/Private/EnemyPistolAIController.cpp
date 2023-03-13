@@ -15,7 +15,8 @@ AEnemyPistolAIController::AEnemyPistolAIController()
 void AEnemyPistolAIController::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	Player = Cast<AHotPlayer>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 	if(Player)
 	{
 		if(BT_EnemyPistol)

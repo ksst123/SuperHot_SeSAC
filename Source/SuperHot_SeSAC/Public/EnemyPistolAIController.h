@@ -10,7 +10,7 @@
  * 
  */
 UCLASS()
-class SUPERHOT_SESAC_API AEnemyPistolAIController : public AEnemyBaseAIController
+class SUPERHOT_SESAC_API AEnemyPistolAIController : public AAIController
 {
 	GENERATED_BODY()
 
@@ -25,4 +25,7 @@ protected:
 public:
 	UPROPERTY(EditAnywhere)
 	class UBehaviorTree* BT_EnemyPistol;
+
+	UPROPERTY()
+	class AHotPlayer* Player;
 };

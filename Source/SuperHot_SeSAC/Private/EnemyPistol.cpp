@@ -30,6 +30,16 @@ void AEnemyPistol::BeginPlay()
 	PistolEnemyAnim = Cast<UPistolEnemyAnimInstance>(GetMesh()->GetAnimInstance());
 }
 
+void AEnemyPistol::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	if(Pistol)
+	{
+		// Pistol->
+	}
+}
+
 void AEnemyPistol::AimOn()
 {
 	PlayAnimMontage(PistolEnemyAnim->PistolAimOn, 1.f, TEXT("Default"));
