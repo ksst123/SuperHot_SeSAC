@@ -211,12 +211,16 @@ public:
 	
 	void PosCheck();
 
-	float headVelocity;
+	UPROPERTY()
+	float headVelocity = 0;
 
 	// 오른손 속도 구하기
 	FVector RightHandDirection;
 	float RightHandVelocity;
 	FVector LeftHandDirection;
 	float LeftHandVelocity;
+
+	UPROPERTY()
+	float timeDilation;
 	
 };

@@ -60,8 +60,9 @@ AHotPlayer::AHotPlayer()
 void AHotPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.05);
-
+	
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.01);	
+	
 	// Enhanced Input 사용처리
 	auto PC = Cast<APlayerController>(GetWorld()->GetFirstPlayerController());
 
@@ -75,6 +76,7 @@ void AHotPlayer::BeginPlay()
 			subSystem->AddMappingContext(IMC_HotInput, 0);
 		}
 	}
+	
 
 }
 
@@ -82,7 +84,7 @@ void AHotPlayer::BeginPlay()
 void AHotPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	UE_LOG(LogTemp, Warning, TEXT("Tick Enabled"));
 	
 	//HMD가 연결되어 있지 않다면
 	if(UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayConnected() == false)
@@ -93,12 +95,19 @@ void AHotPlayer::Tick(float DeltaTime)
 	else
 	{
 		PosCheck();
-		
-		UE_LOG(LogTemp, Warning, TEXT("%f"), RightHandVelocity);
 		// HMD, 모션 컨트롤러 속도에 따른 Time Dilation  조절
 	if(!bIsFiring)
 	{
-		UGameplayStatics::SetGlobalTimeDilation(GetWorld(), headVelocity/10 + RightHandVelocity/10 + LeftHandVelocity/10);
+		timeDilation = headVelocity/10 + RightHandVelocity/10 + LeftHandVelocity/10;
+		if(timeDilation < 1.5)
+		{
+			UGameplayStatics::SetGlobalTimeDilation(GetWorld(), timeDilation);	
+		}
+		else
+		{
+			UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.001);	
+		}
+		
 	}
 	
 	}
