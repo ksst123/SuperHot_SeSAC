@@ -4,12 +4,16 @@
 #include "EnemyBase.h"
 
 #include "BaseEnemyAnimInstance.h"
+#include "EditorDirectories.h"
 #include "EnemyHandFightComponent.h"
 #include "EnemyMoveComponent.h"
+#include "LevelScriptActor_Cafeteria.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GeometryCollection/GeometryCollectionComponent.h"
 #include "ProceduralMeshComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "LevelScriptActor_Cafeteria.h"
 
 // Sets default values
 AEnemyBase::AEnemyBase()
@@ -144,9 +148,21 @@ void AEnemyBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 void AEnemyBase::Die()
 {
+	if(bIsDead)
+	{
+		return;
+	}
+	
 	// GetMesh()->SetSimulatePhysics(true);
 	PlayAnimMontage(BaseEnemyAnim->Die, 5.f, TEXT("Default"));
 	BaseEnemyAnim->AnimNotify_Die();
+	GetMesh()->SetSimulatePhysics(false);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	UnPossessed();
+	ALevelScriptActor_Cafeteria* LevelBP = Cast<ALevelScriptActor_Cafeteria>(GetWorld()->GetLevelScriptActor());
+	if(LevelBP)
+	{
+		LevelBP->EnemyCount--;
+	}
 }
 

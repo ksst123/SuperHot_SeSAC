@@ -13,5 +13,8 @@ UCLASS()
 class SUPERHOT_SESAC_API ASuperHotGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
+
+protected:
+	virtual void BeginPlay() override;
 };

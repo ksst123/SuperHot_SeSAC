@@ -3,3 +3,9 @@
 
 #include "SuperHotGameModeBase.h"
 
+#include "Kismet/GameplayStatics.h"
+
+void ASuperHotGameModeBase::BeginPlay()
+{
+	Super::BeginPlay();
+}

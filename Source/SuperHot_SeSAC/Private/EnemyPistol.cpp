@@ -10,6 +10,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "EnemyPistolAIController.h"
+#include "LevelScriptActor_Cafeteria.h"
 
 AEnemyPistol::AEnemyPistol()
 {
@@ -24,6 +25,7 @@ void AEnemyPistol::BeginPlay()
 
 	if(Pistol)
 	{
+		Pistol->weaponMesh->SetSimulatePhysics(false);
 		Pistol->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("hand_rSocketPistol"));
 	}
 
@@ -33,11 +35,6 @@ void AEnemyPistol::BeginPlay()
 void AEnemyPistol::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-
-	if(Pistol)
-	{
-		// Pistol->
-	}
 }
 
 void AEnemyPistol::AimOn()
@@ -54,14 +51,21 @@ void AEnemyPistol::AimOff()
 
 void AEnemyPistol::Die()
 {
-	Super::Die();
+	// Super::Die();
+	if(bIsDead)
+	{
+		return;
+	}
 
 	bIsNotShooting = true;
 	bIsAiming = false;
 	PlayAnimMontage(BaseEnemyAnim->Die, 5.f, TEXT("Default"));
 	BaseEnemyAnim->AnimNotify_Die();
 	Pistol->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-	Pistol->weaponMesh->SetSimulatePhysics(true);
+	// Pistol->weaponMesh->SetSimulatePhysics(true);
+	GetMesh()->SetSimulatePhysics(false);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	UnPossessed();
 	AEnemyPistolAIController* ControllerAI = Cast<AEnemyPistolAIController>(GetController());
 	if(ControllerAI)
 	{
@@ -75,5 +79,12 @@ void AEnemyPistol::Die()
 		Pistol->weaponMesh->SetSimulatePhysics(true);
 		Pistol->weaponMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		Pistol->weaponMesh->AddForce((player->GetActorLocation() - Pistol->GetActorLocation() + FVector(0.f, 0.f, 150.f))  * 100.f);
+	}
+
+	ALevelScriptActor_Cafeteria* LevelBP = Cast<ALevelScriptActor_Cafeteria>(GetWorld()->GetLevelScriptActor());
+	if(LevelBP)
+	{
+		LevelBP->EnemyCount--;
+		UE_LOG(LogTemp, Warning, TEXT("%d enemy"), LevelBP->EnemyCount);
 	}
 }

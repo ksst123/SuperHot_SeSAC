@@ -62,7 +62,7 @@ AHotPlayer::AHotPlayer()
 void AHotPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.001);
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.05);
 
 	// Enhanced Input 사용처리
 	auto PC = Cast<APlayerController>(GetWorld()->GetFirstPlayerController());
@@ -77,7 +77,7 @@ void AHotPlayer::BeginPlay()
 			subSystem->AddMappingContext(IMC_HotInput, 0);
 		}
 	}
-	
+
 }
 
 // Called every frame

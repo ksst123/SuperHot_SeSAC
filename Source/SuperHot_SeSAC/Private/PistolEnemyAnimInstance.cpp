@@ -18,9 +18,14 @@ void UPistolEnemyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		FVector Velocity = ownerEnemyPistol->GetVelocity();
 		Speed = FVector::DotProduct(ownerEnemyPistol->GetActorForwardVector(), Velocity);
 		bIsAiming = ownerEnemyPistol->bIsAiming;
+
+		// UE_LOG(LogTemp, Warning, TEXT("%f"), ownerEnemyPistol->GetBaseAimRotation().Pitch);
+		// UE_LOG(LogTemp, Warning, TEXT("%f"), ownerEnemyPistol->GetBaseAimRotation().Yaw);
 		
-		HorizontalAngle = ownerEnemyPistol->GetBaseAimRotation().Pitch - 180;
-		VerticalAngle = ownerEnemyPistol->GetBaseAimRotation().Yaw - 130;
+		HorizontalAngle = ownerEnemyPistol->GetBaseAimRotation().Pitch + 20;
+		VerticalAngle = ownerEnemyPistol->GetBaseAimRotation().Yaw - 120;
+		UE_LOG(LogTemp, Warning, TEXT("HorizontalAngle: %f"), HorizontalAngle);
+		UE_LOG(LogTemp, Warning, TEXT("VerticalAngle: %f"), VerticalAngle);
 	}
 }
 

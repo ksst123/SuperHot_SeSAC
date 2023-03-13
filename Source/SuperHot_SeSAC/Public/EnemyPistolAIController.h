@@ -28,4 +28,6 @@ public:
 
 	UPROPERTY()
 	class AHotPlayer* Player;
+
+	FVector GetFocalPointOnActor(const AActor* Actor) const override;
 };
