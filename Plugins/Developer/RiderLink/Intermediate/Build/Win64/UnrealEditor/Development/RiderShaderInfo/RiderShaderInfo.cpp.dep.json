@@ -458,8 +458,6 @@
             "c:\\program files\\epicgames\\ue_5.1\\engine\\source\\runtime\\core\\public\\profilingdebugging\\memorytrace.h",
             "c:\\program files\\epicgames\\ue_5.1\\engine\\source\\runtime\\core\\public\\containers\\lockfreefixedsizeallocator.h",
             "c:\\program files\\epicgames\\ue_5.1\\engine\\source\\runtime\\core\\public\\misc\\memstack.h",
-            "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.34.31933\\include\\sanitizer\\asan_interface.h",
-            "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.34.31933\\include\\sanitizer\\common_interface_defs.h",
             "c:\\program files\\epicgames\\ue_5.1\\engine\\source\\runtime\\core\\public\\misc\\scopeexit.h",
             "c:\\program files\\epicgames\\ue_5.1\\engine\\source\\runtime\\core\\public\\misc\\launder.h",
             "c:\\program files\\epicgames\\ue_5.1\\engine\\source\\runtime\\core\\public\\hal\\platformaffinity.h",

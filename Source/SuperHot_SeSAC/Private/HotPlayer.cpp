@@ -5,7 +5,6 @@
 
 #include "Bullet.h"
 #include "EnhancedInputSubsystems.h"
-#include "SuperHotGameModeBase.h"
 #include "Engine/LocalPlayer.h"
 #include "EnhancedInputComponent.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
@@ -15,7 +14,6 @@
 #include "Shotgun.h"
 #include "SMG.h"
 #include "Camera/CameraComponent.h"
-#include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -85,6 +83,7 @@ void AHotPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	
 	//HMD가 연결되어 있지 않다면
 	if(UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayConnected() == false)
 	{
@@ -93,13 +92,14 @@ void AHotPlayer::Tick(float DeltaTime)
 	}
 	else
 	{
+		PosCheck();
+		
+		UE_LOG(LogTemp, Warning, TEXT("%f"), RightHandVelocity);
 		// HMD, 모션 컨트롤러 속도에 따른 Time Dilation  조절
-		FXRHMDData HMDData;
-		UHeadMountedDisplayFunctionLibrary::GetHMDData(GetWorld(), HMDData);
-		FVector currentHMDPos = HMDData.Position;
-		
-		
-		//UGameplayStatics::SetGlobalTimeDilation(GetWorld(), );
+	if(!bIsFiring)
+	{
+		UGameplayStatics::SetGlobalTimeDilation(GetWorld(), headVelocity/10 + RightHandVelocity/10 + LeftHandVelocity/10);
+	}
 	
 	}
 
@@ -122,6 +122,7 @@ void AHotPlayer::Tick(float DeltaTime)
 		if(!bHit)
 		{
 			bIsGrabbableR = false;
+			
 			if(GrabbedObjectR)
 			{
 				GrabbedObjectR->SetMaterial(0, basicMaterial);
@@ -138,6 +139,7 @@ void AHotPlayer::Tick(float DeltaTime)
 			// 물리 기능이 활성화 되어있는 녀석만 판단
 			if(HitObjs[i].Component->IsSimulatingPhysics() == true)
 			{
+				HitObjs[i].GetComponent()->SetMaterial(0, basicMaterial);
 				// 현재 손과 가장 가까운 녀석과 이번에 검출할 녀석과 더 가까운 녀석이 있다면
 				//-> 필요 속성 : 현재 가장 가까운 녀석과 손과의 거리
 				float distance = FVector::Dist(HitObjs[Closest].GetActor()->GetActorLocation(), Center);
@@ -162,6 +164,7 @@ void AHotPlayer::Tick(float DeltaTime)
 			}
 		}
 	}
+	GrabbingR();
 	
 }
 
@@ -196,8 +199,20 @@ void AHotPlayer::Move(const FInputActionValue& Values)
 	//}
 	// 사용자의 입력에 따라 앞뒤좌우 이동
 	FVector2D Axis = Values.Get<FVector2D>();
-	AddMovementInput(GetActorForwardVector(), Axis.X);
+	if(UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayConnected() == false)
+	{
+	AddMovementInput(GetActorForwardVector() , Axis.X);
 	AddMovementInput(GetActorRightVector(), Axis.Y);
+	}
+	else
+	{
+		FRotator HMDRot;
+		FVector HMDDir;
+		UHeadMountedDisplayFunctionLibrary::GetOrientationAndPosition(HMDRot, HMDDir);
+		AddMovementInput(HotCamera->GetComponentRotation().Vector(), Axis.X);
+		AddMovementInput(HotCamera->GetComponentRotation().Vector(), Axis.Y);
+	}
+	
 }
 
 void AHotPlayer::Turn(const FInputActionValue& Values)
@@ -233,6 +248,8 @@ void AHotPlayer::MoveStop()
 
 void AHotPlayer::Fire()
 {
+	if(bIsGrabbedR)
+	{
 	if(bPistolOn)
 	{
 		bIsFiring = true;
@@ -245,11 +262,15 @@ void AHotPlayer::Fire()
 		}), 0.6, false);
 	
 		UGameplayStatics::SetGlobalTimeDilation(GetWorld(),2);
-	
+
+		if(GrabbedObjectR)
+		{
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), muzzleFlashVFX, GrabbedObjectR->GetSocketLocation(TEXT("Front")), GrabbedObjectR->GetSocketRotation(TEXT("Front")));
-	
+			
 		// 총알 액터 스폰
 		GetWorld()->SpawnActor<ABullet>(bulletFactory2, GrabbedObjectR->GetSocketTransform(TEXT("Front")));
+		}
+	
 	}
 	else if(bSMGOn)
 	{
@@ -263,21 +284,24 @@ void AHotPlayer::Fire()
 		}), 0.6, false);
 	
 		UGameplayStatics::SetGlobalTimeDilation(GetWorld(),2.0);
-		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), muzzleFlashVFX, GrabbedObjectR->GetSocketLocation(TEXT("Front")), GrabbedObjectR->GetSocketRotation(TEXT("Front")));
-	
-	// 총알 액터 스폰
-	//첫 발 발사
-	GetWorld()->SpawnActor<ABullet>(bulletFactory2, GrabbedObjectR->GetSocketLocation(TEXT("Front")),GrabbedObjectR->GetSocketRotation(TEXT("Front")) + FRotator(FMath::RandRange(-2,2), FMath::RandRange(-2,2), 0));
-	// 두 번째 발 발사
-	GetWorldTimerManager().SetTimer(burstTimer1, FTimerDelegate::CreateLambda([&]()
+		if(GrabbedObjectR)
 		{
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), muzzleFlashVFX, GrabbedObjectR->GetSocketLocation(TEXT("Front")), GrabbedObjectR->GetSocketRotation(TEXT("Front")));
+		// 총알 액터 스폰
+		//첫 발 발사
 		GetWorld()->SpawnActor<ABullet>(bulletFactory2, GrabbedObjectR->GetSocketLocation(TEXT("Front")),GrabbedObjectR->GetSocketRotation(TEXT("Front")) + FRotator(FMath::RandRange(-2,2), FMath::RandRange(-2,2), 0));
-		}), 0.15f, false);
-	//세 번째 발 발사
-	GetWorldTimerManager().SetTimer(burstTimer2, FTimerDelegate::CreateLambda([&]()
-{
-		GetWorld()->SpawnActor<ABullet>(bulletFactory2, GrabbedObjectR->GetSocketLocation(TEXT("Front")),GrabbedObjectR->GetSocketRotation(TEXT("Front")) + FRotator(FMath::RandRange(-2,2), FMath::RandRange(-2,2), 0));
-	}), 0.3f, false);
+		// 두 번째 발 발사
+		GetWorldTimerManager().SetTimer(burstTimer1, FTimerDelegate::CreateLambda([&]()
+			{
+			GetWorld()->SpawnActor<ABullet>(bulletFactory2, GrabbedObjectR->GetSocketLocation(TEXT("Front")),GrabbedObjectR->GetSocketRotation(TEXT("Front")) + FRotator(FMath::RandRange(-2,2), FMath::RandRange(-2,2), 0));
+			}), 0.15f, false);
+		//세 번째 발 발사
+		GetWorldTimerManager().SetTimer(burstTimer2, FTimerDelegate::CreateLambda([&]()
+	{
+			GetWorld()->SpawnActor<ABullet>(bulletFactory2, GrabbedObjectR->GetSocketLocation(TEXT("Front")),GrabbedObjectR->GetSocketRotation(TEXT("Front")) + FRotator(FMath::RandRange(-2,2), FMath::RandRange(-2,2), 0));
+		}), 0.3f, false);
+		}
+	
 	}
 	else if(bShotgunOn)
 	{
@@ -291,17 +315,20 @@ void AHotPlayer::Fire()
 		}), 0.6, false);
 	
 		UGameplayStatics::SetGlobalTimeDilation(GetWorld(),2);
-
-		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), muzzleFlashVFX, GrabbedObjectR->GetSocketLocation(TEXT("Front")), GrabbedObjectR->GetSocketRotation(TEXT("Front")));
-	
-	// 총알 액터 스폰
-	GetWorld()->SpawnActor<ABullet>(bulletFactory3, GrabbedObjectR->GetSocketLocation(TEXT("Front1")), GrabbedObjectR->GetSocketRotation(TEXT("Front1")) + FRotator(FMath::RandRange(0,5),FMath::RandRange(0,5),0));
-	GetWorld()->SpawnActor<ABullet>(bulletFactory3, GrabbedObjectR->GetSocketLocation(TEXT("Front2")), GrabbedObjectR->GetSocketRotation(TEXT("Front2")) + FRotator(FMath::RandRange(0,5), 0,0));
-	GetWorld()->SpawnActor<ABullet>(bulletFactory3, GrabbedObjectR->GetSocketLocation(TEXT("Front3")), GrabbedObjectR->GetSocketRotation(TEXT("Front3")) + FRotator(FMath::RandRange(0,5),FMath::RandRange(0,-5),0));
-	GetWorld()->SpawnActor<ABullet>(bulletFactory3, GrabbedObjectR->GetSocketLocation(TEXT("Front4")), GrabbedObjectR->GetSocketRotation(TEXT("Front4")) + FRotator(0,FMath::RandRange(0,-5),0));
-	GetWorld()->SpawnActor<ABullet>(bulletFactory3, GrabbedObjectR->GetSocketLocation(TEXT("Front5")), GrabbedObjectR->GetSocketRotation(TEXT("Front5")) + FRotator(FMath::RandRange(0,-5),FMath::RandRange(0,-5),0));
-	GetWorld()->SpawnActor<ABullet>(bulletFactory3, GrabbedObjectR->GetSocketLocation(TEXT("Front6")), GrabbedObjectR->GetSocketRotation(TEXT("Front6")) + FRotator(FMath::RandRange(0,-5),FMath::RandRange(0,5),0));
-	GetWorld()->SpawnActor<ABullet>(bulletFactory3, GrabbedObjectR->GetSocketLocation(TEXT("Front7")), GrabbedObjectR->GetSocketRotation(TEXT("Front7")) + FRotator(0,FMath::RandRange(0,5),0));
+		if(GrabbedObjectR)
+		{
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), muzzleFlashVFX, GrabbedObjectR->GetSocketLocation(TEXT("Front")), GrabbedObjectR->GetSocketRotation(TEXT("Front")));
+			// 총알 액터 스폰
+			GetWorld()->SpawnActor<ABullet>(bulletFactory3, GrabbedObjectR->GetSocketLocation(TEXT("Front1")), GrabbedObjectR->GetSocketRotation(TEXT("Front1")) + FRotator(FMath::RandRange(0,5),FMath::RandRange(0,5),0));
+			GetWorld()->SpawnActor<ABullet>(bulletFactory3, GrabbedObjectR->GetSocketLocation(TEXT("Front2")), GrabbedObjectR->GetSocketRotation(TEXT("Front2")) + FRotator(FMath::RandRange(0,5), 0,0));
+			GetWorld()->SpawnActor<ABullet>(bulletFactory3, GrabbedObjectR->GetSocketLocation(TEXT("Front3")), GrabbedObjectR->GetSocketRotation(TEXT("Front3")) + FRotator(FMath::RandRange(0,5),FMath::RandRange(0,-5),0));
+			GetWorld()->SpawnActor<ABullet>(bulletFactory3, GrabbedObjectR->GetSocketLocation(TEXT("Front4")), GrabbedObjectR->GetSocketRotation(TEXT("Front4")) + FRotator(0,FMath::RandRange(0,-5),0));
+			GetWorld()->SpawnActor<ABullet>(bulletFactory3, GrabbedObjectR->GetSocketLocation(TEXT("Front5")), GrabbedObjectR->GetSocketRotation(TEXT("Front5")) + FRotator(FMath::RandRange(0,-5),FMath::RandRange(0,-5),0));
+			GetWorld()->SpawnActor<ABullet>(bulletFactory3, GrabbedObjectR->GetSocketLocation(TEXT("Front6")), GrabbedObjectR->GetSocketRotation(TEXT("Front6")) + FRotator(FMath::RandRange(0,-5),FMath::RandRange(0,5),0));
+			GetWorld()->SpawnActor<ABullet>(bulletFactory3, GrabbedObjectR->GetSocketLocation(TEXT("Front7")), GrabbedObjectR->GetSocketRotation(TEXT("Front7")) + FRotator(0,FMath::RandRange(0,5),0));
+			
+		}
+	}
 	}
 	
 }
@@ -311,17 +338,20 @@ void AHotPlayer::TryGrabR()
 	if(bIsGrabbableR)
 	{
 		bIsGrabbedR = true;
-		// -> 물체 물리 기능 비활성화
-		GrabbedObjectR->SetSimulatePhysics(false);
-		// ->바닥 같은 오브젝트에 부딪히지 않게 처리---------------------------------------------------------------
-		GrabbedObjectR->SetCollisionProfileName(FName("GrabbedWeapon"));
-		// ->손에 붙혀주자
-		GrabbedActorR->AttachToComponent(RightHandMesh, FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("gun"));
-		// 원래 머테리얼로 돌려주기
-		GrabbedObjectR->SetMaterial(0, basicMaterial);
-		// 손을 안 보이게 처리
-		RightHandMesh->SetVisibility(false);
-
+		if(GrabbedObjectR)
+		{
+			// -> 물체 물리 기능 비활성화
+			GrabbedObjectR->SetSimulatePhysics(false);
+			// ->바닥 같은 오브젝트에 부딪히지 않게 처리---------------------------------------------------------------
+			GrabbedObjectR->SetCollisionProfileName(FName("GrabbedWeapon"));
+			// ->손에 붙혀주자
+			GrabbedActorR->AttachToComponent(RightHandMesh, FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("gun"));
+			// 원래 머테리얼로 돌려주기
+			GrabbedObjectR->SetMaterial(0, basicMaterial);
+			// 손을 안 보이게 처리
+			RightHandMesh->SetVisibility(false);
+		}
+		
 		// GrabbedObjectR이 어떤 무기 클래스냐에 따라 bool 변수 입력 변경
 		pistol = Cast<APistol>(GrabbedActorR);
 		smg = Cast<ASMG>(GrabbedActorR);
@@ -359,22 +389,35 @@ void AHotPlayer::DetachGrabR()
 		bIsGrabbedR = false;
 		if(GrabbedObjectR)
 		{
-			UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1);
+			//UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.5);
 			
-			GetWorldTimerManager().ClearTimer(resetTimer);
-			GetWorldTimerManager().SetTimer(resetTimer, FTimerDelegate::CreateLambda([&]()
-			{
-				UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.001);
-			}), 0.3f, false);
+			//GetWorldTimerManager().ClearTimer(resetTimer);
+			//GetWorldTimerManager().SetTimer(resetTimer, FTimerDelegate::CreateLambda([&]()
+			//{
+			//	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.001);
+			//}), 0.1f, false);
 			
+			GrabbedObjectR->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
 			GrabbedObjectR->SetSimulatePhysics(true);
 			//콜리전 채널 다시 바닥 등의 오브젝트와 상호작용 되도록
 			GrabbedObjectR->SetCollisionProfileName(FName("PhysicsActor"));
-			GrabbedObjectR->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
 			RightHandMesh->SetVisibility(true);
 			bPistolOn = false;
 			bSMGOn = false;
 			bShotgunOn = false;
+
+			//던지기
+			GrabbedObjectR->AddForce(ThrowDirectionR * ThrowPowerR * GrabbedObjectR->GetMass());
+			// 회전시키기
+			// 각속도 = DeltaTheta(특정 축 기준 변위 각도, Axis, Angle) / DeltaTime
+			float Angle;
+			FVector Axis;
+			// 델타 로테이션으로부터 Axis와 Angle 뽑아내기
+			DeltaRotationR.ToAxisAndAngle(Axis, Angle);
+			float dt = GetWorld()->DeltaTimeSeconds;
+			FVector AngularVelocity = (1.0f / dt) * Angle * Axis;
+			GrabbedObjectR->SetPhysicsAngularVelocityInRadians(AngularVelocity * ToquePowerR, true);
+			GrabbedObjectR = nullptr;
 		}
 	}
 	else
@@ -396,5 +439,54 @@ void AHotPlayer::TryGrabL()
 void AHotPlayer::DetachGrabL()
 {
 	
+}
+
+void AHotPlayer::GrabbingR()
+{
+	if(!bIsGrabbedR)
+	{
+		return;
+	}
+	// 던질 방향을 계속 업데이트
+	ThrowDirectionR = RightHand->GetComponentLocation() - PrevPosR;
+	RightHandVelocity = ThrowDirectionR.Size();
+	// 회전방향 업데이트
+
+	// 쿼터니언 공식
+	// Angle1 = Q1, Angle2 = Q2
+	// Angle1 + Angle 2 = Q1 * Q2
+	//  -Angle1 = Q1.Inverse()
+	// Angle2 - Angle1 = Q2 * Q1.Inverse()
+	DeltaRotationR = RightHand->GetComponentQuat() * PrevRotR.Inverse();
+	
+	// 이전 위치 업데이트
+	PrevPosR = RightHand->GetComponentLocation();
+	// 이전 회전값 업데이트
+	PrevRotR = RightHand->GetComponentQuat();
+}
+
+void AHotPlayer::GrabbingL()
+{
+	
+}
+
+void AHotPlayer::PosCheck()
+{
+	FXRHMDData HMDData;
+	UHeadMountedDisplayFunctionLibrary::GetHMDData(GetWorld(), HMDData);
+	CurHeadPos = HMDData.Position;
+	HeadDirection = CurHeadPos - PrevHeadPos;
+	RightHandDirection = RightHand->GetComponentLocation() - PrevPosR;
+	LeftHandDirection = LeftHand->GetComponentLocation() - PrevPosL;
+
+	//이동 속도
+	headVelocity = HeadDirection.Size();
+	RightHandVelocity = RightHandDirection.Size();
+	LeftHandVelocity = LeftHandDirection.Size();
+
+	//현재 위치 업데이트
+	PrevHeadPos = CurHeadPos;
+	PrevPosR = RightHand->GetComponentLocation();
+	PrevPosL = LeftHand->GetComponentLocation();
 }
 

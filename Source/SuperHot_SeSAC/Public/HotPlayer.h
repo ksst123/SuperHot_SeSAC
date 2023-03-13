@@ -174,4 +174,49 @@ public:
 	// 왼손 닿은 물체 기억
 	UPROPERTY()
 	class UPrimitiveComponent* GrabbedObjectL;
+
+	// 던질 방향
+	FVector ThrowDirectionR;
+	FVector ThrowDirectionL;
+	// 던질 힘
+	UPROPERTY(EditAnywhere, Category = "Grab")
+	float ThrowPowerR = 1;
+	UPROPERTY(EditAnywhere, Category = "Grab")
+	float ThrowPowerL = 1;
+
+	// 직전 위치
+	FVector PrevPosR;
+	FVector PrevPosL;
+	// 이전 회전값
+	FQuat PrevRotR;
+	FQuat PrevRotL;
+	// 회전 방향
+	FQuat DeltaRotationR;
+	FQuat DeltaRotationL;
+	// 회전 빠르기
+	UPROPERTY(EditAnywhere, Category = "Grab")
+	float ToquePowerR = 1;
+	UPROPERTY(EditAnywhere, Category = "Grab")
+	float ToquePowerL = 1;
+
+	void GrabbingR();
+	void GrabbingL();
+
+	//머리 속도 구하기 관련
+	FVector HeadDirection;
+	FVector CurHeadPos;
+	FVector PrevHeadPos;
+	FQuat PrevHeadRot;
+	FQuat DeltaRotationHead;
+	
+	void PosCheck();
+
+	float headVelocity;
+
+	// 오른손 속도 구하기
+	FVector RightHandDirection;
+	float RightHandVelocity;
+	FVector LeftHandDirection;
+	float LeftHandVelocity;
+	
 };
