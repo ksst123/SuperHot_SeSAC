@@ -88,6 +88,9 @@ public:
 
 	UPROPERTY()
 	FTimerHandle resetTimer;
+
+	UPROPERTY()
+	FTimerHandle grabResetTimer;
 	
 	UPROPERTY(EditAnywhere, Category = "Weapon")
 	bool bPistolOn = false;

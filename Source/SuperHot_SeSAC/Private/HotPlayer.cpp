@@ -359,9 +359,17 @@ void AHotPlayer::DetachGrabR()
 		bIsGrabbedR = false;
 		if(GrabbedObjectR)
 		{
+			UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1);
+			
+			GetWorldTimerManager().ClearTimer(resetTimer);
+			GetWorldTimerManager().SetTimer(resetTimer, FTimerDelegate::CreateLambda([&]()
+			{
+				UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.001);
+			}), 0.3f, false);
+			
 			GrabbedObjectR->SetSimulatePhysics(true);
 			//콜리전 채널 다시 바닥 등의 오브젝트와 상호작용 되도록
-			GrabbedObjectR->SetCollisionProfileName(FName("Weapon"));
+			GrabbedObjectR->SetCollisionProfileName(FName("PhysicsActor"));
 			GrabbedObjectR->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
 			RightHandMesh->SetVisibility(true);
 			bPistolOn = false;
