@@ -12,8 +12,6 @@ void APistol::BeginPlay()
 {
 	Super::BeginPlay();
 	player = Cast<AHotPlayer>(GetWorld()->GetFirstPlayerController()->GetPawn());
-	
-	Fire();
 }
 
 void APistol::Fire()

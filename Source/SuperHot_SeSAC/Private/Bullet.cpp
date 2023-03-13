@@ -75,6 +75,7 @@ void ABullet::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 		//총알 메쉬 제거
 		bulletMeshComp->DestroyComponent();
 	}
+	//부딪힌 대상이 무기면 총알만 파괴
 	else if(weapon)
 	{
 		//나이아가라 스폰
@@ -84,6 +85,7 @@ void ABullet::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 		//총알 메쉬 제거
 		bulletMeshComp->DestroyComponent();
 	}
+	//부딪힌 대상이 적이면 적을 죽이고 적 피격 나이아가라 스폰
 	else if(enemy)
 	{
 		//나이아가라 스폰
@@ -104,6 +106,14 @@ void ABullet::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 			UE_LOG(LogTemp, Warning, TEXT("%s"), *(SweepResult.BoneName.ToString()));
 		}
 	}
+	else
+	{
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), bulletVFX2, GetActorLocation(), GetActorRotation());
+		trailVFX->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+		bulletMeshComp->DestroyComponent();
+	}
+    
+	
 }
 
 void ABullet::EnemyHitCheck()
