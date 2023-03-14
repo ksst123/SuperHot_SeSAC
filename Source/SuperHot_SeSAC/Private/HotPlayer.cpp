@@ -4,6 +4,7 @@
 #include "HotPlayer.h"
 
 #include "Bullet.h"
+#include "ClearActor.h"
 #include "EnhancedInputSubsystems.h"
 #include "Engine/LocalPlayer.h"
 #include "EnhancedInputComponent.h"
@@ -365,6 +366,7 @@ void AHotPlayer::TryGrabR()
 		pistol = Cast<APistol>(GrabbedActorR);
 		smg = Cast<ASMG>(GrabbedActorR);
 		shotgun = Cast<AShotgun>(GrabbedActorR);
+		clearActor = Cast<AClearActor>(GrabbedObjectR);
 		
 		if(pistol)
 		{
@@ -378,6 +380,18 @@ void AHotPlayer::TryGrabR()
 		else if(shotgun)
 		{
 			bShotgunOn = true;
+		}
+		else if(clearActor)
+		{
+			if(bIsFirstLevel)
+			{
+				clearActor->ToCafeMap();
+				bIsFirstLevel = false;
+			}
+			else
+			{
+				clearActor->GameClear();
+			}
 		}
 		
 	}

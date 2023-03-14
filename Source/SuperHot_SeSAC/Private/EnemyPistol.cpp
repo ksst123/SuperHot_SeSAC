@@ -63,13 +63,12 @@ void AEnemyPistol::Die()
 	PlayAnimMontage(BaseEnemyAnim->Die, 5.f, TEXT("Default"));
 	BaseEnemyAnim->AnimNotify_Die();
 	Pistol->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-	// Pistol->weaponMesh->SetSimulatePhysics(true);
 	// GetMesh()->SetSimulatePhysics(false);
 	// GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	for(int i = 0; i < DestructibleMeshes.Num(); i++)
 	{
-		// DestructibleMeshes[i]->SetSimulatePhysics(true);
-		DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		DestructibleMeshes[i]->SetSimulatePhysics(true);
+		DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	}
 	UnPossessed();
 	AEnemyPistolAIController* ControllerAI = Cast<AEnemyPistolAIController>(GetController());
@@ -93,4 +92,14 @@ void AEnemyPistol::Die()
 		LevelBP->EnemyCount--;
 		UE_LOG(LogTemp, Warning, TEXT("%d enemy"), LevelBP->EnemyCount);
 	}
+
+	FTimerHandle DestroyDelay;
+	GetWorld()->GetTimerManager().SetTimer(DestroyDelay, FTimerDelegate::CreateLambda([this]()->void
+	{
+		for(int i = 0; i < DestructibleMeshes.Num(); i++)
+		{
+			DestructibleMeshes[i]->DestroyComponent();
+		}
+	}), 2.f, false);
+	GetWorld()->GetTimerManager().ClearTimer(DestroyDelay);
 }

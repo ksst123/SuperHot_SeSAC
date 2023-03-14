@@ -162,8 +162,8 @@ void AEnemyBase::Die()
 	{
 		// 캡슐 콜리전??
 		// 피직스 true여야 destruction 가능
-		// DestructibleMeshes[i]->SetSimulatePhysics(true);
-		DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		DestructibleMeshes[i]->SetSimulatePhysics(true);
+		DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	}
 	UnPossessed();
 	ALevelScriptActor_Cafeteria* LevelBP = Cast<ALevelScriptActor_Cafeteria>(GetWorld()->GetLevelScriptActor());
@@ -171,5 +171,15 @@ void AEnemyBase::Die()
 	{
 		LevelBP->EnemyCount--;
 	}
+
+	FTimerHandle DestroyDelay;
+	GetWorld()->GetTimerManager().SetTimer(DestroyDelay, FTimerDelegate::CreateLambda([this]()->void
+	{
+		for(int i = 0; i < DestructibleMeshes.Num(); i++)
+		{
+			DestructibleMeshes[i]->DestroyComponent();
+		}
+	}), 2.f, false);
+	GetWorld()->GetTimerManager().ClearTimer(DestroyDelay);
 }
 

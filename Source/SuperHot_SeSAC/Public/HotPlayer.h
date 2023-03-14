@@ -154,6 +154,11 @@ public:
 	UPROPERTY()
 	class ASMG* smg;
 
+	UPROPERTY()
+	class AClearActor* clearActor;
+	UPROPERTY()
+	bool bIsFirstLevel = true;
+	
 	FTimerHandle burstTimer1;
 	FTimerHandle burstTimer2;
 

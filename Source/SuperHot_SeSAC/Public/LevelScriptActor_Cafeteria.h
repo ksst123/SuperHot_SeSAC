@@ -21,7 +21,14 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 EnemyCount = -1;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<class AEnemyBase*> Enemies;
+
+	UPROPERTY(EditAnywhere, Category="Clear")
+	class AClearActor* ClearActor;
+	UPROPERTY(EditAnywhere, Category="Clear")
+	TSubclassOf<AClearActor> ClearActorFactory;
+
+	UFUNCTION()
+	void StageClear();
 };
