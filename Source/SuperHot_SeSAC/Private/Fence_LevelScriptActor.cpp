@@ -10,6 +10,7 @@
 void AFence_LevelScriptActor::BeginPlay()
 {
 	Super::BeginPlay();
+	
 
 	int32 count = 0;
 	for(TActorIterator<AEnemyBase> itr(GetWorld()); itr; ++itr)

@@ -158,13 +158,18 @@ void AEnemyBase::Die()
 	BaseEnemyAnim->AnimNotify_Die();
 	// GetMesh()->SetSimulatePhysics(false);
 	// GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	for(int i = 0; i < DestructibleMeshes.Num(); i++)
-	{
-		// 캡슐 콜리전??
-		// 피직스 true여야 destruction 가능
-		// DestructibleMeshes[i]->SetSimulatePhysics(true);
-		DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	}
+	// GetCapsuleComponent()->SetSimulatePhysics(false);
+	// GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	// if(&DestructibleMeshes)
+	// {
+	// 	for(int i = 0; i < DestructibleMeshes.Num(); i++)
+	// 	{
+	// 		// 캡슐 콜리전??
+	// 		// 피직스 true여야 destruction 가능
+	// 		DestructibleMeshes[i]->SetSimulatePhysics(true);
+	// 		// DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	// 	}
+	// }
 	UnPossessed();
 	ALevelScriptActor_Cafeteria* LevelBP = Cast<ALevelScriptActor_Cafeteria>(GetWorld()->GetLevelScriptActor());
 	if(LevelBP)

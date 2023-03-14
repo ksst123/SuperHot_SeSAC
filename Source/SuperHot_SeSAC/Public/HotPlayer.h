@@ -222,5 +222,8 @@ public:
 
 	UPROPERTY()
 	float timeDilation;
-	
+
+	//스테이지 시작 관련
+	UPROPERTY()
+	bool bIsStarted = false;
 };

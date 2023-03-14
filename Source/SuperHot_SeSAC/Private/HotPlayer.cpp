@@ -266,11 +266,10 @@ void AHotPlayer::Fire()
 		GetWorldTimerManager().ClearTimer(resetTimer);
 		GetWorldTimerManager().SetTimer(resetTimer, FTimerDelegate::CreateLambda([&]()
 		{
-			UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.001);
 			bIsFiring = false;	
-		}), 0.6, false);
+		}), 0.3, false);
 	
-		UGameplayStatics::SetGlobalTimeDilation(GetWorld(),2);
+		UGameplayStatics::SetGlobalTimeDilation(GetWorld(),0.5);
 
 		if(GrabbedObjectR)
 		{
@@ -288,11 +287,11 @@ void AHotPlayer::Fire()
 		GetWorldTimerManager().ClearTimer(resetTimer);
 		GetWorldTimerManager().SetTimer(resetTimer, FTimerDelegate::CreateLambda([&]()
 		{
-			UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.001);
+			//UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.001);
 			bIsFiring = false;		
-		}), 0.6, false);
+		}), 0.3, false);
 	
-		UGameplayStatics::SetGlobalTimeDilation(GetWorld(),2.0);
+		UGameplayStatics::SetGlobalTimeDilation(GetWorld(),0.5);
 		if(GrabbedObjectR)
 		{
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), muzzleFlashVFX, GrabbedObjectR->GetSocketLocation(TEXT("Front")), GrabbedObjectR->GetSocketRotation(TEXT("Front")));
@@ -303,12 +302,12 @@ void AHotPlayer::Fire()
 		GetWorldTimerManager().SetTimer(burstTimer1, FTimerDelegate::CreateLambda([&]()
 			{
 			GetWorld()->SpawnActor<ABullet>(bulletFactory2, GrabbedObjectR->GetSocketLocation(TEXT("Front")),GrabbedObjectR->GetSocketRotation(TEXT("Front")) + FRotator(FMath::RandRange(-2,2), FMath::RandRange(-2,2), 0));
-			}), 0.15f, false);
+			}), 0.1f, false);
 		//세 번째 발 발사
 		GetWorldTimerManager().SetTimer(burstTimer2, FTimerDelegate::CreateLambda([&]()
 	{
 			GetWorld()->SpawnActor<ABullet>(bulletFactory2, GrabbedObjectR->GetSocketLocation(TEXT("Front")),GrabbedObjectR->GetSocketRotation(TEXT("Front")) + FRotator(FMath::RandRange(-2,2), FMath::RandRange(-2,2), 0));
-		}), 0.3f, false);
+		}), 0.2f, false);
 		}
 	
 	}
@@ -319,11 +318,10 @@ void AHotPlayer::Fire()
 		GetWorldTimerManager().ClearTimer(resetTimer);
 		GetWorldTimerManager().SetTimer(resetTimer, FTimerDelegate::CreateLambda([&]()
 		{
-			UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.001);
 			bIsFiring = false;	
-		}), 0.6, false);
+		}), 0.3, false);
 	
-		UGameplayStatics::SetGlobalTimeDilation(GetWorld(),2);
+		UGameplayStatics::SetGlobalTimeDilation(GetWorld(),0.5);
 		if(GrabbedObjectR)
 		{
 			UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), muzzleFlashVFX, GrabbedObjectR->GetSocketLocation(TEXT("Front")), GrabbedObjectR->GetSocketRotation(TEXT("Front")));
@@ -346,6 +344,11 @@ void AHotPlayer::TryGrabR()
 {
 	if(bIsGrabbableR)
 	{
+		if(!bIsStarted)
+		{
+			bIsStarted = true;
+		}
+		
 		bIsGrabbedR = true;
 		if(GrabbedObjectR)
 		{
@@ -396,18 +399,13 @@ void AHotPlayer::DetachGrabR()
 	if(bIsGrabbedR)
 	{
 		bIsGrabbedR = false;
+
+		
 		if(GrabbedObjectR)
 		{
-			//UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.5);
-			
-			//GetWorldTimerManager().ClearTimer(resetTimer);
-			//GetWorldTimerManager().SetTimer(resetTimer, FTimerDelegate::CreateLambda([&]()
-			//{
-			//	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.001);
-			//}), 0.1f, false);
-			
 			GrabbedObjectR->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
 			GrabbedObjectR->SetSimulatePhysics(true);
+			GrabbedObjectR->SetEnableGravity(true);
 			//콜리전 채널 다시 바닥 등의 오브젝트와 상호작용 되도록
 			GrabbedObjectR->SetCollisionProfileName(FName("PhysicsActor"));
 			RightHandMesh->SetVisibility(true);
@@ -481,21 +479,24 @@ void AHotPlayer::GrabbingL()
 
 void AHotPlayer::PosCheck()
 {
-	FXRHMDData HMDData;
-	UHeadMountedDisplayFunctionLibrary::GetHMDData(GetWorld(), HMDData);
-	CurHeadPos = HMDData.Position;
-	HeadDirection = CurHeadPos - PrevHeadPos;
-	RightHandDirection = RightHand->GetComponentLocation() - PrevPosR;
-	LeftHandDirection = LeftHand->GetComponentLocation() - PrevPosL;
+	if(bIsStarted)
+	{
+		FXRHMDData HMDData;
+		UHeadMountedDisplayFunctionLibrary::GetHMDData(GetWorld(), HMDData);
+		CurHeadPos = HMDData.Position;
+		HeadDirection = CurHeadPos - PrevHeadPos;
+		RightHandDirection = RightHand->GetComponentLocation() - PrevPosR;
+		LeftHandDirection = LeftHand->GetComponentLocation() - PrevPosL;
 
-	//이동 속도
-	headVelocity = HeadDirection.Size();
-	RightHandVelocity = RightHandDirection.Size();
-	LeftHandVelocity = LeftHandDirection.Size();
+		//이동 속도
+		headVelocity = HeadDirection.Size();
+		RightHandVelocity = RightHandDirection.Size();
+		LeftHandVelocity = LeftHandDirection.Size();
 
-	//현재 위치 업데이트
-	PrevHeadPos = CurHeadPos;
-	PrevPosR = RightHand->GetComponentLocation();
-	PrevPosL = LeftHand->GetComponentLocation();
+		//현재 위치 업데이트
+		PrevHeadPos = CurHeadPos;
+		PrevPosR = RightHand->GetComponentLocation();
+		PrevPosL = LeftHand->GetComponentLocation();
+	}
 }
 

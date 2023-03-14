@@ -24,4 +24,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<class AEnemyBase*> Enemies;
+
+	UPROPERTY()
+	class AHotPlayer* player;
 };
