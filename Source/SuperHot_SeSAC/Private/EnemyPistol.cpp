@@ -11,7 +11,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "EnemyPistolAIController.h"
 #include "LevelScriptActor_Cafeteria.h"
-#include "Components/CapsuleComponent.h"
+#include "GeometryCollection/GeometryCollectionComponent.h"
 
 AEnemyPistol::AEnemyPistol()
 {
@@ -64,10 +64,13 @@ void AEnemyPistol::Die()
 	BaseEnemyAnim->AnimNotify_Die();
 	Pistol->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 	// Pistol->weaponMesh->SetSimulatePhysics(true);
-	GetMesh()->SetSimulatePhysics(false);
-	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	GetCapsuleComponent()->SetSimulatePhysics(false);
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	// GetMesh()->SetSimulatePhysics(false);
+	// GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	for(int i = 0; i < DestructibleMeshes.Num(); i++)
+	{
+		// DestructibleMeshes[i]->SetSimulatePhysics(true);
+		DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
 	UnPossessed();
 	AEnemyPistolAIController* ControllerAI = Cast<AEnemyPistolAIController>(GetController());
 	if(ControllerAI)
