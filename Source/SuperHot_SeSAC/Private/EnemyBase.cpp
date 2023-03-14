@@ -158,6 +158,8 @@ void AEnemyBase::Die()
 	BaseEnemyAnim->AnimNotify_Die();
 	GetMesh()->SetSimulatePhysics(false);
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetCapsuleComponent()->SetSimulatePhysics(false);
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	UnPossessed();
 	ALevelScriptActor_Cafeteria* LevelBP = Cast<ALevelScriptActor_Cafeteria>(GetWorld()->GetLevelScriptActor());
 	if(LevelBP)
