@@ -6,13 +6,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2334002a-f104-4496-bf59-04db29843d5f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Content/AI/Meshes/pyramid.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/ClearActor.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Public/ClearActor.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SuperHot_SeSAC/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SuperHot_SeSAC/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vsconfig" beforeDir="false" afterPath="$PROJECT_DIR$/.vsconfig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/AI/Maps/CafeteriaMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/AI/Maps/CafeteriaMap.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Materials/M_Basic_Grabbable.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Materials/M_Basic_Grabbable.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/Bullet.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/Bullet.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/EnemyBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/EnemyBase.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/EnemyPistol.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/EnemyPistol.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/Fence_LevelScriptActor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/Fence_LevelScriptActor.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/HotPlayer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/HotPlayer.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/LevelScriptActor_Cafeteria.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/LevelScriptActor_Cafeteria.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Public/HotPlayer.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Public/HotPlayer.h" afterDir="false" />
@@ -188,7 +189,7 @@
       <workItem from="1678680726484" duration="786000" />
       <workItem from="1678688227233" duration="16402000" />
       <workItem from="1678708636545" duration="5185000" />
-      <workItem from="1678760006415" duration="3276000" />
+      <workItem from="1678760508630" duration="4237000" />
     </task>
     <task id="LOCAL-00001" summary="230306 잡커밋">
       <created>1678104311895</created>
