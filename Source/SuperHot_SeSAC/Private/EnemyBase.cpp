@@ -4,16 +4,15 @@
 #include "EnemyBase.h"
 
 #include "BaseEnemyAnimInstance.h"
-#include "EditorDirectories.h"
 #include "EnemyHandFightComponent.h"
 #include "EnemyMoveComponent.h"
+#include "Fence_LevelScriptActor.h"
+#include "HotPlayer.h"
 #include "LevelScriptActor_Cafeteria.h"
-#include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GeometryCollection/GeometryCollectionComponent.h"
 #include "ProceduralMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "LevelScriptActor_Cafeteria.h"
 
 // Sets default values
 AEnemyBase::AEnemyBase()
@@ -171,10 +170,24 @@ void AEnemyBase::Die()
 	// 	}
 	// }
 	UnPossessed();
-	ALevelScriptActor_Cafeteria* LevelBP = Cast<ALevelScriptActor_Cafeteria>(GetWorld()->GetLevelScriptActor());
-	if(LevelBP)
+	ALevelScriptActor_Cafeteria* CafeLevelBP = Cast<ALevelScriptActor_Cafeteria>(GetWorld()->GetLevelScriptActor());
+	AFence_LevelScriptActor* FenceLevelBP = Cast<AFence_LevelScriptActor>(GetWorld()->GetLevelScriptActor());
+	auto player = Cast<AHotPlayer>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+
+	if(player->bIsFirstLevel)
 	{
-		LevelBP->EnemyCount--;
+		if(FenceLevelBP)
+		{
+			FenceLevelBP->EnemyCount--;
+			UE_LOG(LogTemp, Warning, TEXT("Enemy--"));
+		}
+	}
+	else
+	{
+		if(CafeLevelBP)
+		{
+			CafeLevelBP->EnemyCount--;
+		}
 	}
 }
 

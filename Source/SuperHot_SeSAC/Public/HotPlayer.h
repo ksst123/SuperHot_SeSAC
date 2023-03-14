@@ -229,6 +229,6 @@ public:
 	float timeDilation;
 
 	//스테이지 시작 관련
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	bool bIsStarted = false;
 };

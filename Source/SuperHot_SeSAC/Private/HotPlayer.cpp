@@ -85,7 +85,6 @@ void AHotPlayer::BeginPlay()
 void AHotPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	UE_LOG(LogTemp, Warning, TEXT("Tick Enabled"));
 	
 	//HMD가 연결되어 있지 않다면
 	if(UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayConnected() == false)
@@ -369,7 +368,7 @@ void AHotPlayer::TryGrabR()
 		pistol = Cast<APistol>(GrabbedActorR);
 		smg = Cast<ASMG>(GrabbedActorR);
 		shotgun = Cast<AShotgun>(GrabbedActorR);
-		clearActor = Cast<AClearActor>(GrabbedObjectR);
+		clearActor = Cast<AClearActor>(GrabbedActorR);
 		
 		if(pistol)
 		{

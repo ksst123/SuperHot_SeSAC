@@ -7,12 +7,10 @@
 #include "HotPlayer.h"
 #include "Pistol.h"
 #include "PistolEnemyAnimInstance.h"
-#include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "EnemyPistolAIController.h"
 #include "LevelScriptActor_Cafeteria.h"
-#include "Components/CapsuleComponent.h"
-#include "GeometryCollection/GeometryCollectionComponent.h"
+#include "Fence_LevelScriptActor.h"
 
 AEnemyPistol::AEnemyPistol()
 {
@@ -89,10 +87,21 @@ void AEnemyPistol::Die()
 		Pistol->weaponMesh->AddForce((player->GetActorLocation() - Pistol->GetActorLocation() + FVector(0.f, 0.f, 150.f))  * 100.f);
 	}
 
-	ALevelScriptActor_Cafeteria* LevelBP = Cast<ALevelScriptActor_Cafeteria>(GetWorld()->GetLevelScriptActor());
-	if(LevelBP)
+	ALevelScriptActor_Cafeteria* CafeLevelBP = Cast<ALevelScriptActor_Cafeteria>(GetWorld()->GetLevelScriptActor());
+	AFence_LevelScriptActor* FenceLevelBP = Cast<AFence_LevelScriptActor>(GetWorld()->GetLevelScriptActor());
+
+	if(player->bIsFirstLevel)
 	{
-		LevelBP->EnemyCount--;
-		UE_LOG(LogTemp, Warning, TEXT("%d enemy"), LevelBP->EnemyCount);
+		if(FenceLevelBP)
+		{
+			FenceLevelBP->EnemyCount--;
+		}
+	}
+	else
+	{
+		if(CafeLevelBP)
+		{
+			CafeLevelBP->EnemyCount--;
+		}
 	}
 }

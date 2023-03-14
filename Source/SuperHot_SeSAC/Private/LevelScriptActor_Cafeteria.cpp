@@ -3,11 +3,9 @@
 
 #include "LevelScriptActor_Cafeteria.h"
 
-#include "ClearActor.h"
 #include "EngineUtils.h"
 #include "EnemyBase.h"
-#include "HotPlayer.h"
-#include "Kismet/GameplayStatics.h"
+#include "SuperHotGameModeBase.h"
 
 void ALevelScriptActor_Cafeteria::BeginPlay()
 {
@@ -30,13 +28,19 @@ void ALevelScriptActor_Cafeteria::Tick(float DeltaSeconds)
 
 	if(EnemyCount == 0)
 	{
+		EnemyCount = -1;
 		StageClear();
 	}
 }
 
 void ALevelScriptActor_Cafeteria::StageClear()
 {
-	ClearActor = GetWorld()->SpawnActor<AClearActor>(ClearActorFactory);
-	auto player = Cast<AHotPlayer>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	ClearActor->SetActorLocation(player->GetActorLocation() + player->GetActorForwardVector() * 30.f);
+	// ClearActor = GetWorld()->SpawnActor<AClearActor>(ClearActorFactory);
+	// auto player = Cast<AHotPlayer>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	// ClearActor->SetActorLocation(player->GetActorLocation() + player->GetActorForwardVector() * 30.f);
+
+	if(gm)
+	{
+			gm->bIsCleared = true;
+	}
 }
