@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "ClearActor.generated.h"
+#include "Playpoint.generated.h"
 
 UCLASS()
-class SUPERHOT_SESAC_API AClearActor : public AActor
+class SUPERHOT_SESAC_API APlaypoint : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AClearActor();
+	APlaypoint();
 
 protected:
 	// Called when the game starts or when spawned
@@ -23,15 +23,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditDefaultsOnly, Category="Clear")
-	class UStaticMeshComponent* PyramidMesh;
-
-	UPROPERTY()
-	class ASuperHotGameModeBase* gm;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class USphereComponent* sphereComp;
 	
-	UFUNCTION()
-	void ToCafeMap();
-
-	UFUNCTION()
-	void GameClear();
+	UPROPERTY()
+	class AHotPlayer* player;
 };

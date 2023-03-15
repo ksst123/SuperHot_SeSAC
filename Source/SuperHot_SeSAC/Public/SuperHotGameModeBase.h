@@ -17,4 +17,8 @@ class SUPERHOT_SESAC_API ASuperHotGameModeBase : public AGameModeBase
 
 protected:
 	virtual void BeginPlay() override;
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsCleared;
 };

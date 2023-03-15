@@ -15,6 +15,7 @@ class SUPERHOT_SESAC_API ALevelScriptActor_Cafeteria : public ALevelScriptActor
 	GENERATED_BODY()
 
 public:
+	
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaSeconds) override;
@@ -31,4 +32,7 @@ public:
 
 	UFUNCTION()
 	void StageClear();
+
+	UPROPERTY()
+	class ASuperHotGameModeBase* gm;
 };

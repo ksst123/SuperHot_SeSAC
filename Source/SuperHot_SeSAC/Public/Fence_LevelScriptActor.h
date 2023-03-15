@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "Engine/LevelScriptActor.h"
 #include "Fence_LevelScriptActor.generated.h"
 
@@ -15,6 +16,7 @@ class SUPERHOT_SESAC_API AFence_LevelScriptActor : public ALevelScriptActor
 	GENERATED_BODY()
 
 public:
+	
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaSeconds) override;
@@ -24,4 +26,15 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<class AEnemyBase*> Enemies;
+
+	UPROPERTY(EditAnywhere, Category="Clear")
+	class AClearActor* ClearActor;
+	UPROPERTY(EditAnywhere, Category="Clear")
+	TSubclassOf<AClearActor> ClearActorFactory;
+
+	UPROPERTY()
+	class ASuperHotGameModeBase* gm;
+	
+	UFUNCTION()
+	void StageClear();
 };

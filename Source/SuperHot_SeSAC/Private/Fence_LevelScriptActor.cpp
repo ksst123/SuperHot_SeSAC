@@ -2,15 +2,16 @@
 
 
 #include "Fence_LevelScriptActor.h"
-
+#include "SuperHotGameModeBase.h"
 #include "EngineUtils.h"
-#include "Kismet/GameplayStatics.h"
 #include "EnemyBase.h"
+
 
 void AFence_LevelScriptActor::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	gm = Cast<ASuperHotGameModeBase>(GetWorld()->GetAuthGameMode());
 
 	int32 count = 0;
 	for(TActorIterator<AEnemyBase> itr(GetWorld()); itr; ++itr)
@@ -26,10 +27,17 @@ void AFence_LevelScriptActor::BeginPlay()
 void AFence_LevelScriptActor::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-
+	
 	if(EnemyCount == 0)
 	{
-		// UGameplayStatics::OpenLevel(GetWorld(), FName("FenceMap"));
-		UE_LOG(LogTemp, Warning, TEXT("%d: To Game Clear"), EnemyCount);
+		StageClear();
+	}
+}
+
+void AFence_LevelScriptActor::StageClear()
+{
+	if(gm)
+	{
+			gm->bIsCleared = true;
 	}
 }

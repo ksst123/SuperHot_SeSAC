@@ -24,8 +24,6 @@ void UPistolEnemyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		
 		HorizontalAngle = ownerEnemyPistol->GetBaseAimRotation().Pitch + 20;
 		VerticalAngle = ownerEnemyPistol->GetBaseAimRotation().Yaw - 120;
-		UE_LOG(LogTemp, Warning, TEXT("HorizontalAngle: %f"), HorizontalAngle);
-		UE_LOG(LogTemp, Warning, TEXT("VerticalAngle: %f"), VerticalAngle);
 	}
 }
 
