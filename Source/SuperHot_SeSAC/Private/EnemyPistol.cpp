@@ -26,10 +26,19 @@ void AEnemyPistol::BeginPlay()
 	if(Pistol)
 	{
 		Pistol->weaponMesh->SetSimulatePhysics(false);
-		Pistol->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("hand_rSocketPistol"));
+		Pistol->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("hand_rSocketPistol"));
 	}
 
 	PistolEnemyAnim = Cast<UPistolEnemyAnimInstance>(GetMesh()->GetAnimInstance());
+
+	FTimerHandle AimDelay;
+	GetWorldTimerManager().SetTimer(AimDelay, ([this]()->void
+	{
+		bIsNotShooting = true;
+		UE_LOG(LogTemp, Warning, TEXT("%s"), bIsNotShooting ? TEXT("True") : TEXT("False"));
+	}
+	), 1.0f, false);
+	GetWorldTimerManager().ClearTimer(AimDelay);
 }
 
 void AEnemyPistol::Tick(float DeltaSeconds)

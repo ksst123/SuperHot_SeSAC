@@ -158,6 +158,11 @@ public:
 	class AClearActor* clearActor;
 	UPROPERTY()
 	bool bIsFirstLevel = true;
+
+	UPROPERTY()
+	class AFloppyDiskActor* FloppyDisk;
+	UPROPERTY()
+	bool bFloppyDisk = false;
 	
 	FTimerHandle burstTimer1;
 	FTimerHandle burstTimer2;

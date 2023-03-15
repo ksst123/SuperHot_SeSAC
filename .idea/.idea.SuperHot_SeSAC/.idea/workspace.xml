@@ -5,7 +5,18 @@
     <projectFile>Intermediate/ProjectFiles/UE5.vcxproj</projectFile>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="865334a2-859c-4bd5-a1f5-d5ed9ce767b2" name="Changes" comment="" />
+    <list default="true" id="865334a2-859c-4bd5-a1f5-d5ed9ce767b2" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.SuperHot_SeSAC/.idea/.name" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.SuperHot_SeSAC/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SuperHot_SeSAC/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/AI/Maps/CafeteriaMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/AI/Maps/CafeteriaMap.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/BTTask_PistolShoot.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/BTTask_PistolShoot.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/EnemyPistol.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/EnemyPistol.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/EnemyPistolAIController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/EnemyPistolAIController.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/HotPlayer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/HotPlayer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/PistolEnemyAnimInstance.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/PistolEnemyAnimInstance.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Public/EnemyPistol.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Public/EnemyPistol.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Public/HotPlayer.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Public/HotPlayer.h" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -28,9 +39,9 @@
   },
   "keyToStringList": {
     "rider.external.source.directories": [
-      "C:\\Users\\bbssvv\\AppData\\Roaming\\JetBrains\\Rider2022.3\\resharper-host\\DecompilerCache",
-      "C:\\Users\\bbssvv\\AppData\\Roaming\\JetBrains\\Rider2022.3\\resharper-host\\SourcesCache",
-      "C:\\Users\\bbssvv\\AppData\\Local\\Symbols\\src"
+      "C:\\Users\\SBAuser\\AppData\\Roaming\\JetBrains\\Rider2022.3\\resharper-host\\DecompilerCache",
+      "C:\\Users\\SBAuser\\AppData\\Roaming\\JetBrains\\Rider2022.3\\resharper-host\\SourcesCache",
+      "C:\\Users\\SBAuser\\AppData\\Local\\Symbols\\src"
     ]
   }
 }]]></component>
@@ -257,6 +268,7 @@
       <option name="presentableId" value="Default" />
       <updated>1678811653243</updated>
       <workItem from="1678811655706" duration="1455000" />
+      <workItem from="1678865849209" duration="9119000" />
     </task>
     <servers />
   </component>

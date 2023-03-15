@@ -28,13 +28,13 @@ void AEnemyPistolAIController::BeginPlay()
 
 void AEnemyPistolAIController::Tick(float DeltaSeconds)
 {
-	// Super::Tick(DeltaSeconds);
+	Super::Tick(DeltaSeconds);
 	
 	if(Player)
 	{
-		SetFocus(Player);
+		// SetFocus(Player);
 		MoveToActor(Player, 150.f);
-		SetFocalPoint(Player->GetActorLocation(), EAIFocusPriority::Default);
+		SetFocalPoint(Player->GetActorLocation() + FVector(10, -35.f, 0), EAIFocusPriority::Gameplay);
 	}
 	
 	if(Player)
@@ -45,6 +45,7 @@ void AEnemyPistolAIController::Tick(float DeltaSeconds)
 			if(owner->bIsAiming == false)
 			{
 				owner->bIsAiming = true;
+				// GetFocalPointOnActor(Player);
 			}
 		}
 	}
@@ -52,5 +53,6 @@ void AEnemyPistolAIController::Tick(float DeltaSeconds)
 
 FVector AEnemyPistolAIController::GetFocalPointOnActor(const AActor* Actor) const
 {
+	UE_LOG(LogTemp, Warning, TEXT("Focal Point"));
 	return Actor != nullptr ? Actor->GetActorLocation() + FVector(0, 0, 40.f) : FAISystem::InvalidLocation;
 }

@@ -8,6 +8,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "Engine/LocalPlayer.h"
 #include "EnhancedInputComponent.h"
+#include "FloppyDiskActor.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "MotionControllerComponent.h"
 #include "NiagaraFunctionLibrary.h"
@@ -369,6 +370,7 @@ void AHotPlayer::TryGrabR()
 		smg = Cast<ASMG>(GrabbedActorR);
 		shotgun = Cast<AShotgun>(GrabbedActorR);
 		clearActor = Cast<AClearActor>(GrabbedActorR);
+		FloppyDisk = Cast<AFloppyDiskActor>(GrabbedActorR);
 		
 		if(pistol)
 		{
@@ -394,6 +396,10 @@ void AHotPlayer::TryGrabR()
 			{
 				clearActor->GameClear();
 			}
+		}
+		else if(FloppyDisk)
+		{
+			bFloppyDisk = true;
 		}
 		
 	}

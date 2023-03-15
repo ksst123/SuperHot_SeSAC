@@ -33,7 +33,7 @@ EBTNodeResult::Type UBTTask_PistolShoot::ExecuteTask(UBehaviorTreeComponent& Own
 		UE_LOG(LogTemp, Warning, TEXT("Shooting true"));
 	}), 2.f, false);
 	
-	GetWorld()->GetTimerManager().ClearTimer(ShootDelay);
+	// GetWorld()->GetTimerManager().ClearTimer(ShootDelay);
 
 	return EBTNodeResult::Succeeded;
 }
