@@ -33,6 +33,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	TSubclassOf<class ABullet> bulletFactory2;
 
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+	bool bEnemyGrabbed = false;
 	
+	UFUNCTION()
+	void Crash(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UPROPERTY()
+	class AEnemyBase* enemy;
 };
- 

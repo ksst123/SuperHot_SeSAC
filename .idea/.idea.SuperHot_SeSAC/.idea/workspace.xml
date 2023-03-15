@@ -5,7 +5,30 @@
     <projectFile>Intermediate/ProjectFiles/UE5.vcxproj</projectFile>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="865334a2-859c-4bd5-a1f5-d5ed9ce767b2" name="Changes" comment="" />
+    <list default="true" id="865334a2-859c-4bd5-a1f5-d5ed9ce767b2" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.SuperHot_SeSAC/.idea/.name" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.SuperHot_SeSAC/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SuperHot_SeSAC/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vsconfig" beforeDir="false" afterPath="$PROJECT_DIR$/.vsconfig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/AI/Blueprints/BP_EnemyBase.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/AI/Blueprints/BP_EnemyBase.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/AI/Maps/FenceMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/AI/Maps/FenceMap.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/AI/Materials/M_Basic_Floor.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/AI/Materials/M_Basic_Floor.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/AI/Meshes/SM_Fence.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/AI/Meshes/SM_Fence.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BP_Playpoint.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_ClearActor.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_ClearActor.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_Pistol.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_Pistol.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_PlayerBullet.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_PlayerBullet.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/Bullet.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/Bullet.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/ClearActor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/ClearActor.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/EnemyBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/EnemyBase.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/EnemyPistol.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/EnemyPistol.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/HotPlayer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/HotPlayer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/Playpoint.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/Playpoint.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/WeaponBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/WeaponBase.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Public/ClearActor.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Public/ClearActor.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Public/Playpoint.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Public/Playpoint.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Public/WeaponBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Public/WeaponBase.h" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -28,9 +51,9 @@
   },
   "keyToStringList": {
     "rider.external.source.directories": [
-      "C:\\Users\\bbssvv\\AppData\\Roaming\\JetBrains\\Rider2022.3\\resharper-host\\DecompilerCache",
-      "C:\\Users\\bbssvv\\AppData\\Roaming\\JetBrains\\Rider2022.3\\resharper-host\\SourcesCache",
-      "C:\\Users\\bbssvv\\AppData\\Local\\Symbols\\src"
+      "C:\\Users\\SBAuser\\AppData\\Roaming\\JetBrains\\Rider2022.3\\resharper-host\\DecompilerCache",
+      "C:\\Users\\SBAuser\\AppData\\Roaming\\JetBrains\\Rider2022.3\\resharper-host\\SourcesCache",
+      "C:\\Users\\SBAuser\\AppData\\Local\\Symbols\\src"
     ]
   }
 }]]></component>
@@ -257,6 +280,7 @@
       <option name="presentableId" value="Default" />
       <updated>1678811653243</updated>
       <workItem from="1678811655706" duration="1455000" />
+      <workItem from="1678855734108" duration="23719000" />
     </task>
     <servers />
   </component>

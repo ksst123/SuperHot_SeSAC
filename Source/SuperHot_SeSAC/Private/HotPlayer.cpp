@@ -14,6 +14,7 @@
 #include "Pistol.h"
 #include "Shotgun.h"
 #include "SMG.h"
+#include "BehaviorTree/BehaviorTreeTypes.h"
 #include "Camera/CameraComponent.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -85,7 +86,7 @@ void AHotPlayer::BeginPlay()
 void AHotPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
+
 	//HMD가 연결되어 있지 않다면
 	if(UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayConnected() == false)
 	{
@@ -134,6 +135,7 @@ void AHotPlayer::Tick(float DeltaTime)
 			
 			if(GrabbedObjectR)
 			{
+				UE_LOG(LogTemp, Warning, TEXT("nothing grabbable"));
 				GrabbedObjectR->SetMaterial(0, basicMaterial);
 				GrabbedObjectR = nullptr;
 				return;
@@ -409,26 +411,18 @@ void AHotPlayer::TryGrabR()
 
 void AHotPlayer::DetachGrabR()
 {
-	if(bIsGrabbedR)
+	if(bIsGrabbedR && GrabbedObjectR)
 	{
-		bIsGrabbedR = false;
-
-		
-		if(GrabbedObjectR)
-		{
+			UE_LOG(LogTemp, Warning, TEXT("Right Hand Velocity : %f"), RightHandVelocity);
 			GrabbedObjectR->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
 			GrabbedObjectR->SetSimulatePhysics(true);
 			GrabbedObjectR->SetEnableGravity(true);
 			//콜리전 채널 다시 바닥 등의 오브젝트와 상호작용 되도록
-			GrabbedObjectR->SetCollisionProfileName(FName("PhysicsActor"));
 			RightHandMesh->SetVisibility(true);
 			bPistolOn = false;
 			bSMGOn = false;
 			bShotgunOn = false;
 
-			//던지기
-			GrabbedObjectR->AddForce(ThrowDirectionR * ThrowPowerR * GrabbedObjectR->GetMass());
-			// 회전시키기
 			// 각속도 = DeltaTheta(특정 축 기준 변위 각도, Axis, Angle) / DeltaTime
 			float Angle;
 			FVector Axis;
@@ -436,9 +430,30 @@ void AHotPlayer::DetachGrabR()
 			DeltaRotationR.ToAxisAndAngle(Axis, Angle);
 			float dt = GetWorld()->DeltaTimeSeconds;
 			FVector AngularVelocity = (1.0f / dt) * Angle * Axis;
-			GrabbedObjectR->SetPhysicsAngularVelocityInRadians(AngularVelocity * ToquePowerR, true);
-			GrabbedObjectR = nullptr;
+
+			//던지기 직전의 속도가 2 초과라면 던지기
+			if(RightHandVelocity >2)
+			{
+				//콜리전 채널 Thrown으로 변경
+				GrabbedObjectR->SetCollisionProfileName(FName("Thrown"));
+				//던지기
+				GrabbedObjectR->AddForce(ThrowDirectionR * ThrowPowerR * GrabbedObjectR->GetMass());
+				// 회전시키기
+				//GrabbedObjectR->SetPhysicsAngularVelocityInRadians(AngularVelocity * ToquePowerR, true);
+			}
+		else
+			//던지기 직전의 속도가 2 이하라면 떨구기
+		{
+			//콜리전 채널 Weapon으로 변경
+			GrabbedObjectR->SetCollisionProfileName(FName("Weapon"));
+			//아래로 떨구기
+			GrabbedObjectR->AddForce(FVector(0,0,-100) * ThrowPowerR * GrabbedObjectR->GetMass());
+			//GrabbedObjectR->SetPhysicsAngularVelocityInRadians(AngularVelocity * ToquePowerR, true);
 		}
+		// GrabbedObjectR 비우기, 다시 잡을 수 있게 bIsGrabbedR 뒤집기
+		GrabbedObjectR->SetMaterial(0, basicMaterial);
+		GrabbedObjectR = nullptr;
+		bIsGrabbedR = false;
 	}
 	else
 	{
@@ -469,9 +484,7 @@ void AHotPlayer::GrabbingR()
 	}
 	// 던질 방향을 계속 업데이트
 	ThrowDirectionR = RightHand->GetComponentLocation() - PrevPosR;
-	RightHandVelocity = ThrowDirectionR.Size();
 	// 회전방향 업데이트
-
 	// 쿼터니언 공식
 	// Angle1 = Q1, Angle2 = Q2
 	// Angle1 + Angle 2 = Q1 * Q2

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/TimelineComponent.h"
 #include "GameFramework/Actor.h"
 #include "Playpoint.generated.h"
 
@@ -24,8 +25,19 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class USphereComponent* sphereComp;
+	class UStaticMeshComponent* sphere;
 	
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, Category = "Play")
 	class AHotPlayer* player;
+
+	UPROPERTY(EditAnywhere, Category = "Play")
+	bool bIsPlaying = false;
+
+	FTimeline timeline;
+	
+	UPROPERTY(EditAnywhere, Category = "Play")
+	class UCurveFloat* playCurve;
+
+	UFUNCTION()
+	void ScaleChange(float value);
 };

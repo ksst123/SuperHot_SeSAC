@@ -11,6 +11,8 @@
 #include "EnemyPistolAIController.h"
 #include "LevelScriptActor_Cafeteria.h"
 #include "Fence_LevelScriptActor.h"
+#include "Components/CapsuleComponent.h"
+#include "GeometryCollection/GeometryCollectionComponent.h"
 
 AEnemyPistol::AEnemyPistol()
 {
@@ -71,6 +73,19 @@ void AEnemyPistol::Die()
 	// 	DestructibleMeshes[i]->SetSimulatePhysics(true);
 	// 	// DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	// }
+
+	GetMesh()->SetVisibility(false);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetCapsuleComponent()->SetSimulatePhysics(false);
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	for(int i = 0; i < DestructibleMeshes.Num(); i++)
+	{
+		DestructibleMeshes[i]->SetVisibility(true);
+		DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		// enemy->GetMesh()->BreakConstraint(FVector(100.f, 100.f, 100.f), SweepResult.Location, SweepResult.BoneName);
+		// UE_LOG(LogTemp, Warning, TEXT("%s"), *(SweepResult.BoneName.ToString()));
+	}
+	
 	UnPossessed();
 	AEnemyPistolAIController* ControllerAI = Cast<AEnemyPistolAIController>(GetController());
 	if(ControllerAI)
