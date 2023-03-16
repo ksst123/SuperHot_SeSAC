@@ -24,27 +24,30 @@ void AEnemyPistolAIController::BeginPlay()
 			RunBehaviorTree(BT_EnemyPistol);
 		}
 	}
+
+	AIowner = Cast<AEnemyPistol>(GetPawn());
 }
 
 void AEnemyPistolAIController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 	
-	if(Player)
+	if(Player && AIowner)
 	{
 		// SetFocus(Player);
 		MoveToActor(Player, 150.f);
 		SetFocalPoint(Player->GetActorLocation() + FVector(10, -35.f, 0), EAIFocusPriority::Gameplay);
+		// SetFocalPoint(FMath::Lerp<FVector>(owner->GetActorLocation(), Player->GetActorLocation() + FVector(10, -35.f, 0)), EAIFocusPriority::Gameplay);
 	}
 	
 	if(Player)
 	{
-		AEnemyPistol* owner = Cast<AEnemyPistol>(GetPawn());
-		if(owner)
+		// AEnemyPistol* owner = Cast<AEnemyPistol>(GetPawn());
+		if(AIowner)
 		{
-			if(owner->bIsAiming == false)
+			if(AIowner->bIsAiming == false)
 			{
-				owner->bIsAiming = true;
+				AIowner->bIsAiming = true;
 				// GetFocalPointOnActor(Player);
 			}
 		}

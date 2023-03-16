@@ -43,7 +43,7 @@ void UEnemyHandFightComponent::OnPunch()
 	}
 	bPunching = false;
 	
-	int32 PunchDir = FMath::RandRange(1, 100);
+	PunchDir = FMath::RandRange(1, 100);
 	if(PunchDir > 50)
 	{
 		ownerEnemy->PlayAnimMontage(ownerEnemy->BaseEnemyAnim->PunchLeft, 2.f, TEXT("Default"));

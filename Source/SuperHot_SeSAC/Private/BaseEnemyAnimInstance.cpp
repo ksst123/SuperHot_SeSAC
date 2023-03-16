@@ -4,6 +4,7 @@
 #include "BaseEnemyAnimInstance.h"
 #include "EnemyBase.h"
 #include "EnemyHandFightComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 void UBaseEnemyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
@@ -20,11 +21,15 @@ void UBaseEnemyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 void UBaseEnemyAnimInstance::AnimNotify_PunchLeft()
 {
 	ownerEnemy->HandFightComponent->bPunching = true;
+	// 플레이어 구체 커진 후 첫 레벨 불러오기
+	UGameplayStatics::OpenLevel(GetWorld(), FName("FenceMap"));
 }
 
 void UBaseEnemyAnimInstance::AnimNotify_PunchRight()
 {
 	ownerEnemy->HandFightComponent->bPunching = true;
+	// 플레이어 구체 커진 후 첫 레벨 불러오기
+	UGameplayStatics::OpenLevel(GetWorld(), FName("FenceMap"));
 }
 
 void UBaseEnemyAnimInstance::AnimNotify_Die()

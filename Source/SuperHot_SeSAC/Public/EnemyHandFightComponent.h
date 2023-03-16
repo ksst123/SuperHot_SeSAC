@@ -26,6 +26,9 @@ public:
 
 	UPROPERTY()
 	bool bPunching = true;
+
+	UPROPERTY()
+	int32 PunchDir;
 	
 	void OnPunch();
 };

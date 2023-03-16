@@ -29,5 +29,8 @@ public:
 	UPROPERTY()
 	class AHotPlayer* Player;
 
+	UPROPERTY()
+	class AEnemyPistol* AIowner;
+
 	FVector GetFocalPointOnActor(const AActor* Actor) const override;
 };

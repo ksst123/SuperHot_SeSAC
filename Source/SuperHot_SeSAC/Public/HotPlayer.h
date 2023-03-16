@@ -236,4 +236,8 @@ public:
 	//스테이지 시작 관련
 	UPROPERTY(EditAnywhere)
 	bool bIsStarted = false;
+
+	// 플레이어 사망 여부
+	UPROPERTY(VisibleAnywhere)
+	bool bIsDead = false;
 };
