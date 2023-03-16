@@ -16,6 +16,8 @@ EBTNodeResult::Type UBTTask_PistolShoot::ExecuteTask(UBehaviorTreeComponent& Own
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
 
+	UE_LOG(LogTemp, Warning, TEXT("Shooting Node starts"));
+	
 	enemy = Cast<AEnemyPistol>(OwnerComp.GetAIOwner()->GetPawn());
 	if(enemy)
 	{
@@ -31,9 +33,9 @@ EBTNodeResult::Type UBTTask_PistolShoot::ExecuteTask(UBehaviorTreeComponent& Own
 	{
 		enemy->bIsNotShooting = true;
 		UE_LOG(LogTemp, Warning, TEXT("Shooting true"));
-	}), 2.f, false);
+	}), 1000.f, false);
 	
-	// GetWorld()->GetTimerManager().ClearTimer(ShootDelay);
+	GetWorld()->GetTimerManager().ClearTimer(ShootDelay);
 
 	return EBTNodeResult::Succeeded;
 }

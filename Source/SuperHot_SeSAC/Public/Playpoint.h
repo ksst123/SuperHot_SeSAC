@@ -40,4 +40,14 @@ public:
 
 	UFUNCTION()
 	void ScaleChange(float value);
+
+	// 게임오버 시 Playpoint가 플레이어로 향하는 기능
+	UFUNCTION()
+	void GameOver();
+
+	// 구체가 다가오는 시간
+	float CurrentTime;
+	float GameOverTime = 2.f;
+	UPROPERTY()
+	FTimerHandle GameOverTimer;
 };
