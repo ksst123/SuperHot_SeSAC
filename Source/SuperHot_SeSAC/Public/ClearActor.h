@@ -23,7 +23,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditDefaultsOnly, Category="Clear")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Clear")
 	class UStaticMeshComponent* PyramidMesh;
 
 	UPROPERTY()

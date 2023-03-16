@@ -20,6 +20,7 @@ AClearActor::AClearActor()
 	}
 
 	PyramidMesh->SetSimulatePhysics(true);
+	
 }
 
 // Called when the game starts or when spawned
@@ -34,13 +35,11 @@ void AClearActor::BeginPlay()
 void AClearActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	// SetActorLocation(FVector(670, 370, 140));
-	// SetActorRotation(FRotator(0, 45, 0));
 
 	if(gm->bIsCleared)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Visibility true"));
 		PyramidMesh->SetVisibility(true);
+		PyramidMesh->SetCollisionProfileName(FName("PhysicActor"));
 	}
 }
 

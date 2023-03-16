@@ -96,17 +96,17 @@ void ABullet::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 		//총알 메쉬 제거
 		bulletMeshComp->DestroyComponent();
 
-		enemy->GetMesh()->SetVisibility(false);
-		enemy->GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		enemy->GetCapsuleComponent()->SetSimulatePhysics(false);
-		enemy->GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		for(int i = 0; i < enemy->DestructibleMeshes.Num(); i++)
-		{
-			enemy->DestructibleMeshes[i]->SetVisibility(true);
-			enemy->DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-			// enemy->GetMesh()->BreakConstraint(FVector(100.f, 100.f, 100.f), SweepResult.Location, SweepResult.BoneName);
-			// UE_LOG(LogTemp, Warning, TEXT("%s"), *(SweepResult.BoneName.ToString()));
-		}
+		// enemy->GetMesh()->SetVisibility(false);
+		// enemy->GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		// enemy->GetCapsuleComponent()->SetSimulatePhysics(false);
+		// enemy->GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		// for(int i = 0; i < enemy->DestructibleMeshes.Num(); i++)
+		// {
+		// 	enemy->DestructibleMeshes[i]->SetVisibility(true);
+		// 	enemy->DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		// 	// enemy->GetMesh()->BreakConstraint(FVector(100.f, 100.f, 100.f), SweepResult.Location, SweepResult.BoneName);
+		// 	// UE_LOG(LogTemp, Warning, TEXT("%s"), *(SweepResult.BoneName.ToString()));
+		// }
 		enemy->Die();
 	}
 	else
