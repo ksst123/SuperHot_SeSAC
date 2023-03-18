@@ -28,14 +28,19 @@ EBTNodeResult::Type UBTTask_PistolShoot::ExecuteTask(UBehaviorTreeComponent& Own
 		}
 	}
 
-	FTimerHandle ShootDelay;
+	
 	GetWorld()->GetTimerManager().SetTimer(ShootDelay, FTimerDelegate::CreateLambda([this]()->void
 	{
-		enemy->bIsNotShooting = true;
-		UE_LOG(LogTemp, Warning, TEXT("Shooting true"));
-	}), 1000.f, false);
-	
-	GetWorld()->GetTimerManager().ClearTimer(ShootDelay);
+		if(enemy)
+		{
+			enemy->bIsNotShooting = true;
+			UE_LOG(LogTemp, Warning, TEXT("Shooting true"));
+			if(enemy->bIsDead)
+			{
+				GetWorld()->GetTimerManager().ClearTimer(ShootDelay);
+			}
+		}
+	}), 1.f, true, 0.5);
 
 	return EBTNodeResult::Succeeded;
 }

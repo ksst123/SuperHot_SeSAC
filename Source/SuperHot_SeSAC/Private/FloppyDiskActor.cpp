@@ -28,7 +28,8 @@ AFloppyDiskActor::AFloppyDiskActor()
 void AFloppyDiskActor::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	BoxComponent->SetSimulatePhysics(true);
 }
 
 // Called every frame

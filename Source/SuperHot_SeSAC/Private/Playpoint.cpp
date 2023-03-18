@@ -84,6 +84,5 @@ void APlaypoint::GameOver()
 			SetActorLocation(TargetPos);
 			GetWorldTimerManager().ClearTimer(GameOverTimer);
 		}
-	}), 1000.f, true);
-	// GetWorldTimerManager().ClearTimer(GameOverTimer);
+	}), 0.1f, true);
 }

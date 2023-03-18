@@ -126,7 +126,6 @@ AEnemyBase::AEnemyBase()
 	RightFist->SetupAttachment(GetMesh(), TEXT("hand_rSocketFist"));
 	RightFist->SetRelativeScale3D(FVector(0.3f));
 	// RightFist->SetRelativeLocation(FVector(-24.677729, -2.888604, 81.473991));
-
 }
 
 // Called when the game starts or when spawned
@@ -142,6 +141,9 @@ void AEnemyBase::BeginPlay()
 	DestructibleLeftArm->SetVisibility(false);
 	DestructibleRightLeg->SetVisibility(false);
 	DestructibleLeftLeg->SetVisibility(false);
+
+	RightFist->OnComponentBeginOverlap.AddDynamic(this, &AEnemyBase::OnBeginOverlap);
+	LeftFist->OnComponentBeginOverlap.AddDynamic(this, &AEnemyBase::OnBeginOverlap);
 }
 
 // Called every frame
@@ -183,17 +185,17 @@ void AEnemyBase::Die()
 	// 		// DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	// 	}
 	// }
-	GetMesh()->SetVisibility(false);
-	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	GetCapsuleComponent()->SetSimulatePhysics(false);
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	for(int i = 0; i < DestructibleMeshes.Num(); i++)
-	{
-		DestructibleMeshes[i]->SetVisibility(true);
-		DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-		// enemy->GetMesh()->BreakConstraint(FVector(100.f, 100.f, 100.f), SweepResult.Location, SweepResult.BoneName);
-		// UE_LOG(LogTemp, Warning, TEXT("%s"), *(SweepResult.BoneName.ToString()));
-	}
+	// GetMesh()->SetVisibility(false);
+	// GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	// GetCapsuleComponent()->SetSimulatePhysics(false);
+	// GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	// for(int i = 0; i < DestructibleMeshes.Num(); i++)
+	// {
+	// 	DestructibleMeshes[i]->SetVisibility(true);
+	// 	DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	// 	// enemy->GetMesh()->BreakConstraint(FVector(100.f, 100.f, 100.f), SweepResult.Location, SweepResult.BoneName);
+	// 	// UE_LOG(LogTemp, Warning, TEXT("%s"), *(SweepResult.BoneName.ToString()));
+	// }
 	UnPossessed();
 	ALevelScriptActor_Cafeteria* CafeLevelBP = Cast<ALevelScriptActor_Cafeteria>(GetWorld()->GetLevelScriptActor());
 	AFence_LevelScriptActor* FenceLevelBP = Cast<AFence_LevelScriptActor>(GetWorld()->GetLevelScriptActor());

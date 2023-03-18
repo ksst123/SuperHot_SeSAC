@@ -48,6 +48,5 @@ public:
 	// 구체가 다가오는 시간
 	float CurrentTime;
 	float GameOverTime = 2.f;
-	UPROPERTY()
 	FTimerHandle GameOverTimer;
 };

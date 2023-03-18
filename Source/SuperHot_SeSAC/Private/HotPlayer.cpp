@@ -129,7 +129,7 @@ void AHotPlayer::Tick(float DeltaTime)
 		TArray<FOverlapResult> HitObjs;
 		bool bHit = GetWorld()->OverlapMultiByChannel(HitObjs, Center, FQuat::Identity, ECC_GameTraceChannel15, FCollisionShape::MakeSphere(GrabRange), Param);
 		
-		// 충돌했다면
+		// 충돌 안했다면
 		if(!bHit)
 		{
 			bIsGrabbableR = false;

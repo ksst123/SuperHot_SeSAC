@@ -4,11 +4,13 @@
 #include "Bullet.h"
 
 #include "EnemyBase.h"
+#include "NavigationSystemTypes.h"
 #include "WeaponBase.h"
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/RotatingMovementComponent.h"
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
+#include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SceneComponent.h"
 #include "GeometryCollection/GeometryCollectionComponent.h"
@@ -18,9 +20,13 @@ ABullet::ABullet()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	
 	rootComp = CreateDefaultSubobject<USceneComponent>(TEXT("RootComp"));
 	SetRootComponent(rootComp);
+
+	// BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
+	// SetRootComponent(BoxComponent);
+	// BoxComponent->SetupAttachment(bulletMeshComp);
 	
 	bulletMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BulletMesh"));
 	bulletMeshComp->SetupAttachment(RootComponent);
@@ -44,6 +50,7 @@ void ABullet::BeginPlay()
 	Super::BeginPlay();
 
 	bulletMeshComp->OnComponentBeginOverlap.AddDynamic(this, &ABullet::OnOverlapBegin);
+	// BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &ABullet::OnOverlapBegin);
 	
 }
 
@@ -60,7 +67,7 @@ void ABullet::Tick(float DeltaTime)
 void ABullet::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	bullet= Cast<ABullet>(OtherActor);
+	bullet = Cast<ABullet>(OtherActor);
 	weapon = Cast<AWeaponBase>(OtherActor);
 	enemy = Cast<AEnemyBase>(OtherActor);
 
@@ -75,6 +82,8 @@ void ABullet::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 		trailVFX->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
 		//총알 메쉬 제거
 		bulletMeshComp->DestroyComponent();
+		// BoxComponent->DestroyComponent();
+		UE_LOG(LogTemp, Warning, TEXT("Bullet Crashed"));
 	}
 	//부딪힌 대상이 무기면 총알만 파괴
 	else if(weapon)
@@ -85,6 +94,9 @@ void ABullet::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 		trailVFX->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
 		//총알 메쉬 제거
 		bulletMeshComp->DestroyComponent();
+		// BoxComponent->DestroyComponent();
+		UE_LOG(LogTemp, Warning, TEXT("weapon Crashed"));
+
 	}
 	//부딪힌 대상이 적이면 적을 죽이고 적 피격 나이아가라 스폰
 	else if(enemy)
@@ -95,6 +107,8 @@ void ABullet::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 		trailVFX->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
 		//총알 메쉬 제거
 		bulletMeshComp->DestroyComponent();
+		// BoxComponent->DestroyComponent();
+		UE_LOG(LogTemp, Warning, TEXT("Enemy Crashed"));
 
 		// enemy->GetMesh()->SetVisibility(false);
 		// enemy->GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
@@ -107,6 +121,9 @@ void ABullet::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 		// 	// enemy->GetMesh()->BreakConstraint(FVector(100.f, 100.f, 100.f), SweepResult.Location, SweepResult.BoneName);
 		// 	// UE_LOG(LogTemp, Warning, TEXT("%s"), *(SweepResult.BoneName.ToString()));
 		// }
+		enemy->GetMesh()->BreakConstraint(FVector(100.f, 100.f, 100.f), SweepResult.Location, SweepResult.BoneName);
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *(SweepResult.BoneName.ToString()));
+		DrawDebugSphere(GetWorld(), SweepResult.Location, 100.f, 10.f, FColor::Blue);
 		enemy->Die();
 	}
 	else
@@ -114,9 +131,8 @@ void ABullet::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), bulletVFX2, GetActorLocation(), GetActorRotation());
 		trailVFX->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
 		bulletMeshComp->DestroyComponent();
+		// BoxComponent->DestroyComponent();
 	}
-    
-	
 }
 
 void ABullet::EnemyHitCheck()

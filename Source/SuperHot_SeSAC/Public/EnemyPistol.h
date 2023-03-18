@@ -35,7 +35,7 @@ public:
 	bool bIsAiming = false;
 
 	UPROPERTY()
-	bool bIsNotShooting = false;
+	bool bIsNotShooting;
 
 	UFUNCTION()
 	void AimOn();

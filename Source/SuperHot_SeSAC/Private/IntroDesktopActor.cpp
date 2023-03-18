@@ -32,7 +32,8 @@ AIntroDesktopActor::AIntroDesktopActor()
 void AIntroDesktopActor::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	DiskEntrance->OnComponentBeginOverlap.AddDynamic(this, &AIntroDesktopActor::OnBeginOverlap);
 }
 
 // Called every frame
