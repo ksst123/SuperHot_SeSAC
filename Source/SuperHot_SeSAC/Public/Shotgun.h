@@ -31,4 +31,7 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Weapon")
 	class UNiagaraSystem* muzzleFlashVFX;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+	int shotgunCount = 2;
 };

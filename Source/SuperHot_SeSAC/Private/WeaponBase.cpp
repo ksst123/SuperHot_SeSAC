@@ -4,6 +4,7 @@
 #include "WeaponBase.h"
 
 #include "EnemyBase.h"
+#include "NiagaraFunctionLibrary.h"
 #include "Components/StaticMeshComponent.h"
 
 // Sets default values
@@ -41,8 +42,8 @@ void AWeaponBase::Crash(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Enemy Crashed"));
 		enemy->Die();
-		//디스럭터블 메쉬 추가 필요 ------------------------------------------------------------------------   
-		Destroy();
+		//에너미 피격 나이아가라 스폰
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), bulletVFX, GetActorLocation(), GetActorRotation());
 	}
 	else
 	//오버랩된 액터가 오브젝트라면

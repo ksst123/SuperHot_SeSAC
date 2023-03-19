@@ -23,4 +23,7 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Weapon")
 	class UNiagaraSystem* muzzleFlashVFX;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	int pistolCount = 4;
 };
