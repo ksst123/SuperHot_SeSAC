@@ -185,17 +185,17 @@ void AEnemyBase::Die()
 	// 		// DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	// 	}
 	// }
-	// GetMesh()->SetVisibility(false);
-	// GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	// GetCapsuleComponent()->SetSimulatePhysics(false);
-	// GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	// for(int i = 0; i < DestructibleMeshes.Num(); i++)
-	// {
-	// 	DestructibleMeshes[i]->SetVisibility(true);
-	// 	DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	// 	// enemy->GetMesh()->BreakConstraint(FVector(100.f, 100.f, 100.f), SweepResult.Location, SweepResult.BoneName);
-	// 	// UE_LOG(LogTemp, Warning, TEXT("%s"), *(SweepResult.BoneName.ToString()));
-	// }
+	GetMesh()->SetVisibility(false);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetCapsuleComponent()->SetSimulatePhysics(false);
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	for(int i = 0; i < DestructibleMeshes.Num(); i++)
+	{
+		DestructibleMeshes[i]->SetVisibility(true);
+		DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		// enemy->GetMesh()->BreakConstraint(FVector(100.f, 100.f, 100.f), SweepResult.Location, SweepResult.BoneName);
+		// UE_LOG(LogTemp, Warning, TEXT("%s"), *(SweepResult.BoneName.ToString()));
+	}
 	UnPossessed();
 	ALevelScriptActor_Cafeteria* CafeLevelBP = Cast<ALevelScriptActor_Cafeteria>(GetWorld()->GetLevelScriptActor());
 	AFence_LevelScriptActor* FenceLevelBP = Cast<AFence_LevelScriptActor>(GetWorld()->GetLevelScriptActor());
