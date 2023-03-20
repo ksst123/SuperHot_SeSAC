@@ -15,6 +15,6 @@ class SUPERHOT_SESAC_API AThrowingWeapon : public AWeaponBase
 	GENERATED_BODY()
 
 public:
-	void Crash(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) __override;
+	//void Crash(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) __override;
 
 };
