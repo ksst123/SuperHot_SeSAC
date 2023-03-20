@@ -5,33 +5,7 @@
     <projectFile>Intermediate/ProjectFiles/UE5.vcxproj</projectFile>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="865334a2-859c-4bd5-a1f5-d5ed9ce767b2" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SuperHot_SeSAC/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SuperHot_SeSAC/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/AI/Blueprints/BP_EnemyBase.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/AI/Blueprints/BP_EnemyBase.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/AI/Maps/CafeteriaMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/AI/Maps/CafeteriaMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/AI/Maps/FenceMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/AI/Maps/FenceMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/AI/Maps/IntroMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/AI/Maps/IntroMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Assets/Meshes/Weapons/pistol.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/Meshes/Weapons/pistol.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_Bullet.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_Bullet.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_Bullet_2.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_Bullet_2.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_PlayerBullet.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_PlayerBullet.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Characters/Mannequins/Meshes/SK_Mannequin.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/Mannequins/Meshes/SK_Mannequin.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/FX/FX_EnemyHit.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/FX/FX_EnemyHit.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/FX/FX_Tri.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/FX/FX_Tri.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/BTTask_PistolShoot.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/BTTask_PistolShoot.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/Bullet.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/Bullet.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/EnemyBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/EnemyBase.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/EnemyPistol.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/EnemyPistol.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/FloppyDiskActor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/FloppyDiskActor.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/HotPlayer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/HotPlayer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/IntroDesktopActor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/IntroDesktopActor.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/Pistol.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/Pistol.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/Playpoint.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Private/Playpoint.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Public/BTTask_PistolShoot.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Public/BTTask_PistolShoot.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Public/Bullet.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Public/Bullet.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Public/EnemyPistol.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Public/EnemyPistol.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Public/Playpoint.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SuperHot_SeSAC/Public/Playpoint.h" afterDir="false" />
-    </list>
+    <list default="true" id="865334a2-859c-4bd5-a1f5-d5ed9ce767b2" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -287,6 +261,7 @@
       <workItem from="1678931907929" duration="16332000" />
       <workItem from="1679024988490" duration="11857000" />
       <workItem from="1679106725158" duration="9658000" />
+      <workItem from="1679272323243" duration="49000" />
     </task>
     <servers />
   </component>
