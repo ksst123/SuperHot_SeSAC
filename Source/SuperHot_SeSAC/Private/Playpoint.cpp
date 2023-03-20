@@ -4,6 +4,7 @@
 #include "Playpoint.h"
 
 #include "HotPlayer.h"
+#include "Components/CapsuleComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/TimelineComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -41,16 +42,23 @@ void APlaypoint::Tick(float DeltaTime)
 	{
 		//플레이어가 무기를 그랩해서 시작됐다면
 		if(player->bIsStarted)
+		{
+			if(!bIsPlaying)
 			{
-				if(!bIsPlaying)
-				{
-					UE_LOG(LogTemp, Warning, TEXT("Play!"));
+				UE_LOG(LogTemp, Warning, TEXT("Play!"));
 				//2초에 걸쳐 구체가 커지도록
 				timeline.Play();
 				bIsPlaying = true;
-				}
 			}
-		
+		}
+	}
+
+	if(player->bIsDead)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Player Die"));
+		GameOver();
+		player->bIsDead = false;
+		UGameplayStatics::OpenLevel(GetWorld(), FName("FenceMap"));
 	}
 }
 
@@ -59,3 +67,22 @@ void APlaypoint::ScaleChange(float value)
 	sphere->SetRelativeScale3D(FVector(value));
 }
 
+void APlaypoint::GameOver()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Game Over"));
+	CurrentTime = 0;
+	GetWorldTimerManager().SetTimer(GameOverTimer, FTimerDelegate::CreateLambda([this]()->void
+	{
+		CurrentTime += GetWorld()->DeltaTimeSeconds;
+		UE_LOG(LogTemp, Warning, TEXT("CurrentTime: %f"), CurrentTime);
+		FVector StartPos = GetActorLocation();
+		FVector TargetPos = player->GetActorLocation() * player->GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
+		TargetPos = FMath::Lerp<FVector>(StartPos, TargetPos, CurrentTime / GameOverTime);
+		SetActorLocation(StartPos);
+		if(CurrentTime >= GameOverTime)
+		{
+			SetActorLocation(TargetPos);
+			GetWorldTimerManager().ClearTimer(GameOverTimer);
+		}
+	}), 0.1f, true);
+}

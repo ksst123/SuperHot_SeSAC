@@ -23,15 +23,28 @@ void AEnemyPistol::BeginPlay()
 {
 	Super::BeginPlay();
 
+	bIsNotShooting = false;
+	
 	Pistol = GetWorld()->SpawnActor<APistol>(PistolFactory);
 
 	if(Pistol)
 	{
 		Pistol->weaponMesh->SetSimulatePhysics(false);
-		Pistol->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("hand_rSocketPistol"));
+		Pistol->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("hand_rSocketPistol"));
 	}
 
 	PistolEnemyAnim = Cast<UPistolEnemyAnimInstance>(GetMesh()->GetAnimInstance());
+
+	UE_LOG(LogTemp, Warning, TEXT("Timer Start"));
+	FTimerHandle AimDelay;
+	GetWorldTimerManager().SetTimer(AimDelay, ([this]()->void
+	{
+		bIsNotShooting = true;
+		UE_LOG(LogTemp, Warning, TEXT("%s"), bIsNotShooting ? TEXT("True") : TEXT("False"));
+	}
+	), 0.2f, false);
+	// GetWorldTimerManager().ClearTimer(AimDelay);
+	UE_LOG(LogTemp, Warning, TEXT("Timer End"));
 }
 
 void AEnemyPistol::Tick(float DeltaSeconds)
@@ -59,7 +72,7 @@ void AEnemyPistol::Die()
 		return;
 	}
 
-	bIsNotShooting = true;
+	bIsNotShooting = false;
 	bIsAiming = false;
 	PlayAnimMontage(BaseEnemyAnim->Die, 5.f, TEXT("Default"));
 	BaseEnemyAnim->AnimNotify_Die();
@@ -74,17 +87,17 @@ void AEnemyPistol::Die()
 	// 	// DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	// }
 
-	GetMesh()->SetVisibility(false);
-	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	GetCapsuleComponent()->SetSimulatePhysics(false);
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	for(int i = 0; i < DestructibleMeshes.Num(); i++)
-	{
-		DestructibleMeshes[i]->SetVisibility(true);
-		DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-		// enemy->GetMesh()->BreakConstraint(FVector(100.f, 100.f, 100.f), SweepResult.Location, SweepResult.BoneName);
-		// UE_LOG(LogTemp, Warning, TEXT("%s"), *(SweepResult.BoneName.ToString()));
-	}
+	// GetMesh()->SetVisibility(false);
+	// GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	// GetCapsuleComponent()->SetSimulatePhysics(false);
+	// GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	// for(int i = 0; i < DestructibleMeshes.Num(); i++)
+	// {
+	// 	DestructibleMeshes[i]->SetVisibility(true);
+	// 	DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	// 	// enemy->GetMesh()->BreakConstraint(FVector(100.f, 100.f, 100.f), SweepResult.Location, SweepResult.BoneName);
+	// 	// UE_LOG(LogTemp, Warning, TEXT("%s"), *(SweepResult.BoneName.ToString()));
+	// }
 	
 	UnPossessed();
 	AEnemyPistolAIController* ControllerAI = Cast<AEnemyPistolAIController>(GetController());

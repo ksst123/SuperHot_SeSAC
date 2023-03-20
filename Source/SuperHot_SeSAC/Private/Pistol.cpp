@@ -20,6 +20,3 @@ void APistol::EnemyFire()
 	// 총알 액터 스폰
 	GetWorld()->SpawnActor<ABullet>(bulletFactory, weaponMesh->GetSocketTransform(TEXT("Front")));
 }
-
-
-

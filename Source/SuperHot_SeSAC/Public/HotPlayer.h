@@ -164,6 +164,11 @@ public:
 	class AClearActor* clearActor;
 	UPROPERTY()
 	bool bIsFirstLevel = true;
+
+	UPROPERTY()
+	class AFloppyDiskActor* FloppyDisk;
+	UPROPERTY()
+	bool bFloppyDisk = false;
 	
 	FTimerHandle burstTimer1;
 	FTimerHandle burstTimer2;
@@ -237,6 +242,10 @@ public:
 	//스테이지 시작 관련
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsStarted = false;
+
+	// 플레이어 사망 여부
+	UPROPERTY(VisibleAnywhere)
+	bool bIsDead = false;
 
 	//펀치 관련
 	UFUNCTION()

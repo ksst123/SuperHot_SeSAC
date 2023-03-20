@@ -58,4 +58,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	class UNiagaraSystem* bulletVFX2;
+
+	UPROPERTY(EditAnywhere, Category="Weapon")
+	class UBoxComponent* BoxComponent;
 };

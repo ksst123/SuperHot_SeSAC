@@ -9,6 +9,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "Engine/LocalPlayer.h"
 #include "EnhancedInputComponent.h"
+#include "FloppyDiskActor.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "MotionControllerComponent.h"
 #include "NiagaraFunctionLibrary.h"
@@ -136,7 +137,7 @@ void AHotPlayer::Tick(float DeltaTime)
 		TArray<FOverlapResult> HitObjs;
 		bool bHit = GetWorld()->OverlapMultiByChannel(HitObjs, Center, FQuat::Identity, ECC_GameTraceChannel15, FCollisionShape::MakeSphere(GrabRange), Param);
 		
-		// 충돌했다면
+		// 충돌 안했다면
 		if(!bHit)
 		{
 			bIsGrabbableR = false;
@@ -446,6 +447,7 @@ void AHotPlayer::TryGrabR()
 		smg = Cast<ASMG>(GrabbedActorR);
 		shotgun = Cast<AShotgun>(GrabbedActorR);
 		clearActor = Cast<AClearActor>(GrabbedActorR);
+		FloppyDisk = Cast<AFloppyDiskActor>(GrabbedActorR);
 		
 		if(pistol)
 		{
@@ -476,6 +478,10 @@ void AHotPlayer::TryGrabR()
 			{
 				clearActor->GameClear();
 			}
+		}
+		else if(FloppyDisk)
+		{
+			bFloppyDisk = true;
 		}
 	}
 	//쥘 물건이 없는 상태라면

@@ -24,27 +24,31 @@ void AEnemyPistolAIController::BeginPlay()
 			RunBehaviorTree(BT_EnemyPistol);
 		}
 	}
+
+	AIowner = Cast<AEnemyPistol>(GetPawn());
 }
 
 void AEnemyPistolAIController::Tick(float DeltaSeconds)
 {
-	// Super::Tick(DeltaSeconds);
+	Super::Tick(DeltaSeconds);
 	
-	if(Player)
+	if(Player && AIowner)
 	{
-		SetFocus(Player);
+		// SetFocus(Player);
 		MoveToActor(Player, 150.f);
-		SetFocalPoint(Player->GetActorLocation(), EAIFocusPriority::Default);
+		SetFocalPoint(Player->GetActorLocation() + FVector(10, -35.f, 0), EAIFocusPriority::Gameplay);
+		// SetFocalPoint(FMath::Lerp<FVector>(owner->GetActorLocation(), Player->GetActorLocation() + FVector(10, -35.f, 0)), EAIFocusPriority::Gameplay);
 	}
 	
 	if(Player)
 	{
-		AEnemyPistol* owner = Cast<AEnemyPistol>(GetPawn());
-		if(owner)
+		// AEnemyPistol* owner = Cast<AEnemyPistol>(GetPawn());
+		if(AIowner)
 		{
-			if(owner->bIsAiming == false)
+			if(AIowner->bIsAiming == false)
 			{
-				owner->bIsAiming = true;
+				AIowner->bIsAiming = true;
+				// GetFocalPointOnActor(Player);
 			}
 		}
 	}
@@ -52,5 +56,6 @@ void AEnemyPistolAIController::Tick(float DeltaSeconds)
 
 FVector AEnemyPistolAIController::GetFocalPointOnActor(const AActor* Actor) const
 {
+	UE_LOG(LogTemp, Warning, TEXT("Focal Point"));
 	return Actor != nullptr ? Actor->GetActorLocation() + FVector(0, 0, 40.f) : FAISystem::InvalidLocation;
 }

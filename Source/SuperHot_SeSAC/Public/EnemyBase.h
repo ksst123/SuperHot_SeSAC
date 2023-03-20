@@ -46,6 +46,11 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Destructible Components")
 	class UGeometryCollectionComponent* DestructibleHead;
 
+	UPROPERTY(EditAnywhere, Category="Components")
+	class USphereComponent* LeftFist;
+	UPROPERTY(EditAnywhere, Category="Components")
+	class USphereComponent* RightFist;
+
 	UPROPERTY()
 	bool bIsDead = false;
 
@@ -60,4 +65,11 @@ public:
 	class UBaseEnemyAnimInstance* BaseEnemyAnim;
 	
 	virtual void Die();
+
+	UPROPERTY()
+	bool bPunchOnce = false;
+	UFUNCTION()
+	void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	UFUNCTION()
+	void OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 };

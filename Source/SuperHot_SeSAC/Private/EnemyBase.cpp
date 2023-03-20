@@ -9,9 +9,11 @@
 #include "Fence_LevelScriptActor.h"
 #include "HotPlayer.h"
 #include "LevelScriptActor_Cafeteria.h"
+#include "NavigationSystemTypes.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GeometryCollection/GeometryCollectionComponent.h"
 #include "ProceduralMeshComponent.h"
+#include "Components/SphereComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -114,6 +116,16 @@ AEnemyBase::AEnemyBase()
 	DestructibleMeshes.Add(DestructibleLeftLeg);
 
 	TestMeshComp = CreateDefaultSubobject<UProceduralMeshComponent>(TEXT("Test Mesh Comp"));
+
+	LeftFist = CreateDefaultSubobject<USphereComponent>(TEXT("Left Fist"));
+	LeftFist->SetupAttachment(GetMesh(), TEXT("hand_lSocketFist"));
+	LeftFist->SetRelativeScale3D(FVector(0.3f));
+	// LeftFist->SetRelativeLocation(FVector(27.058314, 20.243555, 80.449254));
+	
+	RightFist = CreateDefaultSubobject<USphereComponent>(TEXT("Right Fist"));
+	RightFist->SetupAttachment(GetMesh(), TEXT("hand_rSocketFist"));
+	RightFist->SetRelativeScale3D(FVector(0.3f));
+	// RightFist->SetRelativeLocation(FVector(-24.677729, -2.888604, 81.473991));
 }
 
 // Called when the game starts or when spawned
@@ -129,6 +141,9 @@ void AEnemyBase::BeginPlay()
 	DestructibleLeftArm->SetVisibility(false);
 	DestructibleRightLeg->SetVisibility(false);
 	DestructibleLeftLeg->SetVisibility(false);
+
+	RightFist->OnComponentBeginOverlap.AddDynamic(this, &AEnemyBase::OnBeginOverlap);
+	LeftFist->OnComponentBeginOverlap.AddDynamic(this, &AEnemyBase::OnBeginOverlap);
 }
 
 // Called every frame
@@ -170,17 +185,17 @@ void AEnemyBase::Die()
 	// 		// DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	// 	}
 	// }
-	GetMesh()->SetVisibility(false);
-	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	GetCapsuleComponent()->SetSimulatePhysics(false);
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	for(int i = 0; i < DestructibleMeshes.Num(); i++)
-	{
-		DestructibleMeshes[i]->SetVisibility(true);
-		DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-		// enemy->GetMesh()->BreakConstraint(FVector(100.f, 100.f, 100.f), SweepResult.Location, SweepResult.BoneName);
-		// UE_LOG(LogTemp, Warning, TEXT("%s"), *(SweepResult.BoneName.ToString()));
-	}
+	// GetMesh()->SetVisibility(false);
+	// GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	// GetCapsuleComponent()->SetSimulatePhysics(false);
+	// GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	// for(int i = 0; i < DestructibleMeshes.Num(); i++)
+	// {
+	// 	DestructibleMeshes[i]->SetVisibility(true);
+	// 	DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	// 	// enemy->GetMesh()->BreakConstraint(FVector(100.f, 100.f, 100.f), SweepResult.Location, SweepResult.BoneName);
+	// 	// UE_LOG(LogTemp, Warning, TEXT("%s"), *(SweepResult.BoneName.ToString()));
+	// }
 	UnPossessed();
 	ALevelScriptActor_Cafeteria* CafeLevelBP = Cast<ALevelScriptActor_Cafeteria>(GetWorld()->GetLevelScriptActor());
 	AFence_LevelScriptActor* FenceLevelBP = Cast<AFence_LevelScriptActor>(GetWorld()->GetLevelScriptActor());
@@ -201,5 +216,36 @@ void AEnemyBase::Die()
 			CafeLevelBP->EnemyCount--;
 		}
 	}
+}
+
+void AEnemyBase::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	AHotPlayer* player = Cast<AHotPlayer>(OtherActor);
+	
+	if(bPunchOnce)
+	{
+		return;
+	}
+	bPunchOnce = true;
+
+	if(player)
+	{
+		player->bIsDead = true;
+		if(HandFightComponent->PunchDir > 50)
+		{
+			BaseEnemyAnim->AnimNotify_PunchLeft();
+		}
+		else
+		{
+			BaseEnemyAnim->AnimNotify_PunchRight();
+		}
+	}
+}
+
+void AEnemyBase::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	
 }
 
