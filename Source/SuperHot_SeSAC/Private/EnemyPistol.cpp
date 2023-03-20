@@ -99,20 +99,21 @@ void AEnemyPistol::Die()
 	// 	// UE_LOG(LogTemp, Warning, TEXT("%s"), *(SweepResult.BoneName.ToString()));
 	// }
 	
-	UnPossessed();
+	
 	AEnemyPistolAIController* ControllerAI = Cast<AEnemyPistolAIController>(GetController());
 	if(ControllerAI)
 	{
 		ControllerAI->BrainComponent->StopLogic(TEXT("Die"));
 	}
-	
+	UnPossessed();
 	
 	AHotPlayer* player = Cast<AHotPlayer>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 	if(player)
 	{
 		Pistol->weaponMesh->SetSimulatePhysics(true);
 		Pistol->weaponMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-		Pistol->weaponMesh->AddForce((player->GetActorLocation() - Pistol->GetActorLocation() + FVector(0.f, 0.f, 150.f))  * 100.f);
+		FVector PistolDir = player->GetActorLocation() - Pistol->GetActorLocation();
+		Pistol->weaponMesh->AddForce(PistolDir.GetSafeNormal() * 10.f + FVector(0.f, 0.f, 150.f));
 	}
 
 	ALevelScriptActor_Cafeteria* CafeLevelBP = Cast<ALevelScriptActor_Cafeteria>(GetWorld()->GetLevelScriptActor());

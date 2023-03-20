@@ -53,8 +53,4 @@ void AWeaponBase::Crash(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 		//디스트럭터블 메쉬 추가 필요----------------------------------------------------------------------
 		Destroy();
 	}
-	
-	
 }
-
-

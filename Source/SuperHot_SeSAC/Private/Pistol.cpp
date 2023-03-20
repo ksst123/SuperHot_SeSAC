@@ -17,7 +17,19 @@ void APistol::BeginPlay()
 void APistol::EnemyFire()
 {
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), muzzleFlashVFX, weaponMesh->GetSocketLocation(TEXT("Front")), weaponMesh->GetSocketRotation(TEXT("Front")));
-	
-	// 총알 액터 스폰
-	GetWorld()->SpawnActor<AEnemyBullet>(bulletFactory, weaponMesh->GetSocketTransform(TEXT("Front")));
+
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+	if(pistolCount > 0)
+	{
+		// 총알 액터 스폰
+		GetWorld()->SpawnActor<ABullet>(bulletFactory, weaponMesh->GetSocketTransform(TEXT("Front")), SpawnParams);
+		UE_LOG(LogTemp, Warning, TEXT("Enemy Bullet Spawned"));
+		pistolCount--;
+	}
+	else
+	{
+		
+	}
 }

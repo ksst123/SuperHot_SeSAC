@@ -51,9 +51,6 @@ void ABullet::BeginPlay()
 	bulletMeshComp->OnComponentBeginOverlap.AddDynamic(this, &ABullet::OnOverlapBegin);
 	// BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &ABullet::OnOverlapBegin);
 	
-	auto player = Cast<AHotPlayer>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	FireDir = player->GetActorLocation() - GetActorLocation() + GetActorUpVector() * 50.f;
-	
 }
 
 // Called every frame
@@ -62,7 +59,7 @@ void ABullet::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	// FireDir = FireDir.GetSafeNormal() * GetActorLocation();
-	SetActorLocation(GetActorLocation() + FireDir.GetSafeNormal() * bulletSpeed * DeltaTime);
+	SetActorLocation(GetActorLocation() + GetActorForwardVector() * bulletSpeed * DeltaTime);
 
 	EnemyHitCheck();
 }
@@ -124,10 +121,10 @@ void ABullet::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 		// 	// enemy->GetMesh()->BreakConstraint(FVector(100.f, 100.f, 100.f), SweepResult.Location, SweepResult.BoneName);
 		// 	// UE_LOG(LogTemp, Warning, TEXT("%s"), *(SweepResult.BoneName.ToString()));
 		// }
-		enemy->GetMesh()->BreakConstraint(FVector(100.f, 100.f, 100.f), SweepResult.Location, SweepResult.BoneName);
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *(SweepResult.BoneName.ToString()));
-		DrawDebugSphere(GetWorld(), SweepResult.Location, 100.f, 10.f, FColor::Blue);
-		enemy->Die();
+		// enemy->GetMesh()->BreakConstraint(FVector(100.f, 100.f, 100.f), SweepResult.Location, SweepResult.BoneName);
+		// UE_LOG(LogTemp, Warning, TEXT("%s"), *(SweepResult.BoneName.ToString()));
+		// DrawDebugSphere(GetWorld(), SweepResult.Location, 100.f, 10.f, FColor::Blue);
+		// enemy->Die();
 	}
 	else
 	{
@@ -143,23 +140,29 @@ void ABullet::EnemyHitCheck()
 	FHitResult HitResult;
 	FCollisionQueryParams Params;
 	Params.AddIgnoredActor(this);
+	FVector StartPos = GetActorLocation();
+	FVector EndPos = GetActorLocation() + GetActorForwardVector() * 10.f;
 	
-	bool bHit = GetWorld()->SweepSingleByChannel(HitResult, GetActorLocation(), GetActorLocation() + GetActorForwardVector() * 10.f, FQuat::Identity, ECollisionChannel::ECC_Pawn, FCollisionShape::MakeSphere(10.f), Params);
+	// bool bHit = GetWorld()->SweepSingleByChannel(HitResult, StartPos, EndPos, FQuat::Identity, ECollisionChannel::ECC_Pawn, FCollisionShape::MakeSphere(10.f), Params);
+	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, StartPos, EndPos, ECollisionChannel::ECC_GameTraceChannel4, Params);
 	if(bHit)
 	{
 		enemy = Cast<AEnemyBase>(HitResult.GetActor());
 		if(enemy)
 		{
-			// enemy->Die();
-			// enemy->GetMesh()->SetVisibility(false);
-			// enemy->GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-			// for(int i = 0; i < enemy->DestructibleMeshes.Num(); i++)
-			// {
-			// 	enemy->DestructibleMeshes[i]->SetVisibility(true);
-			// 	enemy->DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-			// }
-			// enemy->GetMesh()->BreakConstraint(FVector(100.f, 100.f, 100.f), HitResult.Location, HitResult.BoneName);
-			// UE_LOG(LogTemp, Warning, TEXT("%s"), *(HitResult.BoneName.ToString()));
+			enemy->GetMesh()->BreakConstraint(FVector(100.f, 100.f, 100.f), HitResult.Location, HitResult.BoneName);
+			
+			enemy->Die();
+			enemy->GetMesh()->SetVisibility(false);
+			enemy->GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			for(int i = 0; i < enemy->DestructibleMeshes.Num(); i++)
+			{
+				enemy->DestructibleMeshes[i]->SetVisibility(true);
+				enemy->DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+			}
+
+			UE_LOG(LogTemp, Warning, TEXT("BoneName: %s"), *(HitResult.BoneName.ToString()));
+			DrawDebugSphere(GetWorld(), HitResult.Location, 20.f, 10, FColor::Blue, false, 5., 1, 2);
 		}
 	}
 }

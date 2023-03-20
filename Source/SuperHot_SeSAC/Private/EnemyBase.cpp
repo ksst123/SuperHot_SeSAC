@@ -4,8 +4,10 @@
 #include "EnemyBase.h"
 
 #include "BaseEnemyAnimInstance.h"
+#include "BrainComponent.h"
 #include "EnemyHandFightComponent.h"
 #include "EnemyMoveComponent.h"
+#include "EnemyPistolAIController.h"
 #include "Fence_LevelScriptActor.h"
 #include "HotPlayer.h"
 #include "LevelScriptActor_Cafeteria.h"
@@ -196,7 +198,13 @@ void AEnemyBase::Die()
 	// 	// enemy->GetMesh()->BreakConstraint(FVector(100.f, 100.f, 100.f), SweepResult.Location, SweepResult.BoneName);
 	// 	// UE_LOG(LogTemp, Warning, TEXT("%s"), *(SweepResult.BoneName.ToString()));
 	// }
+	AEnemyPistolAIController* ControllerAI = Cast<AEnemyPistolAIController>(GetController());
+	if(ControllerAI)
+	{
+		ControllerAI->BrainComponent->StopLogic(TEXT("Die"));
+	}
 	UnPossessed();
+
 	ALevelScriptActor_Cafeteria* CafeLevelBP = Cast<ALevelScriptActor_Cafeteria>(GetWorld()->GetLevelScriptActor());
 	AFence_LevelScriptActor* FenceLevelBP = Cast<AFence_LevelScriptActor>(GetWorld()->GetLevelScriptActor());
 	auto player = Cast<AHotPlayer>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
