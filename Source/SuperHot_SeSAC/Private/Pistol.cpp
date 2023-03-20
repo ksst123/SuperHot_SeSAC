@@ -3,6 +3,7 @@
 
 #include "Pistol.h"
 #include "Bullet.h"
+#include "EnemyBullet.h"
 #include "HotPlayer.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Components/SceneComponent.h"
@@ -18,5 +19,5 @@ void APistol::EnemyFire()
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), muzzleFlashVFX, weaponMesh->GetSocketLocation(TEXT("Front")), weaponMesh->GetSocketRotation(TEXT("Front")));
 	
 	// 총알 액터 스폰
-	GetWorld()->SpawnActor<ABullet>(bulletFactory, weaponMesh->GetSocketTransform(TEXT("Front")));
+	GetWorld()->SpawnActor<AEnemyBullet>(bulletFactory, weaponMesh->GetSocketTransform(TEXT("Front")));
 }
