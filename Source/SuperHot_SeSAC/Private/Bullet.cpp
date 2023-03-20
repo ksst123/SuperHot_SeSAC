@@ -5,14 +5,11 @@
 
 #include "EnemyBase.h"
 #include "HotPlayer.h"
-#include "NavigationSystemTypes.h"
 #include "WeaponBase.h"
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/RotatingMovementComponent.h"
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
-#include "Components/BoxComponent.h"
-#include "Components/CapsuleComponent.h"
 #include "Components/SceneComponent.h"
 #include "GeometryCollection/GeometryCollectionComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -53,7 +50,7 @@ void ABullet::BeginPlay()
 
 	bulletMeshComp->OnComponentBeginOverlap.AddDynamic(this, &ABullet::OnOverlapBegin);
 	// BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &ABullet::OnOverlapBegin);
-
+	
 	auto player = Cast<AHotPlayer>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	FireDir = player->GetActorLocation() - GetActorLocation() + GetActorUpVector() * 50.f;
 	

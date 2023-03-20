@@ -16,7 +16,7 @@ public:
 	// Sets default values for this character's properties
 	AHotPlayer();
 
-protected:
+public:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
