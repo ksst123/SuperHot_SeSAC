@@ -196,9 +196,9 @@ public:
 	FVector ThrowDirectionL;
 	// 던질 힘
 	UPROPERTY(EditAnywhere, Category = "Grab")
-	float ThrowPowerR = 1;
+	float ThrowPowerR = 3;
 	UPROPERTY(EditAnywhere, Category = "Grab")
-	float ThrowPowerL = 1;
+	float ThrowPowerL = 3;
 
 	// 직전 위치
 	FVector PrevPosR;
@@ -271,4 +271,7 @@ public:
 	bool bSuperUIOn = false;
 	UPROPERTY(EditAnywhere, Category = "UI")
 	bool bHotUIOn = false;
+
+	UPROPERTY(EditAnywhere, Category = "Clear")
+	bool bIsPyramidGrabbed = false;
 };

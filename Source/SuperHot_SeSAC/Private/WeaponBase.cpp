@@ -50,12 +50,13 @@ void AWeaponBase::Crash(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 		UE_LOG(LogTemp, Warning, TEXT("Enemy Crashed"));
 		enemy->Die();
 		//디스트럭터블 메쉬 표시
+		AFieldSystemActor* field = GetWorld()->SpawnActor<class AFieldSystemActor>(masterField, DestructibleMesh->GetComponentLocation(), DestructibleMesh->GetComponentRotation());
 		weaponMesh->SetVisibility(false);
 		weaponMesh->SetSimulatePhysics(false);
 		weaponMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		DestructibleMesh->SetVisibility(true);
-		DestructibleMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		DestructibleMesh->SetSimulatePhysics(true);
+		DestructibleMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		DestructibleMesh->SetCollisionProfileName(FName("Destructed"));
 		//에너미 피격 나이아가라 스폰
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), bulletVFX, GetActorLocation(), GetActorRotation());

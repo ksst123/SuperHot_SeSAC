@@ -39,7 +39,6 @@ void APlaypoint::Tick(float DeltaTime)
 	timeline.TickTimeline(DeltaTime);
 
 	
-	
 	if(player)
 	{
 		//플레이어가 무기를 그랩해서 시작됐다면
@@ -52,6 +51,15 @@ void APlaypoint::Tick(float DeltaTime)
 				timeline.Play();
 				bIsPlaying = true;
 			}
+			// 플레이어가 피라미드를 잡았다면
+			if(player->bIsPyramidGrabbed)
+			{
+				//타임라인 역재생
+				timeline.Reverse();
+			}
+			
+			
+
 		}
 	}
 

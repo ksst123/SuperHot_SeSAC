@@ -320,7 +320,7 @@ void AHotPlayer::Fire()
 			if(pistol->pistolCount > 0)
 			{
 				//격발 사운드 스폰-----------------------------------------------------
-
+				
 				//머즐 플래쉬 이펙트 스폰
 				UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), muzzleFlashVFX, GrabbedObjectR->GetSocketLocation(TEXT("Front")), GrabbedObjectR->GetSocketRotation(TEXT("Front")));
 				//총알 액터 스폰
@@ -430,6 +430,24 @@ void AHotPlayer::TryGrabR()
 		bIsGrabbedR = true;
 		if(GrabbedObjectR)
 		{
+			clearActor = Cast<AClearActor>(GrabbedActorR);
+
+			if(clearActor)
+			{
+				if(bIsFirstLevel)
+				{
+					// 피라미드 산산조각
+					clearActor->Grabbed();
+					//구체 크기 다시 줄이기
+					bIsPyramidGrabbed = true;
+					bIsFirstLevel = false;
+					return;
+				}
+				else
+				{
+					clearActor->GameClear();
+				}
+			}
 			// -> 물체 물리 기능 비활성화
 			GrabbedObjectR->SetSimulatePhysics(false);
 			// ->바닥 같은 오브젝트에 부딪히지 않게 처리---------------------------------------------------------------
@@ -466,12 +484,10 @@ void AHotPlayer::TryGrabR()
 		{
 			if(bIsFirstLevel)
 			{
-				// 피라미드 디스트럭터블 메쉬 적용
-
-				// 주변 구체 다시 원래크기로
-				
-				// n초 후에 다음 스테이지로 이동하도록
-				clearActor->ToCafeMap();
+				// 피라미드 산산조각
+				clearActor->Grabbed();
+				//구체 크기 다시 줄이기
+				bIsPyramidGrabbed = true;
 				bIsFirstLevel = false;
 			}
 			else
@@ -523,6 +539,7 @@ void AHotPlayer::DetachGrabR()
 			{
 				//콜리전 채널 Thrown으로 변경
 				GrabbedObjectR->SetCollisionProfileName(FName("Thrown"));
+				GrabbedObjectR->SetEnableGravity(false);
 				//던지기
 				GrabbedObjectR->AddForce(ThrowDirectionR * ThrowPowerR * GrabbedObjectR->GetMass());
 			}

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/TimelineComponent.h"
 #include "GameFramework/Actor.h"
 #include "ClearActor.generated.h"
 
@@ -26,6 +27,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Clear")
 	class UStaticMeshComponent* PyramidMesh;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Clear")
+	class UGeometryCollectionComponent* DestructibleMesh;
+
 	UPROPERTY()
 	class ASuperHotGameModeBase* gm;
 	
@@ -34,4 +38,23 @@ public:
 
 	UFUNCTION()
 	void GameClear();
+
+	FTimeline timeline;
+	
+	UPROPERTY(EditAnywhere, Category = "Clear")
+	class UCurveFloat* clearCurve;
+
+	UFUNCTION()
+	void ScaleChange(float value);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Clear")
+	TSubclassOf<class AFieldSystemActor> masterField;
+
+	UFUNCTION()
+	void Grabbed();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Clear")
+	class APlaypoint* playPoint;
+	
+	FTimerHandle mapTimer;
 };
