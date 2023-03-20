@@ -41,4 +41,7 @@ public:
 
 	UPROPERTY()
 	class AEnemyBase* enemy;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	class UNiagaraSystem* bulletVFX;
 };

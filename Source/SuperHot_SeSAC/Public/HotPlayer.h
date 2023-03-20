@@ -21,7 +21,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	// 카메라
-	UPROPERTY(VisibleAnywhere, Category="VRCamera")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="VRCamera")
 	class UCameraComponent* HotCamera;
 
 	// 컨트롤러
@@ -30,9 +30,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category="MotionController")
 	class UMotionControllerComponent* RightHand;
 	// 사용할 손 모델
-	UPROPERTY(VisibleAnywhere, Category="MotionController")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="MotionController")
 	class USkeletalMeshComponent* LeftHandMesh;	
-	UPROPERTY(VisibleAnywhere, Category="MotionController")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="MotionController")
 	class USkeletalMeshComponent* RightHandMesh;
 	
 	
@@ -48,7 +48,13 @@ public:
 	float MoveSpeed = 500;
 	// Input Mapping Context
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	// ReSharper disable once UnrealHeaderToolError
 	class UInputMappingContext* IMC_HotInput;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	// ReSharper disable once UnrealHeaderToolError
+	class UInputMappingContext* IMC_Hand;
+	
 	// Input Action for Move
 	UPROPERTY(EditDefaultsOnly, Category="Input")
 	class UInputAction* IA_HotMove;
@@ -234,10 +240,35 @@ public:
 	float timeDilation;
 
 	//스테이지 시작 관련
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsStarted = false;
 
 	// 플레이어 사망 여부
 	UPROPERTY(VisibleAnywhere)
 	bool bIsDead = false;
+
+	//펀치 관련
+	UFUNCTION()
+	void Punch(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UPROPERTY()
+	class AEnemyBase* enemy;
+
+	UPROPERTY(EditAnywhere)
+	class UNiagaraSystem* bulletVFX;
+
+	//클리어 UI 관련
+	UPROPERTY()
+	class ASuperHotGameModeBase* gm;
+	UPROPERTY(EditAnywhere, Category = "UI")
+	TSubclassOf<AActor> SuperUI;
+	UPROPERTY(EditAnywhere, Category = "UI")
+	TSubclassOf<AActor> HotUI;
+
+	UPROPERTY(EditAnywhere, Category = "UI")
+	float UISpawnTime;
+	UPROPERTY(EditAnywhere, Category = "UI")
+	bool bSuperUIOn = false;
+	UPROPERTY(EditAnywhere, Category = "UI")
+	bool bHotUIOn = false;
 };

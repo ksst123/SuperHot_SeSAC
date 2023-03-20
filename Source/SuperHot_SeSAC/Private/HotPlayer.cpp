@@ -5,6 +5,7 @@
 
 #include "Bullet.h"
 #include "ClearActor.h"
+#include "EnemyBase.h"
 #include "EnhancedInputSubsystems.h"
 #include "Engine/LocalPlayer.h"
 #include "EnhancedInputComponent.h"
@@ -15,6 +16,7 @@
 #include "Pistol.h"
 #include "Shotgun.h"
 #include "SMG.h"
+#include "SuperHotGameModeBase.h"
 #include "BehaviorTree/BehaviorTreeTypes.h"
 #include "Camera/CameraComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -63,6 +65,10 @@ AHotPlayer::AHotPlayer()
 void AHotPlayer::BeginPlay()
 {
 	Super::BeginPlay();
+
+	gm = Cast<ASuperHotGameModeBase>(GetWorld()->GetAuthGameMode());
+
+	RightHandMesh->OnComponentBeginOverlap.AddDynamic(this, &AHotPlayer::Punch);
 	
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.01);	
 	
@@ -77,6 +83,7 @@ void AHotPlayer::BeginPlay()
 		if(subSystem)
 		{
 			subSystem->AddMappingContext(IMC_HotInput, 0);
+			subSystem->AddMappingContext(IMC_Hand, 0);
 		}
 	}
 	
@@ -119,7 +126,8 @@ void AHotPlayer::Tick(float DeltaTime)
 	{
 		// 오른손 닿은 오브젝트 머테리얼 처리
 		//중심점
-		FVector Center = RightHand->GetComponentLocation();
+		//FVector Center = RightHand->GetComponentLocation();
+		FVector Center = RightHandMesh->GetSocketLocation(FName("gun"));
 		//충돌체크(구충돌)
 		//충돌 질의 작성
 		FCollisionQueryParams Param;
@@ -177,6 +185,39 @@ void AHotPlayer::Tick(float DeltaTime)
 		}
 	}
 	GrabbingR();
+
+	//클리어 됐다면
+	if(gm)
+	{
+		if(gm->bIsCleared)
+		{
+			UISpawnTime += GetWorld()->DeltaTimeSeconds;
+			if(!bSuperUIOn)
+			{
+				bSuperUIOn = true;
+				//카메라 방향으로 300 거리에 SUPER UI 액터를 스폰한다.
+				//GetWorld()->SpawnActor<AActor>(SuperUI, HotCamera->GetComponentLocation() + HotCamera->GetForwardVector() * 300, HotCamera->GetComponentRotation());
+			}
+			//1.5초 후에 HOT UI 액터를 스폰한다.
+			if(UISpawnTime > 1.5 && !bHotUIOn)
+			{
+				bHotUIOn = true;
+				//GetWorld()->SpawnActor<AActor>(HotUI, HotCamera->GetComponentLocation() + HotCamera->GetForwardVector() * 300, HotCamera->GetComponentRotation());
+			}
+			//3초 지나면 시간 초기화
+			if(UISpawnTime > 3)
+			{
+				//시간 초기화
+				UISpawnTime = 0;
+				bSuperUIOn = false;
+				bHotUIOn = false;
+			}
+			
+			
+		}
+	}
+
+		
 	
 }
 
@@ -276,12 +317,24 @@ void AHotPlayer::Fire()
 
 		if(GrabbedObjectR)
 		{
-		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), muzzleFlashVFX, GrabbedObjectR->GetSocketLocation(TEXT("Front")), GrabbedObjectR->GetSocketRotation(TEXT("Front")));
-			
-		// 총알 액터 스폰
-		GetWorld()->SpawnActor<ABullet>(bulletFactory2, GrabbedObjectR->GetSocketTransform(TEXT("Front")));
+			if(pistol->pistolCount > 0)
+			{
+				//격발 사운드 스폰-----------------------------------------------------
+
+				//머즐 플래쉬 이펙트 스폰
+				UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), muzzleFlashVFX, GrabbedObjectR->GetSocketLocation(TEXT("Front")), GrabbedObjectR->GetSocketRotation(TEXT("Front")));
+				//총알 액터 스폰
+				GetWorld()->SpawnActor<ABullet>(bulletFactory2, GrabbedObjectR->GetSocketTransform(TEXT("Front")));
+				//장탄수 1 감소
+				pistol->pistolCount--;
+			}
+			//장탄 수 없으면 격발 X
+			else
+			{
+				//틱틱 사운드 스폰-----------------------------------------------------
+				
+			}
 		}
-	
 	}
 	else if(bSMGOn)
 	{
@@ -297,20 +350,31 @@ void AHotPlayer::Fire()
 		UGameplayStatics::SetGlobalTimeDilation(GetWorld(),0.5);
 		if(GrabbedObjectR)
 		{
-		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), muzzleFlashVFX, GrabbedObjectR->GetSocketLocation(TEXT("Front")), GrabbedObjectR->GetSocketRotation(TEXT("Front")));
-		// 총알 액터 스폰
-		//첫 발 발사
-		GetWorld()->SpawnActor<ABullet>(bulletFactory2, GrabbedObjectR->GetSocketLocation(TEXT("Front")),GrabbedObjectR->GetSocketRotation(TEXT("Front")) + FRotator(FMath::RandRange(-2,2), FMath::RandRange(-2,2), 0));
-		// 두 번째 발 발사
-		GetWorldTimerManager().SetTimer(burstTimer1, FTimerDelegate::CreateLambda([&]()
+			if(smg->smgCount > 0)
 			{
-			GetWorld()->SpawnActor<ABullet>(bulletFactory2, GrabbedObjectR->GetSocketLocation(TEXT("Front")),GrabbedObjectR->GetSocketRotation(TEXT("Front")) + FRotator(FMath::RandRange(-2,2), FMath::RandRange(-2,2), 0));
-			}), 0.1f, false);
-		//세 번째 발 발사
-		GetWorldTimerManager().SetTimer(burstTimer2, FTimerDelegate::CreateLambda([&]()
-	{
-			GetWorld()->SpawnActor<ABullet>(bulletFactory2, GrabbedObjectR->GetSocketLocation(TEXT("Front")),GrabbedObjectR->GetSocketRotation(TEXT("Front")) + FRotator(FMath::RandRange(-2,2), FMath::RandRange(-2,2), 0));
-		}), 0.2f, false);
+				UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), muzzleFlashVFX, GrabbedObjectR->GetSocketLocation(TEXT("Front")), GrabbedObjectR->GetSocketRotation(TEXT("Front")));
+
+				//격발 사운드 스폰-----------------------------------------------------------
+				// 총알 액터 스폰
+				//첫 발 발사
+				GetWorld()->SpawnActor<ABullet>(bulletFactory2, GrabbedObjectR->GetSocketLocation(TEXT("Front")),GrabbedObjectR->GetSocketRotation(TEXT("Front")) + FRotator(FMath::RandRange(-2,2), FMath::RandRange(-2,2), 0));
+				// 두 번째 발 발사
+				GetWorldTimerManager().SetTimer(burstTimer1, FTimerDelegate::CreateLambda([&]()
+				{
+					GetWorld()->SpawnActor<ABullet>(bulletFactory2, GrabbedObjectR->GetSocketLocation(TEXT("Front")),GrabbedObjectR->GetSocketRotation(TEXT("Front")) + FRotator(FMath::RandRange(-2,2), FMath::RandRange(-2,2), 0));
+				}), 0.1f, false);
+				//세 번째 발 발사
+				GetWorldTimerManager().SetTimer(burstTimer2, FTimerDelegate::CreateLambda([&]()
+				{
+					GetWorld()->SpawnActor<ABullet>(bulletFactory2, GrabbedObjectR->GetSocketLocation(TEXT("Front")),GrabbedObjectR->GetSocketRotation(TEXT("Front")) + FRotator(FMath::RandRange(-2,2), FMath::RandRange(-2,2), 0));
+				}), 0.2f, false);
+				smg->smgCount--;
+			}
+			//장탄수 0 이하
+			else
+			{
+				//틱틱 사운드 스폰-------------------------------------------------------------
+			}
 		}
 	
 	}
@@ -327,15 +391,26 @@ void AHotPlayer::Fire()
 		UGameplayStatics::SetGlobalTimeDilation(GetWorld(),0.5);
 		if(GrabbedObjectR)
 		{
-			UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), muzzleFlashVFX, GrabbedObjectR->GetSocketLocation(TEXT("Front")), GrabbedObjectR->GetSocketRotation(TEXT("Front")));
-			// 총알 액터 스폰
-			GetWorld()->SpawnActor<ABullet>(bulletFactory3, GrabbedObjectR->GetSocketLocation(TEXT("Front1")), GrabbedObjectR->GetSocketRotation(TEXT("Front1")) + FRotator(FMath::RandRange(0,5),FMath::RandRange(0,5),0));
-			GetWorld()->SpawnActor<ABullet>(bulletFactory3, GrabbedObjectR->GetSocketLocation(TEXT("Front2")), GrabbedObjectR->GetSocketRotation(TEXT("Front2")) + FRotator(FMath::RandRange(0,5), 0,0));
-			GetWorld()->SpawnActor<ABullet>(bulletFactory3, GrabbedObjectR->GetSocketLocation(TEXT("Front3")), GrabbedObjectR->GetSocketRotation(TEXT("Front3")) + FRotator(FMath::RandRange(0,5),FMath::RandRange(0,-5),0));
-			GetWorld()->SpawnActor<ABullet>(bulletFactory3, GrabbedObjectR->GetSocketLocation(TEXT("Front4")), GrabbedObjectR->GetSocketRotation(TEXT("Front4")) + FRotator(0,FMath::RandRange(0,-5),0));
-			GetWorld()->SpawnActor<ABullet>(bulletFactory3, GrabbedObjectR->GetSocketLocation(TEXT("Front5")), GrabbedObjectR->GetSocketRotation(TEXT("Front5")) + FRotator(FMath::RandRange(0,-5),FMath::RandRange(0,-5),0));
-			GetWorld()->SpawnActor<ABullet>(bulletFactory3, GrabbedObjectR->GetSocketLocation(TEXT("Front6")), GrabbedObjectR->GetSocketRotation(TEXT("Front6")) + FRotator(FMath::RandRange(0,-5),FMath::RandRange(0,5),0));
-			GetWorld()->SpawnActor<ABullet>(bulletFactory3, GrabbedObjectR->GetSocketLocation(TEXT("Front7")), GrabbedObjectR->GetSocketRotation(TEXT("Front7")) + FRotator(0,FMath::RandRange(0,5),0));
+			if(shotgun->shotgunCount > 0)
+			{
+				//격발 사운드 스폰 ---------------------------------------------------
+				
+				UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), muzzleFlashVFX, GrabbedObjectR->GetSocketLocation(TEXT("Front")), GrabbedObjectR->GetSocketRotation(TEXT("Front")));
+				// 총알 액터 스폰
+				GetWorld()->SpawnActor<ABullet>(bulletFactory3, GrabbedObjectR->GetSocketLocation(TEXT("Front1")), GrabbedObjectR->GetSocketRotation(TEXT("Front1")) + FRotator(FMath::RandRange(0,5),FMath::RandRange(0,5),0));
+				GetWorld()->SpawnActor<ABullet>(bulletFactory3, GrabbedObjectR->GetSocketLocation(TEXT("Front2")), GrabbedObjectR->GetSocketRotation(TEXT("Front2")) + FRotator(FMath::RandRange(0,5), 0,0));
+				GetWorld()->SpawnActor<ABullet>(bulletFactory3, GrabbedObjectR->GetSocketLocation(TEXT("Front3")), GrabbedObjectR->GetSocketRotation(TEXT("Front3")) + FRotator(FMath::RandRange(0,5),FMath::RandRange(0,-5),0));
+				GetWorld()->SpawnActor<ABullet>(bulletFactory3, GrabbedObjectR->GetSocketLocation(TEXT("Front4")), GrabbedObjectR->GetSocketRotation(TEXT("Front4")) + FRotator(0,FMath::RandRange(0,-5),0));
+				GetWorld()->SpawnActor<ABullet>(bulletFactory3, GrabbedObjectR->GetSocketLocation(TEXT("Front5")), GrabbedObjectR->GetSocketRotation(TEXT("Front5")) + FRotator(FMath::RandRange(0,-5),FMath::RandRange(0,-5),0));
+				GetWorld()->SpawnActor<ABullet>(bulletFactory3, GrabbedObjectR->GetSocketLocation(TEXT("Front6")), GrabbedObjectR->GetSocketRotation(TEXT("Front6")) + FRotator(FMath::RandRange(0,-5),FMath::RandRange(0,5),0));
+				GetWorld()->SpawnActor<ABullet>(bulletFactory3, GrabbedObjectR->GetSocketLocation(TEXT("Front7")), GrabbedObjectR->GetSocketRotation(TEXT("Front7")) + FRotator(0,FMath::RandRange(0,5),0));
+
+				shotgun->shotgunCount--;
+			}
+			else
+			{
+				//틱틱 사운드 스폰 -------------------------------------------------
+			}
 			
 		}
 	}
@@ -391,6 +466,11 @@ void AHotPlayer::TryGrabR()
 		{
 			if(bIsFirstLevel)
 			{
+				// 피라미드 디스트럭터블 메쉬 적용
+
+				// 주변 구체 다시 원래크기로
+				
+				// n초 후에 다음 스테이지로 이동하도록
 				clearActor->ToCafeMap();
 				bIsFirstLevel = false;
 			}
@@ -403,13 +483,14 @@ void AHotPlayer::TryGrabR()
 		{
 			bFloppyDisk = true;
 		}
-		
 	}
+	//쥘 물건이 없는 상태라면
 	else
 	{
-		//쥘수 없는 상태라면
-		//주먹 쥐는 애니메이션 추가
-		
+		UE_LOG(LogTemp, Warning, TEXT("Punch Start"));
+		bIsGrabbedR = true;
+		//손이 적과 오버랩되도록
+		RightHandMesh->SetCollisionProfileName(FName("Punch"));
 	}
 	
 }
@@ -444,8 +525,6 @@ void AHotPlayer::DetachGrabR()
 				GrabbedObjectR->SetCollisionProfileName(FName("Thrown"));
 				//던지기
 				GrabbedObjectR->AddForce(ThrowDirectionR * ThrowPowerR * GrabbedObjectR->GetMass());
-				// 회전시키기
-				//GrabbedObjectR->SetPhysicsAngularVelocityInRadians(AngularVelocity * ToquePowerR, true);
 			}
 		else
 			//던지기 직전의 속도가 2 이하라면 떨구기
@@ -454,18 +533,19 @@ void AHotPlayer::DetachGrabR()
 			GrabbedObjectR->SetCollisionProfileName(FName("Weapon"));
 			//아래로 떨구기
 			GrabbedObjectR->AddForce(FVector(0,0,-100) * ThrowPowerR * GrabbedObjectR->GetMass());
-			//GrabbedObjectR->SetPhysicsAngularVelocityInRadians(AngularVelocity * ToquePowerR, true);
 		}
 		// GrabbedObjectR 비우기, 다시 잡을 수 있게 bIsGrabbedR 뒤집기
 		GrabbedObjectR->SetMaterial(0, basicMaterial);
 		GrabbedObjectR = nullptr;
 		bIsGrabbedR = false;
 	}
+		// 무기를 쥐고있던 상태가 아니라면
 	else
 	{
-		// 무기를 쥐고있던 상태가 아니라면
-		
-		// 주먹 해제
+		// 주먹 충돌 해제
+		UE_LOG(LogTemp, Warning, TEXT("Punch Stop"));
+		bIsGrabbedR = false;
+		RightHandMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
 	
 }
@@ -529,6 +609,18 @@ void AHotPlayer::PosCheck()
 		PrevHeadPos = CurHeadPos;
 		PrevPosR = RightHand->GetComponentLocation();
 		PrevPosL = LeftHand->GetComponentLocation();
+	}
+}
+
+void AHotPlayer::Punch(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	enemy = Cast<AEnemyBase>(OtherActor);
+
+	if(enemy)
+	{
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), bulletVFX, RightHandMesh->GetComponentLocation(), RightHandMesh->GetComponentRotation());
+		enemy->Die();
 	}
 }
 
