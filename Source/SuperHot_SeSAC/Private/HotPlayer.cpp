@@ -14,11 +14,13 @@
 #include "MotionControllerComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Pistol.h"
+#include "Playpoint.h"
 #include "Shotgun.h"
 #include "SMG.h"
 #include "SuperHotGameModeBase.h"
 #include "BehaviorTree/BehaviorTreeTypes.h"
 #include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -59,6 +61,8 @@ AHotPlayer::AHotPlayer()
 		RightHandMesh->SetRelativeRotation(FRotator(25,0,90));
 	}
 
+	HitCollision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Hit Collision"));
+	HitCollision->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -623,4 +627,3 @@ void AHotPlayer::Punch(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, 
 		enemy->Die();
 	}
 }
-

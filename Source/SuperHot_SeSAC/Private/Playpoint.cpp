@@ -73,21 +73,4 @@ void APlaypoint::GameOver()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Game Over"));
 	timeline.Reverse();
-	// CurrentTime = 0;
-	// GetWorldTimerManager().SetTimer(GameOverTimer, FTimerDelegate::CreateLambda([this]()->void
-	// {
-	// 	CurrentTime += GetWorld()->DeltaTimeSeconds;
-	// 	UE_LOG(LogTemp, Warning, TEXT("CurrentTime: %f"), CurrentTime);
-	// 	FVector StartPos = GetActorLocation();
-	// 	FVector TargetPos = player->GetActorLocation() * player->GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
-	// 	TargetPos = FMath::Lerp<FVector>(StartPos, TargetPos, CurrentTime / GameOverTime);
-	// 	SetActorLocation(StartPos);
-	// 	if(CurrentTime >= GameOverTime)
-	// 	{
-	// 		SetActorLocation(TargetPos);
-	// 		return;
-	// 		
-	// 	}
-	// }), 0.1f, true);
-	// GetWorldTimerManager().ClearTimer(GameOverTimer);
 }

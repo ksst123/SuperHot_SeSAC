@@ -34,7 +34,9 @@ public:
 	class USkeletalMeshComponent* LeftHandMesh;	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="MotionController")
 	class USkeletalMeshComponent* RightHandMesh;
-	
+	// 피격 콜리전
+	UPROPERTY(EditAnywhere, Category="Hit Collision")
+	class UCapsuleComponent* HitCollision;
 	
 public:	
 	// Called every frame

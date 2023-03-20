@@ -35,7 +35,7 @@ void AEnemyPistolAIController::Tick(float DeltaSeconds)
 	if(Player && AIowner)
 	{
 		// SetFocus(Player);
-		MoveToActor(Player, 150.f);
+		MoveToActor(Player, 50.f);
 		SetFocalPoint(Player->GetActorLocation() + FVector(10, -35.f, 0), EAIFocusPriority::Gameplay);
 		// SetFocalPoint(FMath::Lerp<FVector>(owner->GetActorLocation(), Player->GetActorLocation() + FVector(10, -35.f, 0)), EAIFocusPriority::Gameplay);
 	}

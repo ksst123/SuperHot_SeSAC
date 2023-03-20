@@ -31,6 +31,6 @@ void AEnemyBaseAIController::Tick(float DeltaSeconds)
 	if(Player)
 	{
 		SetFocus(Player);
-		MoveToActor(Player, 150.f);
+		MoveToActor(Player, 50.f);
 	}
 }
