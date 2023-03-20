@@ -74,16 +74,5 @@ void AWeaponBase::Crash(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 		DestructibleMesh->SetSimulatePhysics(true);
 		DestructibleMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		DestructibleMesh->SetCollisionProfileName(FName("Destructed"));
-		// FTimerHandle CrashTimer;
-		// if(field)
-		// {
-		// GetWorldTimerManager().SetTimer(CrashTimer, FTimerDelegate::CreateLambda([&]()
-		// {
-		// 	field->Destroy();
-		// }), 0.5f, false);
-		// }
-	
-	//DestructibleMesh->AddImpulse(FVector(0,0,100));
-		//DestructibleMesh->AddRadialForce(DestructibleMesh->GetComponentLocation(), 10, 50000, RIF_Linear);
 	}
 }
