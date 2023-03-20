@@ -82,7 +82,9 @@ void APlaypoint::GameOver()
 		if(CurrentTime >= GameOverTime)
 		{
 			SetActorLocation(TargetPos);
-			GetWorldTimerManager().ClearTimer(GameOverTimer);
+			return;
+			
 		}
 	}), 0.1f, true);
+	GetWorldTimerManager().ClearTimer(GameOverTimer);
 }

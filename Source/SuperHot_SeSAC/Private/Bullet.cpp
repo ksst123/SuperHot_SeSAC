@@ -4,6 +4,7 @@
 #include "Bullet.h"
 
 #include "EnemyBase.h"
+#include "HotPlayer.h"
 #include "NavigationSystemTypes.h"
 #include "WeaponBase.h"
 #include "Components/StaticMeshComponent.h"
@@ -14,6 +15,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/SceneComponent.h"
 #include "GeometryCollection/GeometryCollectionComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ABullet::ABullet()
@@ -51,6 +53,9 @@ void ABullet::BeginPlay()
 
 	bulletMeshComp->OnComponentBeginOverlap.AddDynamic(this, &ABullet::OnOverlapBegin);
 	// BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &ABullet::OnOverlapBegin);
+
+	auto player = Cast<AHotPlayer>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	FireDir = player->GetActorLocation() - GetActorLocation() + GetActorUpVector() * 50.f;
 	
 }
 
@@ -59,7 +64,8 @@ void ABullet::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	SetActorLocation(GetActorLocation() + GetActorForwardVector() * bulletSpeed * DeltaTime);
+	// FireDir = FireDir.GetSafeNormal() * GetActorLocation();
+	SetActorLocation(GetActorLocation() + FireDir.GetSafeNormal() * bulletSpeed * DeltaTime);
 
 	EnemyHitCheck();
 }

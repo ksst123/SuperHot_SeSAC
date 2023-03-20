@@ -61,4 +61,7 @@ public:
 
 	UPROPERTY(EditAnywhere, Category="Weapon")
 	class UBoxComponent* BoxComponent;
+
+	UPROPERTY()
+	FVector FireDir;
 };
