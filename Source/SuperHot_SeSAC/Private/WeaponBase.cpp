@@ -6,6 +6,7 @@
 #include "EnemyBase.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Components/StaticMeshComponent.h"
+#include "GeometryCollection/GeometryCollectionComponent.h"
 
 // Sets default values
 AWeaponBase::AWeaponBase()
@@ -14,6 +15,9 @@ AWeaponBase::AWeaponBase()
 	PrimaryActorTick.bCanEverTick = true;
 	weaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("weaponMesh"));
 
+	DestructibleMesh = CreateDefaultSubobject<UGeometryCollectionComponent>(TEXT("DestructibleMesh"));
+	DestructibleMesh->SetupAttachment(weaponMesh);
+	
 }
 
 // Called when the game starts or when spawned
@@ -21,6 +25,9 @@ void AWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
 	weaponMesh->OnComponentBeginOverlap.AddDynamic(this, &AWeaponBase::Crash);
+	DestructibleMesh->SetVisibility(false);
+	DestructibleMesh->SetSimulatePhysics(false);
+	DestructibleMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 // Called every frame
@@ -42,6 +49,14 @@ void AWeaponBase::Crash(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Enemy Crashed"));
 		enemy->Die();
+		//디스트럭터블 메쉬 표시
+		weaponMesh->SetVisibility(false);
+		weaponMesh->SetSimulatePhysics(false);
+		weaponMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		DestructibleMesh->SetVisibility(true);
+		DestructibleMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		DestructibleMesh->SetSimulatePhysics(true);
+		DestructibleMesh->SetCollisionProfileName(FName("Destructed"));
 		//에너미 피격 나이아가라 스폰
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), bulletVFX, GetActorLocation(), GetActorRotation());
 	}
@@ -50,8 +65,26 @@ void AWeaponBase::Crash(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 	//총만 없앤다.
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Object Crashed"));
-		//디스트럭터블 메쉬 추가 필요----------------------------------------------------------------------
-		Destroy();
+		//디스트럭터블 메쉬 표시
+		AFieldSystemActor* field = GetWorld()->SpawnActor<class AFieldSystemActor>(masterField, DestructibleMesh->GetComponentLocation(), DestructibleMesh->GetComponentRotation());
+		weaponMesh->SetVisibility(false);
+		weaponMesh->SetSimulatePhysics(false);
+		weaponMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		DestructibleMesh->SetVisibility(true);
+		DestructibleMesh->SetSimulatePhysics(true);
+		DestructibleMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		DestructibleMesh->SetCollisionProfileName(FName("Destructed"));
+		// FTimerHandle CrashTimer;
+		// if(field)
+		// {
+		// GetWorldTimerManager().SetTimer(CrashTimer, FTimerDelegate::CreateLambda([&]()
+		// {
+		// 	field->Destroy();
+		// }), 0.5f, false);
+		// }
+	
+	//DestructibleMesh->AddImpulse(FVector(0,0,100));
+		//DestructibleMesh->AddRadialForce(DestructibleMesh->GetComponentLocation(), 10, 50000, RIF_Linear);
 	}
 	
 	
