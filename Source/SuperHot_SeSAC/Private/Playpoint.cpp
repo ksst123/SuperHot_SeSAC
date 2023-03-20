@@ -37,6 +37,8 @@ void APlaypoint::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	timeline.TickTimeline(DeltaTime);
+
+	
 	
 	if(player)
 	{

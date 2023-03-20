@@ -187,6 +187,7 @@ void AEnemyBase::Die()
 	// 		// DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	// 	}
 	// }
+
 	// GetMesh()->SetVisibility(false);
 	// GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	// GetCapsuleComponent()->SetSimulatePhysics(false);
@@ -202,6 +203,17 @@ void AEnemyBase::Die()
 	if(ControllerAI)
 	{
 		ControllerAI->BrainComponent->StopLogic(TEXT("Die"));
+	}
+	GetMesh()->SetVisibility(false);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetCapsuleComponent()->SetSimulatePhysics(false);
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	for(int i = 0; i < DestructibleMeshes.Num(); i++)
+	{
+		DestructibleMeshes[i]->SetVisibility(true);
+		DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		// enemy->GetMesh()->BreakConstraint(FVector(100.f, 100.f, 100.f), SweepResult.Location, SweepResult.BoneName);
+		// UE_LOG(LogTemp, Warning, TEXT("%s"), *(SweepResult.BoneName.ToString()));
 	}
 	UnPossessed();
 
