@@ -187,7 +187,10 @@ void AEnemyBase::Die()
 	// 		// DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	// 	}
 	// }
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of 216c2dd (230320 머지전)
 	// GetMesh()->SetVisibility(false);
 	// GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	// GetCapsuleComponent()->SetSimulatePhysics(false);
@@ -199,6 +202,7 @@ void AEnemyBase::Die()
 	// 	// enemy->GetMesh()->BreakConstraint(FVector(100.f, 100.f, 100.f), SweepResult.Location, SweepResult.BoneName);
 	// 	// UE_LOG(LogTemp, Warning, TEXT("%s"), *(SweepResult.BoneName.ToString()));
 	// }
+<<<<<<< HEAD
 	AEnemyPistolAIController* ControllerAI = Cast<AEnemyPistolAIController>(GetController());
 	if(ControllerAI)
 	{
@@ -215,6 +219,8 @@ void AEnemyBase::Die()
 		// enemy->GetMesh()->BreakConstraint(FVector(100.f, 100.f, 100.f), SweepResult.Location, SweepResult.BoneName);
 		// UE_LOG(LogTemp, Warning, TEXT("%s"), *(SweepResult.BoneName.ToString()));
 	}
+=======
+>>>>>>> parent of 216c2dd (230320 머지전)
 	UnPossessed();
 
 	ALevelScriptActor_Cafeteria* CafeLevelBP = Cast<ALevelScriptActor_Cafeteria>(GetWorld()->GetLevelScriptActor());

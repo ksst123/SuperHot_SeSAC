@@ -28,9 +28,6 @@ public:
 	class UStaticMeshComponent* weaponMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	class UGeometryCollectionComponent* DestructibleMesh;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	TSubclassOf<class ABullet> bulletFactory;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
@@ -47,7 +44,4 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	class UNiagaraSystem* bulletVFX;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	TSubclassOf<class AFieldSystemActor> masterField;
 };
