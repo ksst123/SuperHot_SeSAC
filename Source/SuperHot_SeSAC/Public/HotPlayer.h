@@ -162,7 +162,7 @@ public:
 
 	UPROPERTY()
 	class AClearActor* clearActor;
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Level")
 	bool bIsFirstLevel = true;
 
 	UPROPERTY()
@@ -274,4 +274,24 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Clear")
 	bool bIsPyramidGrabbed = false;
+
+	//사운드 관련
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	class USoundBase* GunFire;
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	class USoundBase* GunNoAmmo;
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	class USoundBase* GunPickUp;
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	class USoundBase* ShotgunFire;
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	class USoundBase* ShotgunNoAmmo;
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	class USoundBase* ShotgunPickUp;
+	
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	class USoundBase* EnemyDeath;
+	
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	class USoundBase* NextMap;
 };

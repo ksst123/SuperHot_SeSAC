@@ -135,7 +135,7 @@ void AHotPlayer::Tick(float DeltaTime)
 		Param.AddIgnoredComponent(RightHand);
 		//충돌한 물체들 기록할 배열
 		TArray<FOverlapResult> HitObjs;
-		bool bHit = GetWorld()->OverlapMultiByChannel(HitObjs, Center, FQuat::Identity, ECC_GameTraceChannel15, FCollisionShape::MakeSphere(GrabRange), Param);
+		bool bHit = GetWorld()->OverlapMultiByChannel(HitObjs, Center, FQuat::Identity, ECC_GameTraceChannel18, FCollisionShape::MakeSphere(GrabRange), Param);
 		
 		// 충돌 안했다면
 		if(!bHit)
@@ -185,40 +185,6 @@ void AHotPlayer::Tick(float DeltaTime)
 		}
 	}
 	GrabbingR();
-
-	//클리어 됐다면
-	if(gm)
-	{
-		if(gm->bIsCleared)
-		{
-			UISpawnTime += GetWorld()->DeltaTimeSeconds;
-			if(!bSuperUIOn)
-			{
-				bSuperUIOn = true;
-				//카메라 방향으로 300 거리에 SUPER UI 액터를 스폰한다.
-				//GetWorld()->SpawnActor<AActor>(SuperUI, HotCamera->GetComponentLocation() + HotCamera->GetForwardVector() * 300, HotCamera->GetComponentRotation());
-			}
-			//1.5초 후에 HOT UI 액터를 스폰한다.
-			if(UISpawnTime > 1.5 && !bHotUIOn)
-			{
-				bHotUIOn = true;
-				//GetWorld()->SpawnActor<AActor>(HotUI, HotCamera->GetComponentLocation() + HotCamera->GetForwardVector() * 300, HotCamera->GetComponentRotation());
-			}
-			//3초 지나면 시간 초기화
-			if(UISpawnTime > 3)
-			{
-				//시간 초기화
-				UISpawnTime = 0;
-				bSuperUIOn = false;
-				bHotUIOn = false;
-			}
-			
-			
-		}
-	}
-
-		
-	
 }
 
 // Called to bind functionality to input
@@ -319,8 +285,8 @@ void AHotPlayer::Fire()
 		{
 			if(pistol->pistolCount > 0)
 			{
-				//격발 사운드 스폰-----------------------------------------------------
-				
+				//격발 사운드 스폰
+				UGameplayStatics::SpawnSoundAtLocation(GetWorld(), GunFire, GrabbedObjectR->GetComponentLocation(), GrabbedObjectR->GetComponentRotation());
 				//머즐 플래쉬 이펙트 스폰
 				UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), muzzleFlashVFX, GrabbedObjectR->GetSocketLocation(TEXT("Front")), GrabbedObjectR->GetSocketRotation(TEXT("Front")));
 				//총알 액터 스폰
@@ -331,8 +297,8 @@ void AHotPlayer::Fire()
 			//장탄 수 없으면 격발 X
 			else
 			{
-				//틱틱 사운드 스폰-----------------------------------------------------
-				
+				//틱틱 사운드 스폰
+				UGameplayStatics::SpawnSoundAtLocation(GetWorld(), GunNoAmmo, GrabbedObjectR->GetComponentLocation(), GrabbedObjectR->GetComponentRotation());
 			}
 		}
 	}
@@ -354,18 +320,21 @@ void AHotPlayer::Fire()
 			{
 				UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), muzzleFlashVFX, GrabbedObjectR->GetSocketLocation(TEXT("Front")), GrabbedObjectR->GetSocketRotation(TEXT("Front")));
 
-				//격발 사운드 스폰-----------------------------------------------------------
+				//격발 사운드 스폰
+				UGameplayStatics::SpawnSoundAtLocation(GetWorld(), GunFire, GrabbedObjectR->GetComponentLocation(), GrabbedObjectR->GetComponentRotation());
 				// 총알 액터 스폰
 				//첫 발 발사
 				GetWorld()->SpawnActor<ABullet>(bulletFactory2, GrabbedObjectR->GetSocketLocation(TEXT("Front")),GrabbedObjectR->GetSocketRotation(TEXT("Front")) + FRotator(FMath::RandRange(-2,2), FMath::RandRange(-2,2), 0));
 				// 두 번째 발 발사
 				GetWorldTimerManager().SetTimer(burstTimer1, FTimerDelegate::CreateLambda([&]()
 				{
+					UGameplayStatics::SpawnSoundAtLocation(GetWorld(), GunFire, GrabbedObjectR->GetComponentLocation(), GrabbedObjectR->GetComponentRotation());
 					GetWorld()->SpawnActor<ABullet>(bulletFactory2, GrabbedObjectR->GetSocketLocation(TEXT("Front")),GrabbedObjectR->GetSocketRotation(TEXT("Front")) + FRotator(FMath::RandRange(-2,2), FMath::RandRange(-2,2), 0));
 				}), 0.1f, false);
 				//세 번째 발 발사
 				GetWorldTimerManager().SetTimer(burstTimer2, FTimerDelegate::CreateLambda([&]()
 				{
+					UGameplayStatics::SpawnSoundAtLocation(GetWorld(), GunFire, GrabbedObjectR->GetComponentLocation(), GrabbedObjectR->GetComponentRotation());
 					GetWorld()->SpawnActor<ABullet>(bulletFactory2, GrabbedObjectR->GetSocketLocation(TEXT("Front")),GrabbedObjectR->GetSocketRotation(TEXT("Front")) + FRotator(FMath::RandRange(-2,2), FMath::RandRange(-2,2), 0));
 				}), 0.2f, false);
 				smg->smgCount--;
@@ -373,7 +342,8 @@ void AHotPlayer::Fire()
 			//장탄수 0 이하
 			else
 			{
-				//틱틱 사운드 스폰-------------------------------------------------------------
+				//틱틱 사운드 스폰
+				UGameplayStatics::SpawnSoundAtLocation(GetWorld(), GunNoAmmo, GrabbedObjectR->GetComponentLocation(), GrabbedObjectR->GetComponentRotation());
 			}
 		}
 	
@@ -393,8 +363,8 @@ void AHotPlayer::Fire()
 		{
 			if(shotgun->shotgunCount > 0)
 			{
-				//격발 사운드 스폰 ---------------------------------------------------
-				
+				//격발 사운드 스폰
+				UGameplayStatics::SpawnSoundAtLocation(GetWorld(), ShotgunFire, GrabbedObjectR->GetComponentLocation(), GrabbedObjectR->GetComponentRotation());
 				UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), muzzleFlashVFX, GrabbedObjectR->GetSocketLocation(TEXT("Front")), GrabbedObjectR->GetSocketRotation(TEXT("Front")));
 				// 총알 액터 스폰
 				GetWorld()->SpawnActor<ABullet>(bulletFactory3, GrabbedObjectR->GetSocketLocation(TEXT("Front1")), GrabbedObjectR->GetSocketRotation(TEXT("Front1")) + FRotator(FMath::RandRange(0,5),FMath::RandRange(0,5),0));
@@ -409,7 +379,8 @@ void AHotPlayer::Fire()
 			}
 			else
 			{
-				//틱틱 사운드 스폰 -------------------------------------------------
+				//틱틱 사운드 스폰 
+				UGameplayStatics::SpawnSoundAtLocation(GetWorld(), ShotgunNoAmmo, GrabbedObjectR->GetComponentLocation(), GrabbedObjectR->GetComponentRotation());
 			}
 			
 		}
@@ -445,7 +416,12 @@ void AHotPlayer::TryGrabR()
 				}
 				else
 				{
-					clearActor->GameClear();
+					// 피라미드 산산조각
+					clearActor->Grabbed();
+					//구체 크기 다시 줄이기
+					bIsPyramidGrabbed = true;
+					bIsFirstLevel = false;
+					return;
 				}
 			}
 			// -> 물체 물리 기능 비활성화
@@ -469,19 +445,22 @@ void AHotPlayer::TryGrabR()
 		
 		if(pistol)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Pistol On"));
+			UGameplayStatics::SpawnSoundAtLocation(GetWorld(), GunPickUp, GrabbedObjectR->GetComponentLocation(), GrabbedObjectR->GetComponentRotation());
 			bPistolOn = true;
 		}
 		else if(smg)
 		{
+			UGameplayStatics::SpawnSoundAtLocation(GetWorld(), GunPickUp, GrabbedObjectR->GetComponentLocation(), GrabbedObjectR->GetComponentRotation());
 			bSMGOn = true;
 		}
 		else if(shotgun)
 		{
+			UGameplayStatics::SpawnSoundAtLocation(GetWorld(), ShotgunPickUp, GrabbedObjectR->GetComponentLocation(), GrabbedObjectR->GetComponentRotation());
 			bShotgunOn = true;
 		}
 		else if(clearActor)
 		{
+			UGameplayStatics::SpawnSoundAtLocation(GetWorld(), NextMap, GrabbedObjectR->GetComponentLocation(), GrabbedObjectR->GetComponentRotation());
 			if(bIsFirstLevel)
 			{
 				// 피라미드 산산조각

@@ -57,4 +57,10 @@ public:
 	class APlaypoint* playPoint;
 	
 	FTimerHandle mapTimer;
+
+	UPROPERTY(EditAnywhere, Category = "Clear")
+	class AHotPlayer* player;
+
+	UPROPERTY(EditAnywhere, Category = "Clear")
+	bool bIsPyramidOn = false;
 };

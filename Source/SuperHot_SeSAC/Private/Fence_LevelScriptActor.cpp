@@ -30,6 +30,7 @@ void AFence_LevelScriptActor::Tick(float DeltaSeconds)
 	
 	if(EnemyCount == 0)
 	{
+		
 		StageClear();
 	}
 }

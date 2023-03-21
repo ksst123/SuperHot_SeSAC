@@ -50,4 +50,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	TSubclassOf<class AFieldSystemActor> masterField;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+	class USoundBase* EnemyDeath;
 };

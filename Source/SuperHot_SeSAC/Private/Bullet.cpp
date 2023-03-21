@@ -10,6 +10,8 @@
 #include "GameFramework/RotatingMovementComponent.h"
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
+#include "Components/AudioComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Components/SceneComponent.h"
 #include "GeometryCollection/GeometryCollectionComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -48,7 +50,10 @@ void ABullet::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if(bulletMeshComp)
+	{
 	bulletMeshComp->OnComponentBeginOverlap.AddDynamic(this, &ABullet::OnOverlapBegin);
+	}
 	// BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &ABullet::OnOverlapBegin);
 	
 }
@@ -155,6 +160,8 @@ void ABullet::EnemyHitCheck()
 			enemy->Die();
 			enemy->GetMesh()->SetVisibility(false);
 			enemy->GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			enemy->GetCapsuleComponent()->SetSimulatePhysics(false);
+			enemy->GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 			for(int i = 0; i < enemy->DestructibleMeshes.Num(); i++)
 			{
 				enemy->DestructibleMeshes[i]->SetVisibility(true);

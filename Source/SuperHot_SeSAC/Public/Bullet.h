@@ -64,4 +64,7 @@ public:
 
 	UPROPERTY()
 	FVector FireDir;
+
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	class USoundBase* BulletSound;
 };

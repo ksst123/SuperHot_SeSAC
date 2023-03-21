@@ -7,6 +7,7 @@
 #include "NiagaraFunctionLibrary.h"
 #include "Components/StaticMeshComponent.h"
 #include "GeometryCollection/GeometryCollectionComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AWeaponBase::AWeaponBase()
@@ -48,6 +49,7 @@ void AWeaponBase::Crash(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 	if(enemy)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Enemy Crashed"));
+		UGameplayStatics::SpawnSoundAtLocation(GetWorld(), EnemyDeath, weaponMesh->GetComponentLocation(), weaponMesh->GetComponentRotation());
 		enemy->Die();
 		//디스트럭터블 메쉬 표시
 		AFieldSystemActor* field = GetWorld()->SpawnActor<class AFieldSystemActor>(masterField, DestructibleMesh->GetComponentLocation(), DestructibleMesh->GetComponentRotation());

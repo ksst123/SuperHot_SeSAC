@@ -18,6 +18,7 @@
 #include "Components/SphereComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Field/FieldSystemActor.h"
 
 // Sets default values
 AEnemyBase::AEnemyBase()
@@ -204,17 +205,18 @@ void AEnemyBase::Die()
 	{
 		ControllerAI->BrainComponent->StopLogic(TEXT("Die"));
 	}
-	GetMesh()->SetVisibility(false);
-	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	GetCapsuleComponent()->SetSimulatePhysics(false);
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	for(int i = 0; i < DestructibleMeshes.Num(); i++)
-	{
-		DestructibleMeshes[i]->SetVisibility(true);
-		DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-		// enemy->GetMesh()->BreakConstraint(FVector(100.f, 100.f, 100.f), SweepResult.Location, SweepResult.BoneName);
-		// UE_LOG(LogTemp, Warning, TEXT("%s"), *(SweepResult.BoneName.ToString()));
-	}
+	// GetMesh()->SetVisibility(false);
+	// GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	// GetCapsuleComponent()->SetSimulatePhysics(false);
+	// GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	// for(int i = 0; i < DestructibleMeshes.Num(); i++)
+	// {
+	// 	DestructibleMeshes[i]->SetVisibility(true);
+	// 	DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	// 	// enemy->GetMesh()->BreakConstraint(FVector(100.f, 100.f, 100.f), SweepResult.Location, SweepResult.BoneName);
+	// 	// UE_LOG(LogTemp, Warning, TEXT("%s"), *(SweepResult.BoneName.ToString()));
+	// }
+	AFieldSystemActor* desturctionField = GetWorld()->SpawnActor<AFieldSystemActor>(DestructionField, DestructibleBody->GetComponentLocation(), DestructibleBody->GetComponentRotation());
 	UnPossessed();
 
 	ALevelScriptActor_Cafeteria* CafeLevelBP = Cast<ALevelScriptActor_Cafeteria>(GetWorld()->GetLevelScriptActor());
@@ -223,6 +225,7 @@ void AEnemyBase::Die()
 
 	if(player->bIsFirstLevel)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Yohan"));
 		if(FenceLevelBP)
 		{
 			FenceLevelBP->EnemyCount--;
@@ -234,6 +237,7 @@ void AEnemyBase::Die()
 		if(CafeLevelBP)
 		{
 			CafeLevelBP->EnemyCount--;
+			UE_LOG(LogTemp, Warning, TEXT("Cafe Enemy--"));
 		}
 	}
 }

@@ -13,6 +13,7 @@
 #include "Fence_LevelScriptActor.h"
 #include "Components/CapsuleComponent.h"
 #include "GeometryCollection/GeometryCollectionComponent.h"
+#include "Field/FieldSystemActor.h"
 
 AEnemyPistol::AEnemyPistol()
 {
@@ -105,6 +106,7 @@ void AEnemyPistol::Die()
 	{
 		ControllerAI->BrainComponent->StopLogic(TEXT("Die"));
 	}
+	AFieldSystemActor* desturctionField = GetWorld()->SpawnActor<AFieldSystemActor>(DestructionField, DestructibleBody->GetComponentLocation(), DestructibleBody->GetComponentRotation());
 	UnPossessed();
 	
 	AHotPlayer* player = Cast<AHotPlayer>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
@@ -124,6 +126,7 @@ void AEnemyPistol::Die()
 		if(FenceLevelBP)
 		{
 			FenceLevelBP->EnemyCount--;
+			UE_LOG(LogTemp, Warning, TEXT("Enemy--"));
 		}
 	}
 	else
@@ -131,6 +134,7 @@ void AEnemyPistol::Die()
 		if(CafeLevelBP)
 		{
 			CafeLevelBP->EnemyCount--;
+			UE_LOG(LogTemp, Warning, TEXT("Cafe Enemy--"));
 		}
 	}
 }

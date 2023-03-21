@@ -5,11 +5,14 @@
 
 #include "EngineUtils.h"
 #include "EnemyBase.h"
+#include "HotPlayer.h"
 #include "SuperHotGameModeBase.h"
+#include "Kismet/GameplayStatics.h"
 
 void ALevelScriptActor_Cafeteria::BeginPlay()
 {
 	Super::BeginPlay();
+	gm = Cast<ASuperHotGameModeBase>(GetWorld()->GetAuthGameMode());
 
 	int32 count = 0;
 	for(TActorIterator<AEnemyBase> itr(GetWorld()); itr; ++itr)
@@ -20,6 +23,13 @@ void ALevelScriptActor_Cafeteria::BeginPlay()
 
 	EnemyCount = count;
 	UE_LOG(LogTemp, Warning, TEXT("Enemy: %d"), EnemyCount);
+
+	auto player = Cast<AHotPlayer>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	if(player)
+	{
+		player->bIsFirstLevel = false;
+		UE_LOG(LogTemp, Warning, TEXT("Cafeteriaaa"));
+	}
 }
 
 void ALevelScriptActor_Cafeteria::Tick(float DeltaSeconds)
@@ -28,6 +38,7 @@ void ALevelScriptActor_Cafeteria::Tick(float DeltaSeconds)
 
 	if(EnemyCount == 0)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Cafe Cleared"));
 		EnemyCount = -1;
 		StageClear();
 	}

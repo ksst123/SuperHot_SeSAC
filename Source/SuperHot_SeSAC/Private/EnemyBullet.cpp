@@ -14,9 +14,10 @@
 void AEnemyBullet::BeginPlay()
 {
 	Super::BeginPlay();
-
-	bulletMeshComp->OnComponentBeginOverlap.AddDynamic(this, &AEnemyBullet::OnOverlapBegin);
-	
+	if(bulletMeshComp)
+	{
+		bulletMeshComp->OnComponentBeginOverlap.AddDynamic(this, &AEnemyBullet::OnOverlapBegin);
+	}
 	auto player = Cast<AHotPlayer>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	FireDir = player->HotCamera->GetComponentLocation() - GetActorLocation() + GetActorUpVector() * 30.f;
 }
