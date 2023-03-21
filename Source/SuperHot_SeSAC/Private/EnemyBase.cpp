@@ -18,6 +18,7 @@
 #include "Components/SphereComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Field/FieldSystemActor.h"
 
 // Sets default values
 AEnemyBase::AEnemyBase()
@@ -123,11 +124,13 @@ AEnemyBase::AEnemyBase()
 	LeftFist->SetupAttachment(GetMesh(), TEXT("hand_lSocketFist"));
 	LeftFist->SetRelativeScale3D(FVector(0.3f));
 	// LeftFist->SetRelativeLocation(FVector(27.058314, 20.243555, 80.449254));
+	LeftFist->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	
 	RightFist = CreateDefaultSubobject<USphereComponent>(TEXT("Right Fist"));
 	RightFist->SetupAttachment(GetMesh(), TEXT("hand_rSocketFist"));
 	RightFist->SetRelativeScale3D(FVector(0.3f));
 	// RightFist->SetRelativeLocation(FVector(-24.677729, -2.888604, 81.473991));
+	RightFist->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 // Called when the game starts or when spawned
@@ -204,18 +207,18 @@ void AEnemyBase::Die()
 	{
 		ControllerAI->BrainComponent->StopLogic(TEXT("Die"));
 	}
-	GetMesh()->SetVisibility(false);
-	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	GetCapsuleComponent()->SetSimulatePhysics(false);
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	for(int i = 0; i < DestructibleMeshes.Num(); i++)
-	{
-		DestructibleMeshes[i]->SetVisibility(true);
-		DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-		// enemy->GetMesh()->BreakConstraint(FVector(100.f, 100.f, 100.f), SweepResult.Location, SweepResult.BoneName);
-		// UE_LOG(LogTemp, Warning, TEXT("%s"), *(SweepResult.BoneName.ToString()));
-	}
-	UnPossessed();
+	AFieldSystemActor* destructionField = GetWorld()->SpawnActor<AFieldSystemActor>(DestructionField, DestructibleBody->GetComponentLocation(), DestructibleBody->GetComponentRotation());
+	// GetMesh()->SetVisibility(false);
+	// GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	// for(int i = 0; i < DestructibleMeshes.Num(); i++)
+	// {
+	// 	DestructibleMeshes[i]->SetVisibility(true);
+	// 	DestructibleMeshes[i]->SetSimulatePhysics(true);
+	// 	DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	// 	// enemy->GetMesh()->BreakConstraint(FVector(100.f, 100.f, 100.f), SweepResult.Location, SweepResult.BoneName);
+	// 	// UE_LOG(LogTemp, Warning, TEXT("%s"), *(SweepResult.BoneName.ToString()));
+	// }
+	// UnPossessed();
 
 	ALevelScriptActor_Cafeteria* CafeLevelBP = Cast<ALevelScriptActor_Cafeteria>(GetWorld()->GetLevelScriptActor());
 	AFence_LevelScriptActor* FenceLevelBP = Cast<AFence_LevelScriptActor>(GetWorld()->GetLevelScriptActor());

@@ -10,6 +10,7 @@
 #include "GameFramework/RotatingMovementComponent.h"
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
+#include "Components/CapsuleComponent.h"
 #include "Components/SceneComponent.h"
 #include "GeometryCollection/GeometryCollectionComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -153,13 +154,17 @@ void ABullet::EnemyHitCheck()
 			enemy->GetMesh()->BreakConstraint(FVector(100.f, 100.f, 100.f), HitResult.Location, HitResult.BoneName);
 			
 			enemy->Die();
+			enemy->GetCapsuleComponent()->SetSimulatePhysics(false);
+			enemy->GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 			enemy->GetMesh()->SetVisibility(false);
 			enemy->GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 			for(int i = 0; i < enemy->DestructibleMeshes.Num(); i++)
 			{
 				enemy->DestructibleMeshes[i]->SetVisibility(true);
+				// enemy->DestructibleMeshes[i]->SetSimulatePhysics(true);
 				enemy->DestructibleMeshes[i]->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 			}
+			
 
 			UE_LOG(LogTemp, Warning, TEXT("BoneName: %s"), *(HitResult.BoneName.ToString()));
 			DrawDebugSphere(GetWorld(), HitResult.Location, 20.f, 10, FColor::Blue, false, 5., 1, 2);

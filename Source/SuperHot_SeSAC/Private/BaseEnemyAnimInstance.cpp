@@ -5,6 +5,7 @@
 #include "EnemyBase.h"
 #include "EnemyHandFightComponent.h"
 #include "HotPlayer.h"
+#include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 void UBaseEnemyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -21,6 +22,7 @@ void UBaseEnemyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 void UBaseEnemyAnimInstance::AnimNotify_PunchLeft()
 {
+	ownerEnemy->LeftFist->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	ownerEnemy->HandFightComponent->bPunching = true;
 	auto player = Cast<AHotPlayer>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	if(player)
@@ -31,6 +33,7 @@ void UBaseEnemyAnimInstance::AnimNotify_PunchLeft()
 
 void UBaseEnemyAnimInstance::AnimNotify_PunchRight()
 {
+	ownerEnemy->RightFist->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	ownerEnemy->HandFightComponent->bPunching = true;
 	auto player = Cast<AHotPlayer>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	if(player)

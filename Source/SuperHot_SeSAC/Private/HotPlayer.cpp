@@ -139,7 +139,7 @@ void AHotPlayer::Tick(float DeltaTime)
 		Param.AddIgnoredComponent(RightHand);
 		//충돌한 물체들 기록할 배열
 		TArray<FOverlapResult> HitObjs;
-		bool bHit = GetWorld()->OverlapMultiByChannel(HitObjs, Center, FQuat::Identity, ECC_GameTraceChannel15, FCollisionShape::MakeSphere(GrabRange), Param);
+		bool bHit = GetWorld()->OverlapMultiByChannel(HitObjs, Center, FQuat::Identity, ECC_GameTraceChannel18, FCollisionShape::MakeSphere(GrabRange), Param);
 		
 		// 충돌 안했다면
 		if(!bHit)

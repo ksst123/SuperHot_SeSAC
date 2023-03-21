@@ -105,6 +105,7 @@ void AEnemyPistol::Die()
 	{
 		ControllerAI->BrainComponent->StopLogic(TEXT("Die"));
 	}
+	AFieldSystemActor* destructionField = GetWorld()->SpawnActor<AFieldSystemActor>(DestructionField, DestructibleBody->GetComponentLocation(), DestructibleBody->GetComponentRotation());
 	UnPossessed();
 	
 	AHotPlayer* player = Cast<AHotPlayer>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
